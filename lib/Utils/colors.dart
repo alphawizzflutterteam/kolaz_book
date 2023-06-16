@@ -28,8 +28,8 @@ class AppColors {
   static const Color textclr = Color(0xffFFFFFF);
   static const Color teamcard = Color(0xff8B8B8B);
   static const Color teamcard2 = Color(0xff3B3B3B);
-  static const Color temtextclr = Color(0xff42ACFE);
-  static const Color pdfbtn = Color(0xff42ACFE);
+  static const Color temtextclr = Color(0xff40ACFF);
+  static const Color pdfbtn = Color(0xff40ACFF);
   static const Color pdftext = Color(0xff3B3B3B);
 
 
