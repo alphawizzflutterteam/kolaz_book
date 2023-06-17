@@ -419,7 +419,7 @@ class _JobsScreenState extends State<JobsScreen> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: Center(
+          child: const Center(
             child: Text("No Data to show", style: TextStyle(
               color: Colors.white
             ),),
