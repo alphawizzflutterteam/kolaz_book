@@ -41,6 +41,8 @@ class _freelancing_job_updateState extends State<addNewJob> {
     'delhi ',
   ];
 
+  List jsonData = [];
+
   List<Categories> typeofPhotographyEvent = [];
   List<Data> photographersList = [];
   List<EventType> eventList = [];
@@ -51,11 +53,55 @@ class _freelancing_job_updateState extends State<addNewJob> {
   var cityController;
   var photographerType;
   var photographer;
-  String? selectDates;
-  String? selectTimes;
+  // String? selectDates;
+  // String? selectTimes;
   var photographeridd;
   var totall = 0;
   List<int> amountlist = [];
+
+  // List<DateTime> selectedDates = [DateTime.now()];
+  DateTime? selectedDates;
+  TimeOfDay selectedTime = TimeOfDay.now();
+  TimeOfDay selectedTime2 = TimeOfDay.now();
+
+  Future<void> selectDate(BuildContext context,) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null && pickedDate != selectedDates) {
+      selectedDates = pickedDate;
+      // update();
+    }
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+
+    if (pickedTime != null && pickedTime != selectedTime) {
+      selectedTime = pickedTime;
+      selectTime2(context);
+      // update();
+
+    }
+  }
+
+  Future<void> selectTime2(BuildContext context) async {
+    final TimeOfDay? pickedTime2 = await showTimePicker(
+      context: context,
+      initialTime: selectedTime2,
+    );
+
+    if (pickedTime2 != null && pickedTime2 != selectedTime2) {
+      selectedTime2 = pickedTime2;
+      // update();
+    }
+  }
 
   getPhotographerType() async {
     var uri = Uri.parse(getPhotographerApi.toString());
@@ -83,7 +129,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
   getPhotographerList() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('id');
-    var uri = Uri.parse(getQuotationDetailsApi.toString());
+    var uri = Uri.parse(getClientPhotographersApi.toString());
 
     var request = http.MultipartRequest("POST", uri);
     Map<String, String> headers = {
@@ -156,25 +202,190 @@ class _freelancing_job_updateState extends State<addNewJob> {
   final TextEditingController _textEditingController = TextEditingController();
 
 
+
   Future<void> showAddInformationDialog(BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (context) {
           bool isChecked = false;
-          return StatefulBuilder(builder: (context, setState) {
+          return StatefulBuilder(builder: (context, dialogState) {
             return AlertDialog(
+              backgroundColor: AppColors.back,
               content: Form(
                   key: _formKey,
                   child: Column(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextFormField(
-                        controller: _textEditingController,
-                        validator: (value) {
-                          return value!.isNotEmpty ? null : "Enter any text";
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
+                      //   child: Text(
+                      //     "Date",
+                      //     style: TextStyle(color: AppColors.pdfbtn),
+                      //   ),
+                      // ),
+                      InkWell(
+                        onTap: () {
+                          selectDate(
+                              context);
+                          setState(() {
+
+                          });
                         },
-                        decoration:
-                        InputDecoration(hintText: "Please Enter Text"),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                         height: 35,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: Text(selectedDates != null
+                                ? ' ${DateFormat('MM-dd-yyyy').format(selectedDates!)}'
+                                : 'Select Date ',
+                            style: const TextStyle(
+                                color: AppColors.textclr,
+                                fontSize: 12),
+                          ),
+                        ),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
+                      //   child: Text(
+                      //     "Start Time",
+                      //     style: TextStyle(color: AppColors.pdfbtn),
+                      //   ),
+                      // ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, bottom: 5),
+                        child: InkWell(
+                          onTap: () {
+                            selectTime(context);
+                            dialogState((){
+                            });
+                            setState(() {
+
+                            });
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width /2,
+                            height: 35,
+                            padding: const EdgeInsets.only(
+                                left: 8, top: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.containerclr2),
+                            child: Text(
+                              selectedTime != null
+                                  ? ' ${selectedTime.format(context)}'
+                                  : 'Start Time For Bookings',
+                              style: const TextStyle(
+                                  color: AppColors.textclr,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
+                      //   child: Text(
+                      //     "End Time",
+                      //     style: TextStyle(color: AppColors.pdfbtn),
+                      //   ),
+                      // ),
+                      InkWell(
+                        onTap: () {
+                          selectTime2(context);
+                          dialogState((){
+                          });
+                          setState(() {
+
+                          });
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 35,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: Text(
+                            selectedTime2 != null
+                                ? ' ${selectedTime2.format(context)}'
+                                : 'End Time For Bookings',
+                            style: const TextStyle(
+                                color: AppColors.textclr,
+                                fontSize: 12),
+                          ),
+                        ),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
+                      //   child: Text(
+                      //     "Amount",
+                      //     style: TextStyle(color: AppColors.pdfbtn),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, bottom: 15),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 35,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: TextFormField(
+                            style: const TextStyle(
+                                color: AppColors.textclr),
+                            // controller: controller.outputController,
+                            keyboardType: TextInputType.number,
+                            controller: amountt,
+                            validator: (value) => value!.isEmpty
+                                ? 'Amount cannot be blank'
+                                : null,
+                            decoration: const InputDecoration(
+                                hintText: 'Enter Amount',
+                                hintStyle: TextStyle(
+                                    color: AppColors.textclr,
+                                    fontSize: 14),
+                                border: InputBorder.none,
+                                // contentPadding: EdgeInsets.only(
+                                //     left: 8)
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            jsonData.add({
+                              "date": selectedDates, "from_time": selectedTime, "to_time": selectedTime2, "amount": amountt.text.toString()
+                            });
+                            setState(() {
+
+                            });
+                            print("this is my new json data $jsonData");
+                            Navigator.pop(context);
+                            // addFreelancer();
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
+                          },
+                          child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: AppColors.pdfbtn),
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: const Center(
+                                  child: Text("Add",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColors.textclr)))),
+                        ),
                       ),
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,18 +402,18 @@ class _freelancing_job_updateState extends State<addNewJob> {
                       // ) ̰ e
                     ],
                   )),
-              title: Text('Stateful Dialog'),
-              actions: <Widget>[
-                InkWell(
-                  child: Text('ADD'),
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Do something like updating SharedPreferences or User Settings etc.
-                      Navigator.of(context).pop();
-                    }
-                  },
-                ),
-              ],
+              // title: Text(''),
+              // actions: <Widget>[
+              //   InkWell(
+              //     child: Text('ADD'),
+              //     onTap: () {
+              //       if (_formKey.currentState!.validate()) {
+              //         // Do something like updating SharedPreferences or User Settings etc.
+              //         Navigator.of(context).pop();
+              //       }
+              //     },
+              //   ),
+              // ],
             );
           });
         });
@@ -232,8 +443,8 @@ class _freelancing_job_updateState extends State<addNewJob> {
       'city': cityController.toString(),
       'type_event': eventController.toString(),
       'amount[]': amountt.text.toString(),
-      'date[]': selectDates.toString(),
-      'time[]': selectTimes.toString(),
+      // 'date[]': selectDates.toString(),
+      // 'time[]': selectTimes.toString(),
       'total': totall.toString(),
       'type': photographerType.toString(),
       'user_id': userId.toString(),
@@ -733,7 +944,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
                         child: Expanded(
                           child: ListView.builder(
                             // physics: const NeverScrollableScrollPhysics(),
-                            itemCount: controller.adMore,
+                            itemCount: jsonData.length,
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
@@ -754,35 +965,13 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                       children: [
                                         InkWell(
                                           onTap: () {
-                                            controller.selectDate(
-                                                context, index);
-                                            selectDates = controller
-                                                .selectedDates
-                                                .join(',');
-                                            print(
-                                                'this is selected dates $selectDates');
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 5),
-                                            decoration: const BoxDecoration(
-                                                // color:AppColors.datecontainer,
-                                                ),
-                                            child: Text(
-                                              controller.selectedDates[index] !=
-                                                      null
-                                                  ? ' ${DateFormat('MM-dd-yyyy').format(controller.selectedDates[index])}'
-                                                  : 'Select Date ',
-                                              style: TextStyle(
-                                                  color: AppColors.textclr,
-                                                  fontSize: 12),
-                                            ),
-                                          ),
-                                        ),
-                                        // Text("(MM-DD-YYYY)",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                        InkWell(
-                                          onTap: () {
-                                            controller.selectTime(context);
+                                            // controller.selectDate(
+                                            //     context, index);
+                                            // selectDates = controller
+                                            //     .selectedDates
+                                            //     .join(',');
+                                            // print(
+                                            //     'this is selected dates $selectDates');
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
@@ -791,8 +980,31 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                                 // color:AppColors.datecontainer,
                                                 ),
                                             child: Text(
-                                              controller.selectedTime != null
-                                                  ? ' ${controller.selectedTime.format(context)} to ${controller.selectedTime2.format(context)}'
+                                              // jsonData[index]['date'] != null
+                                              //     ?
+                                              ' ${DateFormat('MM-dd-yyyy').format(jsonData[index]['date'])}',
+                                                  // : 'Select Date ',
+                                              style: const TextStyle(
+                                                  color: AppColors.textclr,
+                                                  fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                        // Text("(MM-DD-YYYY)",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                        InkWell(
+                                          onTap: () {
+                                            // controller.selectTime(context);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 5),
+                                            decoration: const BoxDecoration(
+                                                // color:AppColors.datecontainer,
+                                                ),
+                                            child: Text(
+                                              jsonData[index]['from_time'] != null
+                                                  ? ' ${
+                                                  jsonData[index]['from_time'].format(context)} to ${jsonData[index]['to_time'].format(context)}'
                                                   : 'Select Time For Bookings',
                                               style: const TextStyle(
                                                   color: AppColors.textclr,
@@ -800,32 +1012,15 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              // color:  Color(0xffbfbfbf),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          // height: 35,
-                                          width: 100,
-                                          child: TextFormField(
-                                            style: const TextStyle(
-                                                color: AppColors.textclr),
-                                            // controller: controller.outputController,
-                                            keyboardType: TextInputType.number,
-                                            controller: amountt,
-                                            validator: (value) => value!.isEmpty
-                                                ? 'Amount cannot be blank'
-                                                : null,
-                                            decoration: const InputDecoration(
-                                                hintText: 'Enter Amount',
-                                                hintStyle: TextStyle(
-                                                    color: AppColors.textclr,
-                                                    fontSize: 14),
-                                                border: InputBorder.none,
-                                                contentPadding: EdgeInsets.only(
-                                                    left: 8, bottom: 15)),
-                                          ),
+                                        Text(
+                                          jsonData[index]['amount'] != null
+                                              ? ' ${jsonData[index]['amount']}'
+                                              : 'Select Time For Bookings',
+                                          style: const TextStyle(
+                                              color: AppColors.textclr,
+                                              fontSize: 12),
                                         ),
+
                                         // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
                                         // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
                                       ],
@@ -854,17 +1049,18 @@ class _freelancing_job_updateState extends State<addNewJob> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
-                              onTap: () {
-                                if (controller.formKey.currentState!
-                                    .validate()) {
-                                  controller.increment();
-
-                                  var a = int.parse(amountt.text);
-                                  totall = (totall + a);
-
-                                  //amountt.clear();
-                                  a = 0;
-                                }
+                              onTap: () async {
+                               await showAddInformationDialog(context);
+                                // if (controller.formKey.currentState!
+                                //     .validate()) {
+                                //   controller.increment();
+                                //
+                                //   var a = int.parse(amountt.text);
+                                //   totall = (totall + a);
+                                //
+                                //   //amountt.clear();
+                                //   a = 0;
+                                // }
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

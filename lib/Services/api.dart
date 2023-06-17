@@ -179,25 +179,25 @@ Future<ForgotPassword> resetPasswordApi(Map<String, String> body) async {
     }
   }
 
-Future<GetProfile> getProfile(Map<String, String> body) async {
+Future<GetProfileModel> getProfile(Map<String, String> body) async {
     if (await connectivity.checkConnectivity() == ConnectivityResult.wifi ||
         await connectivity.checkConnectivity() == ConnectivityResult.mobile) {
       String res =
       await _apiClient.postMethod(method: _apiMethods.getProfile, body: body);
       if (res.isNotEmpty) {
         try {
-          return getProfileFromJson(res);
+          return getProfileModelFromJson(res);
         } catch (e) {
           if (kDebugMode) {
             print(e);
           }
-          return GetProfile(error: false, message: e.toString());
+          return GetProfileModel(error: false, message: e.toString());
         }
       } else {
-        return GetProfile(error: true, message: 'Something went wrong');
+        return GetProfileModel(error: true, message: 'Something went wrong');
       }
     } else {
-      return GetProfile(error: true, message: 'No Internet');
+      return GetProfileModel(error: true, message: 'No Internet');
     }
   }
 

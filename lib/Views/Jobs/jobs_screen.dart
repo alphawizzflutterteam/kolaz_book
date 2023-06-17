@@ -88,15 +88,16 @@ class _JobsScreenState extends State<JobsScreen> {
   }
 
 
-
   Widget _client() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        getJobs != null || getJobs.isNotEmpty ?
+        getJobs != null
+        ?
+        getJobs.isNotEmpty ?
             currentindex == 0 ?
         Container(
-          height: MediaQuery.of(context).size.height/2,
+          height: MediaQuery.of(context).size.height/1.8,
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             shrinkWrap: true,
@@ -109,7 +110,10 @@ class _JobsScreenState extends State<JobsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
                     child: InkWell(
                       onTap: (){
-                         Navigator.push(context, MaterialPageRoute(builder: (context)=>EditClientJob()));
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>EditClientJob(
+                           type: true,
+                           allJobs: getJobs[0].allJobs![index]
+                         )));
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
@@ -173,7 +177,7 @@ class _JobsScreenState extends State<JobsScreen> {
           ),
         )
             : Container(
-              height: MediaQuery.of(context).size.height/2,
+              height: MediaQuery.of(context).size.height/1.8,
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
@@ -185,7 +189,10 @@ class _JobsScreenState extends State<JobsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
                     child: InkWell(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>EditClientJob()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>EditClientJob(
+                          type: false,
+                          upcomingJobs:  getJobs[0].upcomingJobs![index],
+                        )));
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -247,6 +254,7 @@ class _JobsScreenState extends State<JobsScreen> {
                 },
               ),
             )
+            : Text("No Data to show")
             : Text("No Data to show")
         // GetBuilder(
         //     init: AddQuatationController(),
@@ -427,7 +435,7 @@ class _JobsScreenState extends State<JobsScreen> {
         ) :
         currentindex == 0 ?
         Container(
-          height: MediaQuery.of(context).size.height/2,
+          height: MediaQuery.of(context).size.height/1.8,
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             shrinkWrap: true,
@@ -519,7 +527,7 @@ class _JobsScreenState extends State<JobsScreen> {
           ),
         )
             :  Container(
-          height: MediaQuery.of(context).size.height/2,
+          height: MediaQuery.of(context).size.height/1.8,
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             shrinkWrap: true,
@@ -671,8 +679,11 @@ class _JobsScreenState extends State<JobsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MoreQuatations()));
+              onTap: () async{
+               var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => MoreQuatations()));
+               if(result != null){
+                 getClientJobs();
+               }
               },
               child: Container(
                 height: 50,
@@ -761,7 +772,7 @@ class _JobsScreenState extends State<JobsScreen> {
                       child: Container(
                           height: 50,
                           width: 120,
-                          child: Center(
+                          child:  Center(
                             child: Text(
                               'Client',
                               style: TextStyle(

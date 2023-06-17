@@ -24,7 +24,7 @@ class ProfileController extends AppBaseController {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
 
-  ProfileDataList? profiledata;
+  ProfileData? profiledata;
   // String? logout;
 
   String? id;
@@ -55,7 +55,7 @@ class ProfileController extends AppBaseController {
       Map<String, String> body = {};
       body[
       RequestKeys.userId] = id!;
-      GetProfile res = await api.getProfile(body);
+      GetProfileModel res = await api.getProfile(body);
       if (!(res.error ?? true)) {
         profiledata = res.data  ;
         firstname = profiledata?.fname;

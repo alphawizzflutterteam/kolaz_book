@@ -17,6 +17,10 @@ final Uri editClientPhotoApi = Uri.parse('${baseUrl}get_all_cat');
 final Uri deleteClientPhotoApi = Uri.parse('${baseUrl}delete_photographer');
 final Uri getClientPhotographersApi = Uri.parse('${baseUrl}get_photographer_client_data');
 final Uri getQuotationDetailsApi = Uri.parse('${baseUrl}get_quatation_by_id');
+final Uri getSubscriptionPlansApi = Uri.parse('${baseUrl}get_plans');
+final Uri planPurchaseApi = Uri.parse('${baseUrl}purchase_plan');
+final Uri getUpcomingJobsTeamApi = Uri.parse('${baseUrl}upcoming_clients_jobs');
+
 // final Uri de = Uri.parse('${baseUrl}get_sellers');
 // final Uri getSellerApi = Uri.parse('${baseUrl}get_sellers');
 

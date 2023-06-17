@@ -71,6 +71,9 @@ dependencies:
   table_calendar: ^3.0.3
   flutter_dotenv: ^5.0.2
   dropdown_button2: ^2.1.2
+  razorpay_flutter: ^1.1.1
+  carousel_slider: ^4.2.1
+
 
 
 #  image_cropper: ^3.0.1

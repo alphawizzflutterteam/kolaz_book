@@ -84,7 +84,7 @@ class _MoreQuatationsState extends State<MoreQuatations> {
          onTap: () async{
           var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddQuotation()));
           if(result != null){
-            controller.getQuotations();
+            getQuotations();
           }
          },
          child: Padding(
@@ -121,7 +121,9 @@ class _MoreQuatationsState extends State<MoreQuatations> {
                        qid: getQuotation[index].id.toString(),
                      )));
                      if(result != null){
-                       getQuotations();
+                       setState(() {
+                         getQuotations();
+                       });
                      }
                    },
                    child: Card(
@@ -135,7 +137,7 @@ class _MoreQuatationsState extends State<MoreQuatations> {
                            child: Row(
                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                              children: [
-                               Text("qid",style: TextStyle(color: AppColors.pdfbtn,fontSize: 16,fontWeight: FontWeight.bold),),
+                               const Text("QID",style: TextStyle(color: AppColors.pdfbtn,fontSize: 16,fontWeight: FontWeight.bold),),
                                Container(
                                    padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
                                    decoration: BoxDecoration(
@@ -152,7 +154,7 @@ class _MoreQuatationsState extends State<MoreQuatations> {
                            child: Row(
                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                              children: [
-                               Text("Client Name",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 16),),
+                               const Text("Client Name",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 16),),
                                Text("${getQuotation[index].clientName}",style: TextStyle(color: AppColors.whit),),
                              ],
                            ),
@@ -162,8 +164,8 @@ class _MoreQuatationsState extends State<MoreQuatations> {
                            child: Row(
                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                              children: [
-                               Text("City",style: TextStyle(color: AppColors.pdfbtn,fontSize: 16,fontWeight: FontWeight.bold),),
-                               Text("${getQuotation[index].city}",style: TextStyle(color: AppColors.whit),),
+                               const Text("City",style: TextStyle(color: AppColors.pdfbtn,fontSize: 16,fontWeight: FontWeight.bold),),
+                               Text("${getQuotation[index].cityName}",style: const TextStyle(color: AppColors.whit),),
                              ],
                            ),
                          ),

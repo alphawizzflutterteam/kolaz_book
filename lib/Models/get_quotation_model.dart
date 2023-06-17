@@ -1,8 +1,8 @@
-import 'dart:convert';
-
 /// status : false
 /// msg : "All Quotation list"
-/// setting : [{"id":"113","client_name":"Piyush","mobile":"9875546464","city":"14","qid":"3442","user_id":"3","output":"znsjdjfjfjejsjfjx hdudbehdud","amount":"50000","type":"client","type_event":"1","booking_id":"0","grapher_id":"0","status":"0","photographers_details":[{"date":"2023-06-15","data":[{"photographer_type":"Candid Cinematography"},{"photographer_type":"LED Wall"}]},{"date":"2023-06-17","data":[{"photographer_type":"Traditional Cinematography"},{"photographer_type":"Drone"}]},{"date":"2023-06-20","data":[{"photographer_type":"Traditional Photography"},{"photographer_type":"Candid Photography"}]}],"update_date":"2023-06-14 13:27:00","event_name":"Weding"}]
+/// setting : [{"city_name":"Agra","id":"131","client_name":"Ajay","mobile":"9686211755","city":"14","qid":"QUA00001","user_id":"3","output":"h jcuskcdovdgjfic","amount":"20000","type":"client","type_event":"1","booking_id":"0","grapher_id":"0","status":"0","photographers_details":[{"date":"2023-06-17","data":[{"photographer_type":"Candid Cinematography"},{"photographer_type":"LED Wall"}]},{"date":"2023-06-20","data":[{"photographer_type":"Drone"},{"photographer_type":"Candid Photography"}]}],"update_date":"2023-06-17 12:58:12","event_name":"Weding"}]
+
+import 'dart:convert';
 
 GetQuotationModel getQuotationModelFromJson(String str) => GetQuotationModel.fromJson(json.decode(str));
 
@@ -54,25 +54,27 @@ GetQuotationModel copyWith({  bool? status,
 
 }
 
-/// id : "113"
-/// client_name : "Piyush"
-/// mobile : "9875546464"
+/// city_name : "Agra"
+/// id : "131"
+/// client_name : "Ajay"
+/// mobile : "9686211755"
 /// city : "14"
-/// qid : "3442"
+/// qid : "QUA00001"
 /// user_id : "3"
-/// output : "znsjdjfjfjejsjfjx hdudbehdud"
-/// amount : "50000"
+/// output : "h jcuskcdovdgjfic"
+/// amount : "20000"
 /// type : "client"
 /// type_event : "1"
 /// booking_id : "0"
 /// grapher_id : "0"
 /// status : "0"
-/// photographers_details : [{"date":"2023-06-15","data":[{"photographer_type":"Candid Cinematography"},{"photographer_type":"LED Wall"}]},{"date":"2023-06-17","data":[{"photographer_type":"Traditional Cinematography"},{"photographer_type":"Drone"}]},{"date":"2023-06-20","data":[{"photographer_type":"Traditional Photography"},{"photographer_type":"Candid Photography"}]}]
-/// update_date : "2023-06-14 13:27:00"
+/// photographers_details : [{"date":"2023-06-17","data":[{"photographer_type":"Candid Cinematography"},{"photographer_type":"LED Wall"}]},{"date":"2023-06-20","data":[{"photographer_type":"Drone"},{"photographer_type":"Candid Photography"}]}]
+/// update_date : "2023-06-17 12:58:12"
 /// event_name : "Weding"
 
 class Setting {
   Setting({
+      String? cityName, 
       String? id, 
       String? clientName, 
       String? mobile, 
@@ -89,6 +91,7 @@ class Setting {
       List<PhotographersDetails>? photographersDetails, 
       String? updateDate, 
       String? eventName,}){
+    _cityName = cityName;
     _id = id;
     _clientName = clientName;
     _mobile = mobile;
@@ -108,6 +111,7 @@ class Setting {
 }
 
   Setting.fromJson(dynamic json) {
+    _cityName = json['city_name'];
     _id = json['id'];
     _clientName = json['client_name'];
     _mobile = json['mobile'];
@@ -130,6 +134,7 @@ class Setting {
     _updateDate = json['update_date'];
     _eventName = json['event_name'];
   }
+  String? _cityName;
   String? _id;
   String? _clientName;
   String? _mobile;
@@ -146,7 +151,8 @@ class Setting {
   List<PhotographersDetails>? _photographersDetails;
   String? _updateDate;
   String? _eventName;
-Setting copyWith({  String? id,
+Setting copyWith({  String? cityName,
+  String? id,
   String? clientName,
   String? mobile,
   String? city,
@@ -162,7 +168,8 @@ Setting copyWith({  String? id,
   List<PhotographersDetails>? photographersDetails,
   String? updateDate,
   String? eventName,
-}) => Setting(  id: id ?? _id,
+}) => Setting(  cityName: cityName ?? _cityName,
+  id: id ?? _id,
   clientName: clientName ?? _clientName,
   mobile: mobile ?? _mobile,
   city: city ?? _city,
@@ -179,6 +186,7 @@ Setting copyWith({  String? id,
   updateDate: updateDate ?? _updateDate,
   eventName: eventName ?? _eventName,
 );
+  String? get cityName => _cityName;
   String? get id => _id;
   String? get clientName => _clientName;
   String? get mobile => _mobile;
@@ -198,6 +206,7 @@ Setting copyWith({  String? id,
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['city_name'] = _cityName;
     map['id'] = _id;
     map['client_name'] = _clientName;
     map['mobile'] = _mobile;
@@ -221,7 +230,7 @@ Setting copyWith({  String? id,
 
 }
 
-/// date : "2023-06-15"
+/// date : "2023-06-17"
 /// data : [{"photographer_type":"Candid Cinematography"},{"photographer_type":"LED Wall"}]
 
 class PhotographersDetails {

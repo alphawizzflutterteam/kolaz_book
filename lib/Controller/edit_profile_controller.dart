@@ -38,7 +38,7 @@ class EditProfileController extends AppBaseController {
   TextEditingController termsconditionControlletr = TextEditingController();
 
 
-  ProfileDataList? profiledata;
+  ProfileData? profiledata;
 
   String? id;
  String? firstname;
@@ -63,7 +63,7 @@ class EditProfileController extends AppBaseController {
       Map<String, String> body = {};
       body[
         RequestKeys.userId] = id!;
-      GetProfile res = await api.getProfile(body);
+      GetProfileModel res = await api.getProfile(body);
       if (!(res.error ?? true)) {
         profiledata = res.data  ;
         firstname = profiledata?.fname;

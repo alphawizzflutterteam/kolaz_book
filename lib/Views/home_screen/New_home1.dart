@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/home_controller.dart';
+import 'package:kolazz_book/Views/Subscription/Subscription_screen.dart';
 import '../../Utils/colors.dart';
 import '../brodcast/Broadcast_screen.dart';
 import '../edit_profile/edit_profile.dart';
@@ -22,6 +24,8 @@ class _HomepageState extends State<Homepage> {
     return GetBuilder(
       init:HomeController(),
       builder: (controller) {
+        // if (connectivity.connectivitycheckConnectivity() == ConnectivityResult.wifi ||
+        //  connectivity.checkConnectivity() == ConnectivityResult.mobile) {
       return Scaffold(
         backgroundColor: AppColors.primary,
         appBar: AppBar(
@@ -50,8 +54,33 @@ class _HomepageState extends State<Homepage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              controller.profiledata != null || controller.profiledata == "" ? Text("${controller.profiledata!.fname} ${controller.profiledata!.lname}",style: TextStyle(color: AppColors.AppbtnColor,fontSize: 15),): CircularProgressIndicator(),
-              Text("15 Days Free Trial ",style: TextStyle(fontSize: 12),),
+              controller.profiledata != null || controller.profiledata == "" ? Text("${controller.profiledata!.fname} ${controller.profiledata!.lname} ",style: TextStyle(color: AppColors.AppbtnColor,fontSize: 15),): CircularProgressIndicator(),
+              controller.profiledata != null ?
+              controller.profiledata!.isPlanActive! == true?
+              Text(
+                controller.profiledata != null ?
+                "${controller.profiledata!.remainingDays} Trial "
+                : "15 Days Free Trial ",style: const TextStyle(fontSize: 12),)
+              : Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: InkWell(
+                  onTap: (){
+                    Get.to(SubscriptionScreen());
+                  },
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                      decoration: BoxDecoration(
+                          color: AppColors.lightwhite,
+
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: const Text("Subscribe Now",style: TextStyle(color: AppColors.whit,
+                      fontSize: 12),)),
+                ),
+              )
+              : const Text("Something went wrong!", style: TextStyle(
+                fontSize: 12
+              ),),
             ],
           ),
           actions: [
@@ -61,7 +90,7 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Notification_screen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Notification_screen()));
                     },
                     child: Container(
                         height: 37,

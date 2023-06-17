@@ -152,7 +152,7 @@ class _AddQuotationState extends State<EditQuotation> {
   }
 
   deleteQuotation(String id) async {
-    // SharedPreferences preferences = await SharedPreferences.getInstance();
+    // SharedPreferences preferences = await SharedPreferences.getInstance();ff
     // String? userId = preferences.getString('id');
     var headers = {
       'Cookie': 'ci_session=b222ee2ce87968a446feacdb861ad51c821bdf6d'
@@ -246,6 +246,7 @@ class _AddQuotationState extends State<EditQuotation> {
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
     Fluttertoast.showToast(msg: userData['message']);
+    Navigator.pop(context);
     Navigator.pop(context, true);
   }
   // getQuotationDetails() async {

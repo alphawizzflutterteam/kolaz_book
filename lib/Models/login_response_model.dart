@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 /// error : false
 /// message : "User Login Success"
-/// data : [{"id":"283","username":"","email":"karanstomar@icloud.com","fname":"Karan","lname":"Tomar","countrycode":"","currency":"","mobile":"8770496666","company_logo":"","company_link":"","password":"25d55ad283aa400af464c76d713c07ad","profile_pic":"","facebook":null,"note":null,"instagram":null,"youtube":null,"company_name":null,"company_number":null,"type":"","isGold":"0","address":"","company_address":null,"city":"","country":"","device_token":"","date":"","agreecheck":"0","otp":"6481","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-06-01 11:45:38","updated_at":"2023-06-01 11:45:38"}]
+/// data : [{"id":"3","username":"","email":"karanstomar@gmail.com","fname":"Karan S","lname":"Tomar","countrycode":"","currency":"","mobile":"8770496665","company_logo":"","company_link":"","password":"25d55ad283aa400af464c76d713c07ad","profile_pic":"","facebook":"","note":"","instagram":"","youtube":"","company_name":null,"company_number":"0","type":"","isGold":"0","address":"","company_address":"","city":"","country":"","device_token":"","date":"","agreecheck":"0","otp":"8169","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-06-06 13:24:09","updated_at":"2023-06-13 09:49:55","remaining_days":"","is_plan_active":false}]
+import 'dart:convert';
 
 LoginResponseModel loginResponseModelFromJson(String str) => LoginResponseModel.fromJson(json.decode(str));
 
 String loginResponseModelToJson(LoginResponseModel data) => json.encode(data.toJson());
-
 
 class LoginResponseModel {
   LoginResponseModel({
@@ -55,41 +53,43 @@ LoginResponseModel copyWith({  bool? error,
 
 }
 
-/// id : "283"
+/// id : "3"
 /// username : ""
-/// email : "karanstomar@icloud.com"
-/// fname : "Karan"
+/// email : "karanstomar@gmail.com"
+/// fname : "Karan S"
 /// lname : "Tomar"
 /// countrycode : ""
 /// currency : ""
-/// mobile : "8770496666"
+/// mobile : "8770496665"
 /// company_logo : ""
 /// company_link : ""
 /// password : "25d55ad283aa400af464c76d713c07ad"
 /// profile_pic : ""
-/// facebook : null
-/// note : null
-/// instagram : null
-/// youtube : null
+/// facebook : ""
+/// note : ""
+/// instagram : ""
+/// youtube : ""
 /// company_name : null
-/// company_number : null
+/// company_number : "0"
 /// type : ""
 /// isGold : "0"
 /// address : ""
-/// company_address : null
+/// company_address : ""
 /// city : ""
 /// country : ""
 /// device_token : ""
 /// date : ""
 /// agreecheck : "0"
-/// otp : "6481"
+/// otp : "8169"
 /// status : "1"
 /// wallet : "0.00"
 /// oauth_provider : null
 /// oauth_uid : null
 /// last_login : null
-/// created_at : "2023-06-01 11:45:38"
-/// updated_at : "2023-06-01 11:45:38"
+/// created_at : "2023-06-06 13:24:09"
+/// updated_at : "2023-06-13 09:49:55"
+/// remaining_days : ""
+/// is_plan_active : false
 
 class Data {
   Data({
@@ -105,16 +105,16 @@ class Data {
       String? companyLink, 
       String? password, 
       String? profilePic, 
-      dynamic facebook, 
-      dynamic note, 
-      dynamic instagram, 
-      dynamic youtube, 
+      String? facebook, 
+      String? note, 
+      String? instagram, 
+      String? youtube, 
       dynamic companyName, 
-      dynamic companyNumber, 
+      String? companyNumber, 
       String? type, 
       String? isGold, 
       String? address, 
-      dynamic companyAddress, 
+      String? companyAddress, 
       String? city, 
       String? country, 
       String? deviceToken, 
@@ -127,7 +127,9 @@ class Data {
       dynamic oauthUid, 
       dynamic lastLogin, 
       String? createdAt, 
-      String? updatedAt,}){
+      String? updatedAt, 
+      String? remainingDays, 
+      bool? isPlanActive,}){
     _id = id;
     _username = username;
     _email = email;
@@ -163,6 +165,8 @@ class Data {
     _lastLogin = lastLogin;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
+    _remainingDays = remainingDays;
+    _isPlanActive = isPlanActive;
 }
 
   Data.fromJson(dynamic json) {
@@ -201,6 +205,8 @@ class Data {
     _lastLogin = json['last_login'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _remainingDays = json['remaining_days'];
+    _isPlanActive = json['is_plan_active'];
   }
   String? _id;
   String? _username;
@@ -214,16 +220,16 @@ class Data {
   String? _companyLink;
   String? _password;
   String? _profilePic;
-  dynamic _facebook;
-  dynamic _note;
-  dynamic _instagram;
-  dynamic _youtube;
+  String? _facebook;
+  String? _note;
+  String? _instagram;
+  String? _youtube;
   dynamic _companyName;
-  dynamic _companyNumber;
+  String? _companyNumber;
   String? _type;
   String? _isGold;
   String? _address;
-  dynamic _companyAddress;
+  String? _companyAddress;
   String? _city;
   String? _country;
   String? _deviceToken;
@@ -237,6 +243,8 @@ class Data {
   dynamic _lastLogin;
   String? _createdAt;
   String? _updatedAt;
+  String? _remainingDays;
+  bool? _isPlanActive;
 Data copyWith({  String? id,
   String? username,
   String? email,
@@ -249,16 +257,16 @@ Data copyWith({  String? id,
   String? companyLink,
   String? password,
   String? profilePic,
-  dynamic facebook,
-  dynamic note,
-  dynamic instagram,
-  dynamic youtube,
+  String? facebook,
+  String? note,
+  String? instagram,
+  String? youtube,
   dynamic companyName,
-  dynamic companyNumber,
+  String? companyNumber,
   String? type,
   String? isGold,
   String? address,
-  dynamic companyAddress,
+  String? companyAddress,
   String? city,
   String? country,
   String? deviceToken,
@@ -272,6 +280,8 @@ Data copyWith({  String? id,
   dynamic lastLogin,
   String? createdAt,
   String? updatedAt,
+  String? remainingDays,
+  bool? isPlanActive,
 }) => Data(  id: id ?? _id,
   username: username ?? _username,
   email: email ?? _email,
@@ -307,6 +317,8 @@ Data copyWith({  String? id,
   lastLogin: lastLogin ?? _lastLogin,
   createdAt: createdAt ?? _createdAt,
   updatedAt: updatedAt ?? _updatedAt,
+  remainingDays: remainingDays ?? _remainingDays,
+  isPlanActive: isPlanActive ?? _isPlanActive,
 );
   String? get id => _id;
   String? get username => _username;
@@ -320,16 +332,16 @@ Data copyWith({  String? id,
   String? get companyLink => _companyLink;
   String? get password => _password;
   String? get profilePic => _profilePic;
-  dynamic get facebook => _facebook;
-  dynamic get note => _note;
-  dynamic get instagram => _instagram;
-  dynamic get youtube => _youtube;
+  String? get facebook => _facebook;
+  String? get note => _note;
+  String? get instagram => _instagram;
+  String? get youtube => _youtube;
   dynamic get companyName => _companyName;
-  dynamic get companyNumber => _companyNumber;
+  String? get companyNumber => _companyNumber;
   String? get type => _type;
   String? get isGold => _isGold;
   String? get address => _address;
-  dynamic get companyAddress => _companyAddress;
+  String? get companyAddress => _companyAddress;
   String? get city => _city;
   String? get country => _country;
   String? get deviceToken => _deviceToken;
@@ -343,6 +355,8 @@ Data copyWith({  String? id,
   dynamic get lastLogin => _lastLogin;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
+  String? get remainingDays => _remainingDays;
+  bool? get isPlanActive => _isPlanActive;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -381,6 +395,8 @@ Data copyWith({  String? id,
     map['last_login'] = _lastLogin;
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;
+    map['remaining_days'] = _remainingDays;
+    map['is_plan_active'] = _isPlanActive;
     return map;
   }
 
