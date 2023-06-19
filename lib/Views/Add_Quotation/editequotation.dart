@@ -50,6 +50,8 @@ class _AddQuotationState extends State<EditQuotation> {
   TextEditingController outputController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
+  TextEditingController cityNameController = TextEditingController();
+
 
   String? SelectedGender;
   String? dropdownValue;
@@ -217,6 +219,7 @@ class _AddQuotationState extends State<EditQuotation> {
     quotationData = result.setting!;
     clientNameController.text = quotationData[0].clientName.toString();
     cityController = quotationData[0].city.toString();
+    cityNameController.text = quotationData[0].cityName.toString();
     eventController = quotationData[0].typeEvent.toString();
     amountController.text = quotationData[0].amount.toString();
     outputController.text = quotationData[0].output.toString();
@@ -544,45 +547,26 @@ class _AddQuotationState extends State<EditQuotation> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 0),
                             child: Container(
-                              padding: EdgeInsets.only(left: 8),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: AppColors.containerclr2),
                               width: MediaQuery.of(context).size.width / 2.1,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: AppColors.cardclr,
-                                  // Initial Value
-                                  value: cityController,
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    "City",
-                                    style: TextStyle(color: AppColors.textclr),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: AppColors.textclr,
-                                  ),
-                                  // Array list of items
-
-                                  items: citiesList.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id.toString(),
-                                      child: Text(
-                                        items.name.toString(),
-                                        style: const TextStyle(
-                                            color: AppColors.textclr),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  // After selecting the desired option,it will
-                                  // change button value to selected value
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      cityController = newValue;
-                                    });
-                                  },
-                                ),
+                              child:  TextFormField(
+                                style:
+                                const TextStyle(color: AppColors.textclr),
+                                controller: cityNameController,
+                                keyboardType: TextInputType.name,
+                                validator: (value) => value!.isEmpty
+                                    ? ' City/Venue cannot be blank'
+                                    : null,
+                                decoration: const InputDecoration(
+                                    hintText: 'City/Venue',
+                                    hintStyle: TextStyle(
+                                        color: AppColors.textclr,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 10, bottom: 6)),
                               ),
 
                               // TextFormField(

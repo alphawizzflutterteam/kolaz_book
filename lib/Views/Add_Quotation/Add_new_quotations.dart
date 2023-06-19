@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:kolazz_book/Models/add_quatation_model.dart';
+import 'package:kolazz_book/Models/client_model.dart';
 import 'package:kolazz_book/Models/event_type_model.dart';
 import 'package:kolazz_book/Models/get_cities_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Controller/addQuatation_controller.dart';
+import '../../Controller/contact_screen_controller.dart';
 import '../../Models/Type_of_photography_model.dart';
 import '../../Utils/colors.dart';
 import 'package:http/http.dart' as http;
@@ -79,10 +82,14 @@ class _AddQuotationState extends State<AddQuotation> {
   TextEditingController outputController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
+  TextEditingController cityNameController = TextEditingController();
 
   String? selectedEvents;
   var eventController;
   var cityController;
+  var clientName;
+  String? userId;
+  List<ClientList> clientList = [];
 
   getPhotographerType() async {
     var uri = Uri.parse(getPhotographerApi.toString());
@@ -125,6 +132,29 @@ class _AddQuotationState extends State<AddQuotation> {
 
     setState(() {
       eventList = EventTypeModel.fromJson(userData).categories!;
+    });
+  }
+
+  getClients() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    userId = preferences.getString('id');
+    var uri = Uri.parse(getClientPhotographersApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields['type'] = "client";
+    request.fields['user_id'] = userId.toString();
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      clientList = ClientModel.fromJson(userData).data!;
     });
   }
 
@@ -596,6 +626,7 @@ class _AddQuotationState extends State<AddQuotation> {
     getPhotographerType();
     getEventTypes();
     getCitiesList();
+    getClients();
   }
 
   List pType = [];
@@ -614,7 +645,7 @@ class _AddQuotationState extends State<AddQuotation> {
 
     request.fields.addAll({
       'client_name': clientNameController.text.toString(),
-      'city': cityController.toString(),
+      'city': cityNameController.text.toString(),
       'mobile': mobileController.text.toString(),
       'type_event': eventController.toString(),
       'output': outputController.text.toString(),
@@ -782,25 +813,66 @@ class _AddQuotationState extends State<AddQuotation> {
                                     // padding: EdgeInsets.symmetric(vertical: 1),
                                     width:
                                         MediaQuery.of(context).size.width / 2.1,
-                                    child: TextFormField(
-                                      style: const TextStyle(
-                                          color: AppColors.textclr),
-                                      controller: clientNameController,
-                                      keyboardType: TextInputType.name,
-                                      validator: (value) => value!.isEmpty
-                                          ? 'Client Name cannot be blank'
-                                          : null,
-                                      decoration: const InputDecoration(
-                                          hintText: 'Enter Client Name',
-                                          hintStyle: TextStyle(
-                                              color: AppColors.textclr,
-                                              fontSize: 14),
-                                          border: InputBorder.none,
-                                          contentPadding: EdgeInsets.only(
-                                              left: 10, bottom: 6)),
+                                    child: CustomSearchableDropDown(
+                                      dropdownHintText: "Client Name",
+                                      suffixIcon: const Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        color: AppColors.whit,
+                                      ),
+                                      backgroundColor: AppColors.containerclr2,
+                                      dropdownBackgroundColor:
+                                          AppColors.containerclr2,
+                                      dropdownItemStyle: const TextStyle(
+                                          color: AppColors.whit),
+                                      // dropdownHintText: TextStyle(
+                                      //   color: AppColors.whit
+                                      // ),
+                                      items: clientList,
+                                      label: 'Client Name',
+                                      labelStyle: const TextStyle(
+                                        color: AppColors.whit
+                                      ),
+                                      multiSelectTag: 'Names',
+                                      decoration: BoxDecoration(
+                                        color: AppColors.containerclr2,
+                                          borderRadius:
+                                              BorderRadius.circular(15)
+                                          // color: Colors.white
+                                          // border: Border.all(
+                                          //   color: CustomColors.lightgray.withOpacity(0.5),
+                                          // )
+                                          ),
+                                      multiSelect: false,
+                                      // prefixIcon: Padding(
+                                      //   padding: const EdgeInsets.all(2.0),
+                                      //   child: Container(
+                                      //       height: 30,
+                                      //       width: 30,
+                                      //       child: Image.asset(
+                                      //         "assets/drawerImages/designation.png", scale: 1.5,)
+                                      //   ),
+                                      // ),
+                                      dropDownMenuItems: clientList.map((item) {
+                                            return "${item.firstName} ${item.lastName}";
+                                          }).toList() ??
+                                          [],
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                          clientName = value;
+                                          //  setState(() {
+                                          //   selectedDesignation = jsonDecode(value);
+                                          //   // });
+                                          // }
+                                          // else {
+                                          //   //setState(() {
+                                          //   selectedDesignation.clear();
+                                          // });
+                                        }
+                                      },
                                     ),
+
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             Row(
@@ -814,66 +886,66 @@ class _AddQuotationState extends State<AddQuotation> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 0),
                                   child: Container(
-                                    padding: EdgeInsets.only(left: 8),
+                                    // padding: EdgeInsets.only(left: 8),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
                                         MediaQuery.of(context).size.width / 2.1,
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                        dropdownColor: AppColors.cardclr,
-                                        // Initial Value
-                                        value: cityController,
-                                        isExpanded: true,
-                                        hint: const Text(
-                                          "City",
-                                          style: TextStyle(
-                                              color: AppColors.textclr),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.keyboard_arrow_down,
-                                          color: AppColors.textclr,
-                                        ),
-                                        // Array list of items
-
-                                        items: citiesList.map((items) {
-                                          return DropdownMenuItem(
-                                            value: items.id.toString(),
-                                            child: Text(
-                                              items.name.toString(),
-                                              style: const TextStyle(
-                                                  color: AppColors.textclr),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        // After selecting the desired option,it will
-                                        // change button value to selected value
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            cityController = newValue;
-                                          });
-                                        },
-                                      ),
+                                    child:
+                                        // DropdownButtonHideUnderline(
+                                        //   child: DropdownButton(
+                                        //     dropdownColor: AppColors.cardclr,
+                                        //     // Initial Value
+                                        //     value: cityController,
+                                        //     isExpanded: true,
+                                        //     hint: const Text(
+                                        //       "City",
+                                        //       style: TextStyle(
+                                        //           color: AppColors.textclr),
+                                        //     ),
+                                        //     icon: const Icon(
+                                        //       Icons.keyboard_arrow_down,
+                                        //       color: AppColors.textclr,
+                                        //     ),
+                                        //     // Array list of items
+                                        //
+                                        //     items: citiesList.map((items) {
+                                        //       return DropdownMenuItem(
+                                        //         value: items.id.toString(),
+                                        //         child: Text(
+                                        //           items.name.toString(),
+                                        //           style: const TextStyle(
+                                        //               color: AppColors.textclr),
+                                        //         ),
+                                        //       );
+                                        //     }).toList(),
+                                        //     // After selecting the desired option,it will
+                                        //     // change button value to selected value
+                                        //     onChanged: (newValue) {
+                                        //       setState(() {
+                                        //         cityController = newValue;
+                                        //       });
+                                        //     },
+                                        //   ),
+                                        // ),
+                                        TextFormField(
+                                      style: const TextStyle(
+                                          color: AppColors.textclr),
+                                      controller: cityNameController,
+                                      keyboardType: TextInputType.name,
+                                      validator: (value) => value!.isEmpty
+                                          ? ' City/Venue cannot be blank'
+                                          : null,
+                                      decoration: const InputDecoration(
+                                          hintText: 'City/Venue',
+                                          hintStyle: TextStyle(
+                                              color: AppColors.textclr,
+                                              fontSize: 14),
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 10, bottom: 6)),
                                     ),
-
-                                    // TextFormField(
-                                    //   style:
-                                    //      const TextStyle(color: AppColors.textclr),
-                                    //   controller: eventController,
-                                    //   keyboardType: TextInputType.name,
-                                    //   validator: (value) => value!.isEmpty
-                                    //       ? ' Events cannot be blank'
-                                    //       : null,
-                                    //   decoration: const InputDecoration(
-                                    //       hintText: 'Enter Events',
-                                    //       hintStyle: TextStyle(
-                                    //           color: AppColors.textclr,
-                                    //           fontSize: 14),
-                                    //       border: InputBorder.none,
-                                    //       contentPadding: EdgeInsets.only(
-                                    //           left: 10, bottom: 6)),
-                                    // ),
                                   ),
                                 )
                               ],

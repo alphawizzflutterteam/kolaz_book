@@ -726,6 +726,7 @@ class _ContactScreenState extends State<ContactScreen> {
       if (userData['status'] == "1") {
         Fluttertoast.showToast(msg: userData['msg']);
         controller.getClientPhotographer();
+        controller.getClienttlist();
       } else {
         Fluttertoast.showToast(msg: userData['msg']);
       }
@@ -2299,10 +2300,4 @@ class _ContactScreenState extends State<ContactScreen> {
       },
     );
   }
-
-
-
-
-
-
 }

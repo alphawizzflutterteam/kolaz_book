@@ -150,6 +150,28 @@ class _JobsScreenState extends State<JobsScreen> {
                               ),
                             ),
                             Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Date",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 14),),
+                                  Container(
+                                    alignment: Alignment.centerRight,
+                                    height: 30,
+                                      width: MediaQuery.of(context).size.width/2,
+                                      child:
+                                  ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemCount: data.photographersDetails!.length,
+                                    itemBuilder: (context, k) {
+                                      return Text('${data.photographersDetails![k].date.toString()} , ',style: const TextStyle(color: AppColors.whit),);
+                                    }
+                                  )),
+                                ],
+                              ),
+                            ),
+                            Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -228,6 +250,28 @@ class _JobsScreenState extends State<JobsScreen> {
                               ),
                             ),
                             Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Date",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 14),),
+                                  Container(
+                                      alignment: Alignment.centerRight,
+                                      height: 30,
+                                      width: MediaQuery.of(context).size.width/2,
+                                      child:
+                                      ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: data.photographersDetails!.length,
+                                          itemBuilder: (context, k) {
+                                            return Text('${data.photographersDetails![k].date.toString()} , ',style: const TextStyle(color: AppColors.whit),);
+                                          }
+                                      )),
+                                ],
+                              ),
+                            ),
+                            Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,8 +298,18 @@ class _JobsScreenState extends State<JobsScreen> {
                 },
               ),
             )
-            : Text("No Data to show")
-            : Text("No Data to show")
+            : Container(
+          height: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(child: Text("No Data to show", style: TextStyle(
+              color: AppColors.whit
+            ),)))
+            : Container(
+            height: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(child: Text("No Data to show", style: TextStyle(
+                color: AppColors.whit
+            ),)))
         // GetBuilder(
         //     init: AddQuatationController(),
         //     builder: (controller){
@@ -425,7 +479,7 @@ class _JobsScreenState extends State<JobsScreen> {
       children: [
         freelancerJobs == null || freelancerJobs.isEmpty ?
         Container(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.width,
           width: MediaQuery.of(context).size.width,
           child: const Center(
             child: Text("No Data to show", style: TextStyle(

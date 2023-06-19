@@ -16,6 +16,7 @@ class RequestKeys {
   static String firstname = 'first_name';
   static String lastname = 'last_name';
   static String city = 'city';
+  static String state = 'state';
   static String photographertype = 'photographer_type';
   static String companyname = 'compny_name';
   static String companyphone = 'company_phone';

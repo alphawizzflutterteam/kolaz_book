@@ -103,6 +103,7 @@ class addPhotographerController extends AppBaseController {
         setBusy(false);
         onTapClear();
         getClientPhotographer();
+        getClienttlist();
         Get.back();
         update();
       }
@@ -140,6 +141,7 @@ class addPhotographerController extends AppBaseController {
         setBusy(false);
         onTapClear();
         getClientPhotographer();
+        getClienttlist();
         Get.back();
         update();
       }
@@ -235,7 +237,7 @@ class addPhotographerController extends AppBaseController {
     }
   }
 
-  Future<void>getClienttlist() async {
+  Future<void> getClienttlist() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     id = preferences.getString('id');
     setBusy(true);

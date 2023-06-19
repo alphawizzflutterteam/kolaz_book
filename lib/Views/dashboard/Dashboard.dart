@@ -89,7 +89,7 @@ class _DashBoardState extends State<DashBoard>
                    borderRadius: BorderRadius.circular(5),
                    color: AppColors.AppbtnColor
                ),
-               child: Center(child: Text('yes',style: TextStyle(color: AppColors.textclr),))),
+               child: Center(child: Text('Yes',style: TextStyle(color: AppColors.textclr),))),
            onPressed: () => Navigator.of(context).pop(true),
          ),
        ],

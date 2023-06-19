@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -8,9 +9,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
+import 'package:kolazz_book/Models/get_cities_model.dart';
+import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/home_screen/New_home1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 import '../Models/get_profile_model.dart';
 import '../Models/update_profile_model.dart';
 import '../Services/request_keys.dart';
@@ -29,6 +32,7 @@ class EditProfileController extends AppBaseController {
   TextEditingController companynameController = TextEditingController();
   TextEditingController companyphoneController = TextEditingController();
   TextEditingController companyaddressController = TextEditingController();
+  TextEditingController companyStateController = TextEditingController();
   TextEditingController companyEmailController = TextEditingController();
   TextEditingController countryController = TextEditingController();
   TextEditingController perdayController = TextEditingController();
@@ -43,14 +47,37 @@ class EditProfileController extends AppBaseController {
   String? id;
  String? firstname;
  String? lastname;
+ String? profilePic;
   UpdateProfile ? updateprofile;
  String? updatedata;
+  List<CityList> citiesList = [];
+  var cityController;
 
+
+  getCitiesList() async {
+    var uri = Uri.parse(getCitiesApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("GET", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    // request.fields['type_id'] = "1";
+    // request.fields['vendor_id'] = userID;
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+      citiesList = GetCitiesModel.fromJson(userData).data!;
+      update();
+  }
 
 
   @override
   void onInit() {
     getProfile();
+    getCitiesList();
     //update();
     super.onInit();
   }
@@ -68,6 +95,7 @@ class EditProfileController extends AppBaseController {
         profiledata = res.data  ;
         firstname = profiledata?.fname;
         lastname = profiledata?.lname;
+        profilePic = profiledata?.profilePic;
          SharedPreferences prefe = await SharedPreferences.getInstance();
          prefe.setString('name',firstname!);
         firstnameController.text = profiledata?.fname ?? "";
@@ -78,12 +106,14 @@ class EditProfileController extends AppBaseController {
         companynameController.text= profiledata?.companyName??'';
         companyphoneController.text= profiledata?.companyNumber??'';
         companyaddressController.text= profiledata?.companyAddress??'';
+        // cityController = profiledata?.city ?? '';
+         companyStateController.text = profiledata?.country ?? '';
         countryController.text= profiledata?.country??'';
         companyEmailController.text= profiledata?.companyLink??'';
         facebookController.text= profiledata?.facebook??'';
         instagramController.text= profiledata?.instagram??'';
         youtubeController.text= profiledata?.youtube??'';
-
+        print("this is my profile image $profilePic");
         // ShowMessage.showSnackBar('Server Res', res.message ?? '');
         setBusy(false);
         update();
@@ -101,20 +131,19 @@ class EditProfileController extends AppBaseController {
   Future<void>updateProfile() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     id = preferences.getString('id');
-
-
-
     setBusy(true);
     try {
       Map<String, String> body = {};
-      body[
-      RequestKeys.Id] = id!;
+      body[RequestKeys.Id] = id!;
       body[RequestKeys.firstname] = firstnameController.text.trim();
       body[RequestKeys.lastname] = lastnameController.text.trim();
       body[RequestKeys.email] = emailController.text.trim();
       body[RequestKeys.mobile] = mobileController.text.trim();
       body[RequestKeys.companyname] = companynameController.text.trim();
       body[RequestKeys.companyphone] = companyphoneController.text.trim();
+      body[RequestKeys.companyaddress] = companyaddressController.text.trim();
+      body[RequestKeys.city] = cityController.trim();
+      body[RequestKeys.state] = companyStateController.text.toString();
       body[RequestKeys.companyaddress] = companyaddressController.text.trim();
       body[RequestKeys.companyEmail] = companyEmailController.text.trim();
       body[RequestKeys.facebookLink] = facebookController.text.trim();
@@ -223,7 +252,7 @@ class EditProfileController extends AppBaseController {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(6))),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -232,7 +261,7 @@ class EditProfileController extends AppBaseController {
                 onTap: () async {
                   getImageGallery(ImgSource.Gallery, context ,i);
                 },
-                child: Container(
+                child:  Container(
                   child: ListTile(
                       title:  Text("Gallery"),
                       leading: Icon(
@@ -248,7 +277,6 @@ class EditProfileController extends AppBaseController {
               ),
               InkWell(
                 onTap: () async {
-
                  getImage(ImgSource.Camera, context, i);
                 },
                 child: Container(

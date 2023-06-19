@@ -37,6 +37,7 @@ class _MoreQuatationsState extends State<MoreQuatations> {
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.type] = 'client';
+    print("this is quotation list ${request.fields.toString()}");
     var response = await request.send();
     print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
@@ -83,6 +84,7 @@ class _MoreQuatationsState extends State<MoreQuatations> {
        bottomSheet:  InkWell(
          onTap: () async{
           var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddQuotation()));
+          print("this is result $result");
           if(result != null){
             getQuotations();
           }

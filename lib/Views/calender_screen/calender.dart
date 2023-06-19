@@ -225,7 +225,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         children: [
           const SizedBox(height: 25,),
           Container(
-            height: MediaQuery.of(context).size.height/2.3,
+            // height: MediaQuery.of(context).size.height/3,
             color: AppColors.grd1,
             child: TableCalendar(
               daysOfWeekHeight: 40,
@@ -279,7 +279,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height/3,
+            height: MediaQuery.of(context).size.height/3.2,
             width: MediaQuery.of(context).size.width,
             child: getJobs.isNotEmpty ?
             ListView.builder(

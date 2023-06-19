@@ -43,6 +43,7 @@ class _EditClientJobState extends State<EditClientJob> {
   TextEditingController outputController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
+  TextEditingController cityNameController = TextEditingController();
 
   String? SelectedGender;
   String? dropdownValue;
@@ -136,7 +137,7 @@ class _EditClientJobState extends State<EditClientJob> {
     if(widget.type == true) {
       setState(() {
         clientNameController.text = widget.allJobs!.clientName.toString();
-        cityController = widget.allJobs!.city.toString();
+        cityNameController.text = widget.allJobs!.city.toString();
         eventController = widget.allJobs!.typeEvent.toString();
         amountController.text = widget.allJobs!.amount.toString();
         outputController.text = widget.allJobs!.output.toString();
@@ -144,7 +145,8 @@ class _EditClientJobState extends State<EditClientJob> {
     }else{
       setState(() {
         clientNameController.text = widget.upcomingJobs!.clientName.toString();
-        cityController = widget.upcomingJobs!.city.toString();
+        // cityController = widget.upcomingJobs!.city.toString();
+        cityNameController.text = widget.upcomingJobs!.city.toString();
         eventController = widget.upcomingJobs!.typeEvent.toString();
         amountController.text = widget.upcomingJobs!.amount.toString();
         outputController.text = widget.upcomingJobs!.output.toString();
@@ -1388,64 +1390,64 @@ class _EditClientJobState extends State<EditClientJob> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 8.0, horizontal: 0),
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 8),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: AppColors.containerclr2),
                                   width: MediaQuery.of(context).size.width / 2.1,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      dropdownColor: AppColors.cardclr,
-                                      // Initial Value
-                                      value: cityController,
-                                      isExpanded: true,
-                                      hint: const Text(
-                                        "City",
-                                        style: TextStyle(color: AppColors.textclr),
-                                      ),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: AppColors.textclr,
-                                      ),
-                                      // Array list of items
-
-                                      items: citiesList.map((items) {
-                                        return DropdownMenuItem(
-                                          value: items.id.toString(),
-                                          child: Text(
-                                            items.name.toString(),
-                                            style: const TextStyle(
-                                                color: AppColors.textclr),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      // After selecting the desired option,it will
-                                      // change button value to selected value
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          cityController = newValue;
-                                        });
-                                      },
-                                    ),
-                                  ),
-
-                                  // TextFormField(
-                                  //   style:
-                                  //      const TextStyle(color: AppColors.textclr),
-                                  //   controller: eventController,
-                                  //   keyboardType: TextInputType.name,
-                                  //   validator: (value) => value!.isEmpty
-                                  //       ? ' Events cannot be blank'
-                                  //       : null,
-                                  //   decoration: const InputDecoration(
-                                  //       hintText: 'Enter Events',
-                                  //       hintStyle: TextStyle(
-                                  //           color: AppColors.textclr,
-                                  //           fontSize: 14),
-                                  //       border: InputBorder.none,
-                                  //       contentPadding: EdgeInsets.only(
-                                  //           left: 10, bottom: 6)),
+                                  child:
+                                  // DropdownButtonHideUnderline(
+                                  //   child: DropdownButton(
+                                  //     dropdownColor: AppColors.cardclr,
+                                  //     // Initial Value
+                                  //     value: cityController,
+                                  //     isExpanded: true,
+                                  //     hint: const Text(
+                                  //       "City",
+                                  //       style: TextStyle(color: AppColors.textclr),
+                                  //     ),
+                                  //     icon: const Icon(
+                                  //       Icons.keyboard_arrow_down,
+                                  //       color: AppColors.textclr,
+                                  //     ),
+                                  //     // Array list of items
+                                  //
+                                  //     items: citiesList.map((items) {
+                                  //       return DropdownMenuItem(
+                                  //         value: items.id.toString(),
+                                  //         child: Text(
+                                  //           items.name.toString(),
+                                  //           style: const TextStyle(
+                                  //               color: AppColors.textclr),
+                                  //         ),
+                                  //       );
+                                  //     }).toList(),
+                                  //     // After selecting the desired option,it will
+                                  //     // change button value to selected value
+                                  //     onChanged: (newValue) {
+                                  //       setState(() {
+                                  //         cityController = newValue;
+                                  //       });
+                                  //     },
+                                  //   ),
                                   // ),
+
+                                  TextFormField(
+                                    style:
+                                       const TextStyle(color: AppColors.textclr),
+                                    controller: cityNameController,
+                                    keyboardType: TextInputType.name,
+                                    validator: (value) => value!.isEmpty
+                                        ? ' City cannot be blank'
+                                        : null,
+                                    decoration: const InputDecoration(
+                                        hintText: 'City/Venue',
+                                        hintStyle: TextStyle(
+                                            color: AppColors.textclr,
+                                            fontSize: 14),
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.only(
+                                            left: 10, bottom: 6)),
+                                  ),
                                 ),
                               )
                             ],

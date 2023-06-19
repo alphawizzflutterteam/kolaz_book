@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kolazz_book/Controller/Subscription_Controller.dart';
+import 'package:kolazz_book/Views/Subscription/Subscription_screen.dart';
 import '../../Controller/edit_profile_controller.dart';
 import '../../Utils/colors.dart';
 
@@ -12,6 +14,8 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           //   ],
           // ),
           body:
-          controller.profiledata != null || controller.profiledata == "" ?  SingleChildScrollView(
+          controller.profiledata != null || controller.profiledata == "" ?
+          SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
@@ -52,8 +57,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   onTap: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Icon(Icons.arrow_back_ios,size: 30, color: Color(0xff1E90FF ),)),
-                              Text("Profile Setting",style: TextStyle(color: AppColors.AppbtnColor,fontSize: 16),)
+                                  child: const Icon(Icons.arrow_back_ios,size: 30, color: Color(0xff1E90FF ),)),
+                              const Text("Profile Setting",style: TextStyle(color: AppColors.AppbtnColor,fontSize: 16),)
                             ],),
                         ),
                       ),
@@ -72,11 +77,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   borderRadius: BorderRadius.circular(50),
                                   child:controller.imageFile != null || controller.imageFile == "" ? Container(
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                                      child: Image.file(controller.imageFile!,fit: BoxFit.fill,height: 90,width: 95,)):Container(
+                                      child: Image.file(controller.imageFile!,fit: BoxFit.fill,height: 90,width: 95,))
+                                  : controller.profilePic == null || controller.profilePic == ''?
+                                      Container(
                                       decoration: BoxDecoration(
                                           color: AppColors.primary,
                                           borderRadius: BorderRadius.circular(50)),
                                       child: Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,))
+                                  : Container(
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                                      child: Image.network(controller.profilePic!,fit: BoxFit.fill,height: 90,width: 95,))
+
                                 ),
                                 Positioned(
                                     top: 65,
@@ -106,9 +117,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           padding: const EdgeInsets.only(left: 80),
                           child: Row(
                             children: [
-                              Text("Subscripation 14 Days Free Trial", style: TextStyle(fontSize: 15, color: Colors.white),),
+                              Text("Subscription 14 Days Free Trial", style: TextStyle(fontSize: 15, color: Colors.white),),
                               SizedBox(width: 6,),
-                              Text("Buy", style: TextStyle(fontSize: 15, color: Color(0xff1E90FF), decoration: TextDecoration.underline,),)
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubscriptionScreen()));
+                                },
+                                  child: Text("Buy", style: TextStyle(fontSize: 15, color: Color(0xff1E90FF), decoration: TextDecoration.underline,),))
                             ],
                           ),
                         ),
@@ -121,26 +136,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         SizedBox(height: 5,),
                         Padding(
-                          padding: const EdgeInsets.only(left: 13, right: 55),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("First Name", style: TextStyle(color: Color(0xffCCCCCC)),),
-                              // SizedBox(width: 15),
-                              Text("Last Name(Surname)", style: TextStyle(color: Color(0xffCCCCCC)),)
-                            ],
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width/2.2,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text("First Name", style: TextStyle(color: Color(0xffCCCCCC)),),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/2.4,
                                     child: Card(
                                       color:  Color(0xff6D6A6A),
                                       shape: RoundedRectangleBorder(
@@ -150,7 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       child: TextFormField(
                                         controller: controller.firstnameController,
                                         keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                             hintText: '',
                                             border: InputBorder.none,
                                             contentPadding: EdgeInsets.only(left: 10)
@@ -158,35 +166,102 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       ),
                                     ),
                                   ),
-                                ),
-                                // SizedBox(width: 0.5,),
-                                Container(
-                                  width: MediaQuery.of(context).size.width/2.2,
-                                  child: Card(
-                                    color: Color(0xff6D6A6A),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    elevation: 5,
-                                    child: TextFormField(
-                                      controller: controller.lastnameController,
-                                      keyboardType: TextInputType.name,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter first name';
-                                        }
-                                        return null;
-                                      },
-                                      decoration: InputDecoration(
-                                          hintText: '',
-                                          border: InputBorder.none,
-                                          contentPadding: EdgeInsets.only(left: 10)
+                                ],
+                              ),
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                 const Padding(
+                                    padding:  EdgeInsets.only(left: 8.0),
+                                    child: Text("Last Name(Surname)", style: TextStyle(color: Color(0xffCCCCCC)),),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/2.3,
+                                    child: Card(
+                                      color: Color(0xff6D6A6A),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: TextFormField(
+                                        controller: controller.lastnameController,
+                                        keyboardType: TextInputType.name,
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Please enter first name';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: const InputDecoration(
+                                            hintText: '',
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.only(left: 10)
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Row(
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            //       child: Container(
+                            //         width: MediaQuery.of(context).size.width/2.2,
+                            //         child: Card(
+                            //           color:  Color(0xff6D6A6A),
+                            //           shape: RoundedRectangleBorder(
+                            //             borderRadius: BorderRadius.circular(10.0),
+                            //           ),
+                            //           elevation: 5,
+                            //           child: TextFormField(
+                            //             controller: controller.firstnameController,
+                            //             keyboardType: TextInputType.name,
+                            //             decoration: InputDecoration(
+                            //                 hintText: '',
+                            //                 border: InputBorder.none,
+                            //                 contentPadding: EdgeInsets.only(left: 10)
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     // SizedBox(width: 0.5,),
+                            //     Container(
+                            //       width: MediaQuery.of(context).size.width/2.2,
+                            //       child: Card(
+                            //         color: Color(0xff6D6A6A),
+                            //         shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.circular(10.0),
+                            //         ),
+                            //         elevation: 5,
+                            //         child: TextFormField(
+                            //           controller: controller.lastnameController,
+                            //           keyboardType: TextInputType.name,
+                            //           validator: (value) {
+                            //             if (value!.isEmpty) {
+                            //               return 'Please enter first name';
+                            //             }
+                            //             return null;
+                            //           },
+                            //           decoration: InputDecoration(
+                            //               hintText: '',
+                            //               border: InputBorder.none,
+                            //               contentPadding: EdgeInsets.only(left: 10)
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             SizedBox(height: 9,),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
@@ -194,7 +269,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Phone Number(Not Editable)", style: TextStyle(fontSize: 14, color: Color(0xffCCCCCC))),
+                                  const Padding(
+                                    padding:  EdgeInsets.only(left: 8.0),
+                                    child: Text("Phone Number(Not Editable)", style: TextStyle(fontSize: 14, color: Color(0xffCCCCCC))),
+                                  ),
                                   SizedBox(height: 5,),
                                   Container(
                                     width: MediaQuery.of(context).size.width/1.1,
@@ -284,8 +362,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       elevation: 5,
                                       child: TextFormField(
                                         controller: controller.companyphoneController,
-                                        keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
+                                        keyboardType: TextInputType.number,
+                                        maxLength: 10,
+                                        decoration: const InputDecoration(
+                                          counterText: '',
                                             hintText: 'Company Phone Number',
                                             hintStyle: TextStyle(color: AppColors.whit),
                                             border: InputBorder.none,
@@ -306,8 +386,81 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       child: TextFormField(
                                         controller: controller.companyaddressController,
                                         keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                             hintText: 'Company Address',hintStyle: TextStyle(color: AppColors.whit),
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.only(left: 10)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/1.1,
+                                    child: Card(
+                                      color: Color(0xff6D6A6A),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton(
+                                            style: const TextStyle(
+                                              color: AppColors.darkblack
+                                            ),
+                                            dropdownColor: AppColors.cardclr,
+                                            // Initial Value
+                                            value: controller.cityController,
+                                            isExpanded: true,
+                                            hint: const Text(
+                                              "City",
+                                              style: TextStyle(
+                                                  color: AppColors.textclr),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.keyboard_arrow_down,
+                                              color: AppColors.textclr,
+                                            ),
+                                            // Array list of items
+
+                                            items: controller.citiesList.map((items) {
+                                              return DropdownMenuItem(
+                                                value: items.id.toString(),
+                                                child: Text(
+                                                  items.name.toString(),
+                                                  style: const TextStyle(
+                                                      color: AppColors.textclr),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            // After selecting the desired option,it will
+                                            // change button value to selected value
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                controller.cityController = newValue;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/1.1,
+                                    child: Card(
+                                      color: Color(0xff6D6A6A),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: TextFormField(
+                                        controller: controller.companyStateController,
+                                        keyboardType: TextInputType.name,
+                                        decoration: const InputDecoration(
+                                            hintText: 'State',hintStyle: TextStyle(color: AppColors.whit),
                                             border: InputBorder.none,
                                             contentPadding: EdgeInsets.only(left: 10)
                                         ),
