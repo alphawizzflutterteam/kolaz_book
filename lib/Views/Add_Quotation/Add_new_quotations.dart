@@ -428,19 +428,19 @@ class _AddQuotationState extends State<AddQuotation> {
               bottomLeft: Radius.circular(10))),
       child: Column(
         children: [
-          const Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.only(top: 4.0, right: 4),
-              child: Text(
-                "(For Developer User Can Hold/Or To Delete This Row)",
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: AppColors.textclr,
-                    fontSize: 12),
-              ),
-            ),
-          ),
+          // const Align(
+          //   alignment: Alignment.topRight,
+          //   child: Padding(
+          //     padding: EdgeInsets.only(top: 4.0, right: 4),
+          //     child: Text(
+          //       "(For Developer User Can Hold/Or To Delete This Row)",
+          //       style: TextStyle(
+          //           fontStyle: FontStyle.italic,
+          //           color: AppColors.textclr,
+          //           fontSize: 12),
+          //     ),
+          //   ),
+          // ),
           const SizedBox(
             height: 10,
           ),
@@ -521,16 +521,16 @@ class _AddQuotationState extends State<AddQuotation> {
               ],
             ),
           ),
-          const Align(
-            alignment: Alignment.center,
-            child: Text(
-              "(For Developer User Can Hold/Or To Delete This Row)",
-              style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: AppColors.textclr,
-                  fontSize: 13),
-            ),
-          ),
+          // const Align(
+          //   alignment: Alignment.center,
+          //   child: Text(
+          //     "(For Developer User Can Hold/Or To Delete This Row)",
+          //     style: TextStyle(
+          //         fontStyle: FontStyle.italic,
+          //         color: AppColors.textclr,
+          //         fontSize: 13),
+          //   ),
+          // ),
           const SizedBox(
             height: 10,
           ),

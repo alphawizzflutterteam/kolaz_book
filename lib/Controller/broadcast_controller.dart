@@ -24,7 +24,7 @@ import '../Views/dashboard/Dashboard.dart';
 import '../Widgets/show_message.dart';
 import 'appbased_controller/appbase_controller.dart';
 
-class EditProfileController extends AppBaseController {
+class BroadcastController extends AppBaseController {
 
   TextEditingController firstnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -47,11 +47,11 @@ class EditProfileController extends AppBaseController {
   ProfileData? profiledata;
 
   String? id;
- String? firstname;
- String? lastname;
- String? profilePic;
+  String? firstname;
+  String? lastname;
+  String? profilePic;
   UpdateProfile ? updateprofile;
- String? updatedata;
+  String? updatedata;
   List<CityList> citiesList = [];
   List<StateList> statesList = [];
   List<Countries> countryList = [];
@@ -75,8 +75,8 @@ class EditProfileController extends AppBaseController {
     print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
-      citiesList = GetCitiesModel.fromJson(userData).data!;
-      update();
+    citiesList = GetCitiesModel.fromJson(userData).data!;
+    update();
   }
 
   getStateList(String countryId) async {
@@ -88,7 +88,7 @@ class EditProfileController extends AppBaseController {
     };
 
     request.headers.addAll(headers);
-     request.fields['country_id'] = countryId.toString();
+    request.fields['country_id'] = countryId.toString();
     // request.fields['vendor_id'] = userID;
     var response = await request.send();
     print(response.statusCode);
@@ -135,15 +135,15 @@ class EditProfileController extends AppBaseController {
     try {
       Map<String, String> body = {};
       body[
-        RequestKeys.userId] = id!;
+      RequestKeys.userId] = id!;
       GetProfileModel res = await api.getProfile(body);
       if (!(res.error ?? true)) {
         profiledata = res.data  ;
         firstname = profiledata?.fname;
         lastname = profiledata?.lname;
         profilePic = profiledata?.profilePic;
-         SharedPreferences prefe = await SharedPreferences.getInstance();
-         prefe.setString('name',firstname!);
+        SharedPreferences prefe = await SharedPreferences.getInstance();
+        prefe.setString('name',firstname!);
         firstnameController.text = profiledata?.fname ?? "";
         usernameController.text = profiledata?.username ?? "";
         lastnameController.text= profiledata?.lname??'';
@@ -153,7 +153,7 @@ class EditProfileController extends AppBaseController {
         companyphoneController.text= profiledata?.companyNumber??'';
         companyaddressController.text= profiledata?.companyAddress??'';
         // cityController = profiledata?.city ?? '';
-         companyStateController.text = profiledata?.country ?? '';
+        companyStateController.text = profiledata?.country ?? '';
         countryController.text= profiledata?.country??'';
         companyEmailController.text= profiledata?.companyLink??'';
         facebookController.text= profiledata?.facebook??'';
@@ -175,7 +175,6 @@ class EditProfileController extends AppBaseController {
   }
 
   updateProfile() async {
-    print("working here!!");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     id = preferences.getString('id');
     setBusy(true);
@@ -191,15 +190,15 @@ class EditProfileController extends AppBaseController {
     body[RequestKeys.companyname] = companynameController.text.trim();
     body[RequestKeys.companyphone] = companyphoneController.text.trim();
     body[RequestKeys.companyaddress] = companyaddressController.text.trim();
-     body[RequestKeys.city] = cityController != null ? cityController.toString() : "";
-    body[RequestKeys.state] = stateController != null ? stateController.toString() : "";
+    // body[RequestKeys.city] = cityController.trim();
+    body[RequestKeys.state] = companyStateController.text.toString();
     body[RequestKeys.companyaddress] = companyaddressController.text.trim();
     body[RequestKeys.companyEmail] = companyEmailController.text.trim();
     body[RequestKeys.facebookLink] = facebookController.text.trim();
     body[RequestKeys.instagramLink] = instagramController.text.trim();
     body[RequestKeys.youtubeLink] = youtubeController.text.trim();
     body[RequestKeys.tncLink] = termsconditionControlletr.text.trim();
-    body[RequestKeys.country] = countryController != null ? countryController.toString() :  "";
+    body[RequestKeys.country] = countryController.text.trim();
     var request = http.MultipartRequest(
         'POST', Uri.parse(updateUserProfileApi.toString()));
     request.fields.addAll(body);
@@ -395,7 +394,7 @@ class EditProfileController extends AppBaseController {
               ),
               InkWell(
                 onTap: () async {
-                 getImage(ImgSource.Camera, context, i);
+                  getImage(ImgSource.Camera, context, i);
                 },
                 child: Container(
                   child: ListTile(
@@ -432,7 +431,7 @@ class EditProfileController extends AppBaseController {
       ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
     );
     getCropImage(context, i, image);
-   // back();
+    // back();
   }
   Future getImageGallery(ImgSource source, BuildContext context, int i) async {
     var image = await ImagePickerGC.pickImage(
@@ -444,7 +443,7 @@ class EditProfileController extends AppBaseController {
       ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
     );
     getCropImage(context, i, image);
-   // back();
+    // back();
   }
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
@@ -458,14 +457,14 @@ class EditProfileController extends AppBaseController {
       ],
     );
     update();
-      if (i == 1) {
-        imageFile = File(croppedFile!.path);
-      } else if (i == 2) {
-        imageFile2 = File(croppedFile!.path);
-      }
+    if (i == 1) {
+      imageFile = File(croppedFile!.path);
+    } else if (i == 2) {
+      imageFile2 = File(croppedFile!.path);
+    }
     updateProfile();
-      update();
-      back();
+    update();
+    back();
   }
 
 }

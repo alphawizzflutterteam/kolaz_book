@@ -111,9 +111,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
       'amount': "${pricerazorpayy}",
-      'name': 'Dr.Apps',
+      'name': 'Kolaz Book',
       'image':'assets/splash/splashimages.png',
-      'description': 'Dr.Apps',
+      'description': 'Kolaz Book',
+      'color-hex': "#595858"
     };
     try {
       _razorpay?.open(options);

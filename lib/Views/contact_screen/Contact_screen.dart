@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/contact_screen_controller.dart';
 import 'package:kolazz_book/Utils/strings.dart';
-import 'package:kolazz_book/Views/Amount_screen/client_amt.dart';
+import 'package:kolazz_book/Views/AccountScreen/client_amt.dart';
 import 'package:kolazz_book/Views/freelencing_jobpost/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -108,10 +108,10 @@ class _ContactScreenState extends State<ContactScreen> {
                                 style: TextStyle(
                                     color: AppColors.textclr, fontSize: 13),
                               ),
-                              Text(
-                                  "${controller.getphotographetClient[index].type}",
-                                  style: TextStyle(
-                                      color: AppColors.textclr, fontSize: 13)),
+                              // Text(
+                              //     "${controller.getphotographetClient[index].type}",
+                              //     style: TextStyle(
+                              //         color: AppColors.textclr, fontSize: 13)),
                               Text(
                                   "${controller.getphotographetClient[index].city}",
                                   style: TextStyle(
@@ -209,11 +209,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AccountScreen()));
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>
+                                        //             AccountScreen()));
                                       },
                                       child: Container(
                                           height: 45,

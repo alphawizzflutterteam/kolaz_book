@@ -126,7 +126,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: CustomDrawerTile(tileName: 'Terms & Condition ', tileIcon:Icon(Icons.terminal_sharp,color: AppColors.textclr,),
+                child: CustomDrawerTile(tileName: 'Terms of Use ', tileIcon:Icon(Icons.terminal_sharp,color: AppColors.textclr,),
                   onTap: (){
                   Get.toNamed(tncscreen);
                   },),

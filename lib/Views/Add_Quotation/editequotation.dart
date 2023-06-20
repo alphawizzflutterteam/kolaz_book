@@ -753,16 +753,16 @@ class _AddQuotationState extends State<EditQuotation> {
                         bottomLeft: Radius.circular(10))),
                 child: Column(
                   children: [
-                    const Align(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        "(For Developer User Can Hold/Or To Delete This Row)",
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: AppColors.textclr,
-                            fontSize: 12),
-                      ),
-                    ),
+                    // const Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: Text(
+                    //     "(For Developer User Can Hold/Or To Delete This Row)",
+                    //     style: TextStyle(
+                    //         fontStyle: FontStyle.italic,
+                    //         color: AppColors.textclr,
+                    //         fontSize: 12),
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 10,
                     ),

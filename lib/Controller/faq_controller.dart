@@ -14,6 +14,7 @@ class FaqController extends AppBaseController {
     getFaq();
     super.onInit();
   }
+
   Future<void>getFaq() async {
     setBusy(true);
     try {

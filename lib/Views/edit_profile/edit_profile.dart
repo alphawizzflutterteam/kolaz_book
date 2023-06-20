@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/Subscription_Controller.dart';
+import 'package:kolazz_book/Models/get_cities_model.dart';
+import 'package:kolazz_book/Models/get_country_model.dart';
+import 'package:kolazz_book/Models/get_states_model.dart';
+import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/Subscription/Subscription_screen.dart';
 import '../../Controller/edit_profile_controller.dart';
 import '../../Utils/colors.dart';
@@ -16,6 +23,80 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
 
+  List<CityList> citiesList = [];
+  List<StateList> statesList = [];
+  List<Countries> countryList = [];
+  var cityController;
+  var countryController;
+  var stateController;
+
+
+  getCitiesList(String stateId) async {
+    var uri = Uri.parse(getCitiesApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields['state_id'] = stateId.toString();
+    print("this is city request ${request.fields.toString()}");
+    // request.fields['vendor_id'] = userID;
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+    citiesList = GetCitiesModel.fromJson(userData).data!;
+    print("this is working ${citiesList.length}");
+
+  }
+
+  getStateList(String countryId) async {
+    var uri = Uri.parse(getStatesApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields['country_id'] = countryId.toString();
+    print("this is state request ${request.fields.toString()}");
+    // request.fields['vendor_id'] = userID;
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+    statesList = GetStatesModel.fromJson(userData).data!;
+
+  }
+
+  getCountryList() async {
+    var uri = Uri.parse(getCountryApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("GET", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    // request.fields['type_id'] = "1";
+    // request.fields['vendor_id'] = userID;
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+    countryList = GetCountryModel.fromJson(userData).data!;
+
+  }
+
+ @override
+ void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCountryList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,20 +154,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             },
                             child: Stack(
                               children: [
-                                ClipRRect(
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(50)),
+                              child:   ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
-                                  child:controller.imageFile != null || controller.imageFile == "" ? Container(
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                                      child: Image.file(controller.imageFile!,fit: BoxFit.fill,height: 90,width: 95,))
-                                  : controller.profilePic == null || controller.profilePic == ''?
-                                      Container(
-                                      decoration: BoxDecoration(
-                                          color: AppColors.primary,
-                                          borderRadius: BorderRadius.circular(50)),
-                                      child: Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,))
-                                  : Container(
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                                      child: Image.network(controller.profilePic!,fit: BoxFit.fill,height: 90,width: 95,))
+                                  child: controller.profilePic == null || controller.profilePic == '' ?
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: controller.imageFile != null
+                                        ? Image.file(controller.imageFile!, fit: BoxFit.cover, height: 90,width: 95,)
+                                        : Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,)
+                                  )
+                                      : ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child:
+                                      // rcImage != null ?
+                                      Image.network(controller.profilePic.toString(), fit: BoxFit.cover, height: 90,width: 95,)
+                                  )
+                              ),
+
+                                  // controller.imageFile != null || controller.imageFile == "" ? Container(
+                                  //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                                  //     child: Image.file(controller.imageFile!,fit: BoxFit.fill,height: 90,width: 95,))
+                                  // : controller.profilePic == null || controller.profilePic == ''?
+                                  //     Container(
+                                  //     decoration: BoxDecoration(
+                                  //         color: AppColors.primary,
+                                  //         borderRadius: BorderRadius.circular(50)),
+                                  //     child: Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,))
+                                  // : Container(
+                                  //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                                  //     child: Image.network(controller.profilePic!,fit: BoxFit.fill,height: 90,width: 95,))
 
                                 ),
                                 Positioned(
@@ -311,7 +411,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       child: TextFormField(
                                         controller: controller.emailController,
                                         keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                             hintStyle: TextStyle(color: AppColors.whit),
                                             border: InputBorder.none,
                                             contentPadding: EdgeInsets.only(left: 10)
@@ -324,7 +424,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Color(0xff303030)),
                                     height: 50,
                                     width: MediaQuery.of(context).size.width/1.1,
-                                    child: Center(
+                                    child: const Center(
                                       child: Text("Company Details", style: TextStyle(fontSize: 14, color:  Color(0xff1E90FF), fontWeight: FontWeight.bold),
                                       ),
                                     ),
@@ -342,7 +442,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       child: TextFormField(
                                         controller: controller.companynameController,
                                         keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                             hintText: 'Company Name',
                                             hintStyle: TextStyle(color: AppColors.whit),
                                             border: InputBorder.none,
@@ -403,47 +503,102 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       elevation: 5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
-                                        child: DropdownButtonHideUnderline(
-                                          child: DropdownButton(
-                                            style: const TextStyle(
-                                              color: AppColors.darkblack
-                                            ),
-                                            dropdownColor: AppColors.cardclr,
-                                            // Initial Value
-                                            value: controller.cityController,
-                                            isExpanded: true,
-                                            hint: const Text(
-                                              "City",
-                                              style: TextStyle(
-                                                  color: AppColors.textclr),
-                                            ),
-                                            icon: const Icon(
-                                              Icons.keyboard_arrow_down,
-                                              color: AppColors.textclr,
-                                            ),
-                                            // Array list of items
+                                      child: CustomSearchableDropDown(
+                                        dropdownHintText: "Country",
+                                        suffixIcon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          color: AppColors.whit,
+                                        ),
+                                        backgroundColor: Color(0xff6D6A6A),
+                                        dropdownBackgroundColor:
+                                        AppColors.containerclr2,
+                                        dropdownItemStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        // dropdownHintText: TextStyle(
+                                        //   color: AppColors.whit
+                                        // ),
+                                        items: countryList,
+                                        label: 'Country',
+                                        labelStyle: const TextStyle(
+                                            color: AppColors.whit
+                                        ),
+                                        multiSelectTag: 'Country',
+                                        decoration: BoxDecoration(
+                                            color: AppColors.containerclr2,
+                                            borderRadius:
+                                            BorderRadius.circular(15)
+                                          // color: Colors.white
+                                          // border: Border.all(
+                                          //   color: CustomColors.lightgray.withOpacity(0.5),
+                                          // )
+                                        ),
+                                        multiSelect: false,
+                                        dropDownMenuItems: countryList.map((item) {
+                                          return "${item.name}";
+                                        }).toList() ??
+                                            [],
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState((){
+                                              countryController = value.id;
+                                            });
+                                            getStateList(countryController.toString());
+                                          }
+                                          print("this is my country code ${countryController}");
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/1.1,
+                                    child: Card(
+                                      color: Color(0xff6D6A6A),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: CustomSearchableDropDown(
+                                        dropdownHintText: "State",
+                                        suffixIcon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          color: AppColors.whit,
+                                        ),
+                                        backgroundColor: Color(0xff6D6A6A),
+                                        dropdownBackgroundColor:
+                                        AppColors.containerclr2,
+                                        dropdownItemStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        items: statesList,
+                                        label: 'State',
+                                        labelStyle: const TextStyle(
+                                            color: AppColors.whit
+                                        ),
+                                        multiSelectTag: 'State',
+                                        decoration: BoxDecoration(
+                                            color: AppColors.containerclr2,
+                                            borderRadius:
+                                            BorderRadius.circular(15)
+                                          // color: Colors.white
+                                          // border: Border.all(
+                                          //   color: CustomColors.lightgray.withOpacity(0.5),
+                                          // )
+                                        ),
+                                        multiSelect: false,
+                                        dropDownMenuItems: statesList.map((item) {
+                                          return "${item.name}";
+                                        }).toList() ??
+                                            [],
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState((){
+                                              stateController = value.id;
+                                            });
+                                             getCitiesList(stateController.toString());
+                                            print("this is city request ${cityController.toString()}");
+                                          }
 
-                                            items: controller.citiesList.map((items) {
-                                              return DropdownMenuItem(
-                                                value: items.id.toString(),
-                                                child: Text(
-                                                  items.name.toString(),
-                                                  style: const TextStyle(
-                                                      color: AppColors.textclr),
-                                                ),
-                                              );
-                                            }).toList(),
-                                            // After selecting the desired option,it will
-                                            // change button value to selected value
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                controller.cityController = newValue;
-                                              });
-                                            },
-                                          ),
-                                        ),
+                                        },
                                       ),
                                     ),
                                   ),
@@ -456,34 +611,49 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       elevation: 5,
-                                      child: TextFormField(
-                                        controller: controller.companyStateController,
-                                        keyboardType: TextInputType.name,
-                                        decoration: const InputDecoration(
-                                            hintText: 'State',hintStyle: TextStyle(color: AppColors.whit),
-                                            border: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(left: 10)
+                                      child: CustomSearchableDropDown(
+                                        dropdownHintText: "City",
+                                        suffixIcon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          color: AppColors.whit,
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width/1.1,
-                                    child: Card(
-                                      color: Color(0xff6D6A6A),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      child: TextFormField(
-                                        controller: controller.countryController,
-                                        keyboardType: TextInputType.name,
-                                        decoration: const InputDecoration(
-                                            hintText: 'Country',hintStyle: TextStyle(color: AppColors.whit),
-                                            border: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(left: 10)
+                                        backgroundColor: Color(0xff6D6A6A),
+                                        dropdownBackgroundColor:
+                                        AppColors.containerclr2,
+                                        dropdownItemStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        // dropdownHintText: TextStyle(
+                                        //   color: AppColors.whit
+                                        // ),
+                                        items: citiesList,
+                                        label: 'City',
+                                        labelStyle: const TextStyle(
+                                            color: AppColors.whit
                                         ),
+                                        multiSelectTag: 'City',
+                                        decoration: BoxDecoration(
+                                            color: AppColors.containerclr2,
+                                            borderRadius:
+                                            BorderRadius.circular(15)
+                                          // color: Colors.white
+                                          // border: Border.all(
+                                          //   color: CustomColors.lightgray.withOpacity(0.5),
+                                          // )
+                                        ),
+                                        multiSelect: false,
+                                        dropDownMenuItems: citiesList.map((item) {
+                                          return "${item.name}";
+                                        }).toList() ??
+                                            [],
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState((){
+                                              cityController = value.id;
+                                            });
+                                            // getCitiesList(stateController.toString());
+                                          }
+                                          print("this is my country code ${cityController}");
+                                        },
                                       ),
                                     ),
                                   ),

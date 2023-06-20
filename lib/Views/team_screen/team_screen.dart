@@ -112,305 +112,368 @@ class _TeamScreenState extends State<TeamScreen> {
               child: Container(
                 height: MediaQuery.of(context).size.height / 1.4,
                 width: MediaQuery.of(context).size.width,
-                child: getUpcomingJobs.isNotEmpty ?
-                ListView.builder(
-                  itemCount: getUpcomingJobs.length,
-                  itemBuilder: (context, index) {
-                    var result = getUpcomingJobs[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                          color: AppColors.teamcard,
-                          borderRadius: BorderRadius.circular(10)),
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 7),
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            height: 65,
+                child: getUpcomingJobs.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: getUpcomingJobs.length,
+                        itemBuilder: (context, index) {
+                          var result = getUpcomingJobs[index];
+                          return Container(
                             decoration: BoxDecoration(
-                                color: AppColors.teamcard2,
+                                color: AppColors.teamcard,
                                 borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 7),
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
-                                  "Client Name: ${result.clientName}",
-                                  style: const TextStyle(
-                                      color: AppColors.textclr,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Event: ${result.eventName}",
-                                  style: const TextStyle(
-                                      color: AppColors.textclr,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Vanue: ${result.cityName}",
-                                  style: const TextStyle(
-                                      color: AppColors.textclr,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, left: 10, right: 10),
-                            child: Row(
-                              children: [
-                                const Text(
-                                  "Date: ",
-                                  style: TextStyle(
-                                      color: AppColors.whit,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
-                                const SizedBox(
-                                  width: 7,
-                                ),
-                                Text(
-                                  "${result.date}",
-                                  style: const TextStyle(
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  height: 65,
+                                  decoration: BoxDecoration(
                                       color: AppColors.teamcard2,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Client Name: ${result.clientName}",
+                                        style: const TextStyle(
+                                            color: AppColors.textclr,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Event: ${result.eventName}",
+                                        style: const TextStyle(
+                                            color: AppColors.textclr,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Vanue: ${result.cityName}",
+                                        style: const TextStyle(
+                                            color: AppColors.textclr,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width:
-                                      MediaQuery.of(context).size.width / 2.7,
-                                      padding: EdgeInsets.all(3.0),
-                                      child: const Text(
-                                        "Photographer Name  ",
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10.0, left: 10, right: 10),
+                                  child: Row(
+                                    children: [
+                                      const Text(
+                                        "Date: ",
                                         style: TextStyle(
                                             color: AppColors.whit,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14),
                                       ),
-                                    ),
-                                    Container(
-                                      // height: 200,
-                                      width:
-                                      MediaQuery.of(context).size.width / 2.9,
-                                      child: ListView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                           itemCount: result.photographers!.length,
-                                          itemBuilder: (context, j) {
-                                        return Padding(
-                                          padding: EdgeInsets.all(3.0),
-                                          child: Text(
-                                            result.photographers![j].name.toString(),
-                                            style: const TextStyle(
-                                                color: AppColors.teamcard2,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                                  ],
+                                      const SizedBox(
+                                        width: 7,
+                                      ),
+                                      Text(
+                                        "${result.date}",
+                                        style: const TextStyle(
+                                            color: AppColors.teamcard2,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 2,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(3.0),
-                                        child: const Text(
-                                          "Type Of Photography",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: AppColors.whit,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14),
-                                        ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2.7,
+                                            padding: EdgeInsets.all(3.0),
+                                            child: const Text(
+                                              "Photographer Name  ",
+                                              style: TextStyle(
+                                                  color: AppColors.whit,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14),
+                                            ),
+                                          ),
+                                          Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.9,
+                                              child: ListView.builder(
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: result
+                                                      .photographers!.length,
+                                                  itemBuilder: (context, j) {
+                                                    if (result.photographers![0]
+                                                            .name
+                                                            .toString() !=
+                                                        "") {
+                                                      return Padding(
+                                                        padding:
+                                                            EdgeInsets.all(3.0),
+                                                        child: Text(
+                                                          result
+                                                              .photographers![j]
+                                                              .name
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .teamcard2,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      );
+                                                    }
+                                                    return const Padding(
+                                                      padding:  EdgeInsets.only(left: 5.0, top: 5),
+                                                      child:  Text(
+                                                        "Not Allotted yet!",
+                                                        style:  TextStyle(
+                                                            color: AppColors
+                                                                .teamcard2,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold),
+                                                      ),
+                                                    );
+                                                  })),
+                                        ],
                                       ),
                                       Container(
-                                        // height: 200,
                                         width:
-                                        MediaQuery.of(context).size.width / 2,
-                                        // width: 300,
-                                        child: ListView.builder(
-                                            physics: NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: result.photographers!.length,
-                                            itemBuilder: (context, j) {
-                                              return Padding(
-                                                padding: EdgeInsets.all(3.0),
-                                                child: Text(
-                                                  result.photographers![j].type.toString(),
-                                                  style: const TextStyle(
-                                                      color: AppColors.teamcard2,
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.bold),
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: const Text(
+                                                "Type Of Photography",
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: AppColors.whit,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14),
+                                              ),
+                                            ),
+                                            Container(
+                                              // height: 200,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2,
+                                              // width: 300,
+                                              child: ListView.builder(
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: result
+                                                      .photographers!.length,
+                                                  itemBuilder: (context, j) {
+                                                    return Padding(
+                                                      padding:
+                                                          EdgeInsets.all(3.0),
+                                                      child: Text(
+                                                        result.photographers![j]
+                                                            .type
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            color: AppColors
+                                                                .teamcard2,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    );
+                                                  }),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.teamcard2,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 5.0, right: 10, top: 5),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Google Map Link ",
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors.temtextclr,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
-                                              );
-                                            }),
+                                                SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text(
+                                                  "Notes ",
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors.temtextclr,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 5,
+                                                right: 5,
+                                                top: 10,
+                                                bottom: 10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  color: Colors.white,
+                                                  height: 40,
+                                                  width: 170,
+                                                  child: TextFormField(
+                                                    // controller: nameController,
+                                                    style: TextStyle(
+                                                        color: AppColors.field,
+                                                        fontSize: 12),
+                                                    keyboardType:
+                                                        TextInputType.name,
+                                                    decoration: InputDecoration(
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 12),
+                                                        hintText:
+                                                            'Paste Google Map Link',
+                                                        border:
+                                                            InputBorder.none,
+                                                        contentPadding:
+                                                            EdgeInsets.only(
+                                                                bottom: 5,
+                                                                left: 5)),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  color: Colors.white,
+                                                  height: 40,
+                                                  width: 170,
+                                                  child: TextFormField(
+                                                    style: TextStyle(
+                                                        color: AppColors.field,
+                                                        fontSize:
+                                                            12), // controller: nameController,
+                                                    keyboardType:
+                                                        TextInputType.name,
+                                                    decoration: InputDecoration(
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 12),
+                                                        hintText:
+                                                            'Enter Short Instruction/ Time /etc. Map Link Link ',
+                                                        border:
+                                                            InputBorder.none,
+                                                        contentPadding:
+                                                            EdgeInsets.only(
+                                                                bottom: 5,
+                                                                left: 5)),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 35,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                1.7,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: AppColors.pdfbtn),
+                                        child: Center(
+                                          child: Text(
+                                            "PDF",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                                color: AppColors.teamcard2,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, right: 10, top: 5),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Google Map Link ",
-                                            style: TextStyle(
-                                                color: AppColors.temtextclr,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            "Notes ",
-                                            style: TextStyle(
-                                                color: AppColors.temtextclr,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5,
-                                          right: 5,
-                                          top: 10,
-                                          bottom: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            color: Colors.white,
-                                            height: 40,
-                                            width: 170,
-                                            child: TextFormField(
-                                              // controller: nameController,
-                                              style: TextStyle(
-                                                  color: AppColors.field,
-                                                  fontSize: 12),
-                                              keyboardType: TextInputType.name,
-                                              decoration: InputDecoration(
-                                                  hintStyle:
-                                                      TextStyle(fontSize: 12),
-                                                  hintText:
-                                                      'Paste Google Map Link',
-                                                  border: InputBorder.none,
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          bottom: 5, left: 5)),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                            color: Colors.white,
-                                            height: 40,
-                                            width: 170,
-                                            child: TextFormField(
-                                              style: TextStyle(
-                                                  color: AppColors.field,
-                                                  fontSize:
-                                                      12), // controller: nameController,
-                                              keyboardType: TextInputType.name,
-                                              decoration: InputDecoration(
-                                                  hintStyle:
-                                                      TextStyle(fontSize: 12),
-                                                  hintText:
-                                                      'Enter Short Instruction/ Time /etc. Map Link Link ',
-                                                  border: InputBorder.none,
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          bottom: 5, left: 5)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  height: 35,
-                                  width:
-                                      MediaQuery.of(context).size.width / 1.7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: AppColors.pdfbtn),
-                                  child: Center(
-                                    child: Text(
-                                      "PDF",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          );
+                        },
+                      )
+                    : Text(
+                        "No data to show!",
+                        style: TextStyle(color: AppColors.whit),
                       ),
-                    );
-                  },
-                )
-                : Text("No data to show!", style: TextStyle(color: AppColors.whit),),
               ),
             ),
 
