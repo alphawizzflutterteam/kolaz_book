@@ -3,6 +3,8 @@ const String baseUrl = 'https://developmentalphawizz.com/kolaz_book/api/';
 
 final Uri addQuotationApi = Uri.parse('${baseUrl}add_quatation');
 final Uri getQuotationApi = Uri.parse('${baseUrl}get_quatation');
+final Uri updateClientJobApi = Uri.parse('${baseUrl}update_job');
+
 final Uri getClientJobsApi = Uri.parse('${baseUrl}get_job_list');
 final Uri getAccountsDataApi = Uri.parse('${baseUrl}accounts');
 final Uri getCalendarJobsApi = Uri.parse('${baseUrl}calender_jobs');

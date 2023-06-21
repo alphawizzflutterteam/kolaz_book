@@ -1,15 +1,24 @@
+import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kolazz_book/Controller/edit_profile_controller.dart';
 import 'package:kolazz_book/Controller/home_controller.dart';
+import 'package:kolazz_book/Models/get_client_jobs_model.dart';
+import 'package:kolazz_book/Models/get_freelancer_jobs_model.dart';
+import 'package:kolazz_book/Services/request_keys.dart';
+import 'package:kolazz_book/Utils/strings.dart';
+import 'package:kolazz_book/Views/Add_Quotation/edite_client_job.dart';
 import 'package:kolazz_book/Views/Subscription/Subscription_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/colors.dart';
 import '../brodcast/Broadcast_screen.dart';
 import '../edit_profile/edit_profile.dart';
 import '../notification/Notification_screen.dart';
 import '../profile/Profile.dart';
-
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -19,6 +28,68 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+
+  List<FreelancerJobs> freelancerJobs = [];
+
+  getFreelancingJobs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri =
+    Uri.parse(getFreelancingJobsApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.type] = 'freelancer';
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      freelancerJobs = GetFreelancerJobsModel.fromJson(userData).data!;
+    });
+  }
+
+
+  List<JobData> getJobs = [];
+
+  getClientJobs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri =
+    Uri.parse(getClientJobsApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    // request.fields[RequestKeys.type] = 'client';
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      getJobs = GetClientJobsModel.fromJson(userData).data!;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getClientJobs();
+    getFreelancingJobs();
+    getClientJobs();
+  }
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -32,23 +103,41 @@ class _HomepageState extends State<Homepage> {
           backgroundColor:AppColors.secondary ,
           toolbarHeight: 79,
           leading:  Padding(
-            padding: const EdgeInsets.only(left: 5, right: 0),
-            child: InkWell(
-              onTap: () {
-
+            padding: const EdgeInsets.only(left: 5, right: 0, top: 15, bottom: 15),
+            child:
+            GetBuilder(
+            init: EditProfileController(),
+        builder: (controller) {
+        return GestureDetector(
+              onTap: (){
+                Get.to(EditProfileScreen());
+               // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyProfilePage()));
               },
-              child:GestureDetector(
-                onTap: (){
-                  Get.to(EditProfileScreen());
-                 // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyProfilePage()));
-                },
-                child: CircleAvatar(
-
-                    radius: 20,
-                    child:Icon(Icons.person)
+              child:  Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(40)),
+                child:   ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: controller.profilePic == null || controller.profilePic == '' ?
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: controller.imageFile != null
+                            ? Image.file(controller.imageFile!, fit: BoxFit.cover, height: 40,width: 40,)
+                            : Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 40,width: 40,)
+                    )
+                        : ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child:
+                        // rcImage != null ?
+                        Image.network(controller.profilePic.toString(), fit: BoxFit.cover, height: 40,width: 40,)
+                    )
                 ),
               ),
-            ),
+            );}
+            )
           ),
           title: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -167,7 +256,17 @@ class _HomepageState extends State<Homepage> {
               ),
               SizedBox(height: 5,),
 
-              _clientCard(context),
+              getJobs.isNotEmpty ?
+              _clientCard(context)
+              : Container(
+                height: 150,
+                child: Center(
+                  child: Text("No Data to show!", style: TextStyle(
+                    color: AppColors.whit
+
+                  ),),
+                ),
+              ),
               SizedBox(height: 30,),
               Align(
                 alignment: Alignment.centerLeft,
@@ -181,7 +280,17 @@ class _HomepageState extends State<Homepage> {
                   ],
                 ),
               ),
-              _clientCard2(context),
+              freelancerJobs.isNotEmpty ?
+              freelancerJobs[0].upcomingJobs!.isNotEmpty ?
+              _clientCard2(context)
+              : Container(
+                height: 150,
+                child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),),
+              )
+              : Container(
+                height: 150,
+                child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),),
+              ),
               SizedBox(height: 30,),
 
               Padding(
@@ -208,15 +317,19 @@ class _HomepageState extends State<Homepage> {
       // height: MediaQuery.of(context).size.height/6.22,
       child: GridView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 10,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        itemCount: getJobs[0].upcomingJobs!.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio:0.5/1.2,
           crossAxisCount: 1,
         ),
         itemBuilder: (BuildContext context, int index) {
+          var data = getJobs[0].upcomingJobs![index];
           return InkWell(
             onTap: () {
-
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditClientJob(
+                type: false,
+                upcomingJobs:  getJobs[0].upcomingJobs![index],
+              )));
             },
             child: Padding(
                 padding: EdgeInsets.all(5),
@@ -233,15 +346,15 @@ class _HomepageState extends State<Homepage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Shubham",style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
+                            Text(data.clientName.toString(),style: const TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
                                 decoration: BoxDecoration(
                                     color: AppColors.lightwhite,
 
                                     borderRadius: BorderRadius.circular(10)
                                 ),
-                                child: Text("KB003",style: TextStyle(color: AppColors.whit,),)),
+                                child: Text(data.qid.toString(),style: const TextStyle(color: AppColors.whit,),)),
                           ],
                         ),
                       ),
@@ -250,8 +363,8 @@ class _HomepageState extends State<Homepage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Indore",style: TextStyle(color: AppColors.textclr,fontWeight: FontWeight.bold,fontSize: 16),),
-                            Text("",style: TextStyle(color: AppColors.whit),),
+                            Text(data.city.toString(),style: const TextStyle(color: AppColors.textclr,fontWeight: FontWeight.bold,fontSize: 16),),
+                           const  Text("",style: TextStyle(color: AppColors.whit),),
                           ],
                         ),
                       ),
@@ -261,8 +374,8 @@ class _HomepageState extends State<Homepage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Wedding",style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
-                            Text("28/April/2023",style: TextStyle(color: AppColors.AppbtnColor),),
+                            Text(data.eventName.toString(),style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
+                            Text(data.updateDate.toString(),style: TextStyle(color: AppColors.AppbtnColor),),
                           ],
                         ),
                       ),
@@ -283,12 +396,13 @@ class _HomepageState extends State<Homepage> {
         // height: MediaQuery.of(context).size.height/6.22,
         child: GridView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 10,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          itemCount: freelancerJobs[0].upcomingJobs!.length,
+          gridDelegate:const  SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio:0.5/1.2,
             crossAxisCount: 1,
           ),
           itemBuilder: (BuildContext context, int index) {
+            var data = freelancerJobs[0].upcomingJobs![index];
             return InkWell(
               onTap: () {
 
@@ -308,7 +422,7 @@ class _HomepageState extends State<Homepage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Shubham",style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
+                              Text('${data.photographerName}',style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
                               Container(
                                   padding: EdgeInsets.symmetric(horizontal: 14,vertical: 10),
                                   decoration: BoxDecoration(
@@ -316,7 +430,7 @@ class _HomepageState extends State<Homepage> {
 
                                       borderRadius: BorderRadius.circular(10)
                                   ),
-                                  child: Text("KB003",style: TextStyle(color: AppColors.whit,),)),
+                                  child: Text(data.uid.toString(),style: TextStyle(color: AppColors.whit,),)),
                             ],
                           ),
                         ),
@@ -325,7 +439,7 @@ class _HomepageState extends State<Homepage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Indore",style: TextStyle(color: AppColors.textclr,fontWeight: FontWeight.bold,fontSize: 16),),
+                              Text(data.cityName.toString(),style: TextStyle(color: AppColors.textclr,fontWeight: FontWeight.bold,fontSize: 16),),
                               Text("",style: TextStyle(color: AppColors.whit),),
                             ],
                           ),
@@ -336,8 +450,8 @@ class _HomepageState extends State<Homepage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Pree Wedding",style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
-                              Text("28/April/2023",style: TextStyle(color: AppColors.AppbtnColor),),
+                              Text(data.eventName.toString(),style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
+                              Text(data.updatedAt.toString(),style: TextStyle(color: AppColors.AppbtnColor),),
                             ],
                           ),
                         ),

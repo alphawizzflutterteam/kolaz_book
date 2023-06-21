@@ -239,10 +239,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                         "${getPlans![index].description}",
                                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18,color: AppColors.whit),
                                       ),
-                                      const SizedBox(height: 15,),
+                                      const SizedBox(height: 10,),
                                       Container(
-                                        height: 200,
-                                        width: 200,
+                                        height: 180,
+                                        width: 180,
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                             image: NetworkImage(

@@ -644,7 +644,7 @@ class _AddQuotationState extends State<AddQuotation> {
         http.MultipartRequest('POST', Uri.parse(addQuotationApi.toString()));
 
     request.fields.addAll({
-      'client_name': clientNameController.text.toString(),
+      'client_name': clientName.toString(),
       'city': cityNameController.text.toString(),
       'mobile': mobileController.text.toString(),
       'type_event': eventController.toString(),
@@ -858,7 +858,10 @@ class _AddQuotationState extends State<AddQuotation> {
                                           [],
                                       onChanged: (value) {
                                         if (value != null) {
-                                          clientName = value;
+                                          print("this is my value ${value.firstName}");
+                                          clientName = "${value.firstName} ${value.lastName}";
+                                          cityNameController.text = value.city;
+                                          mobileController.text = value.mobile;
                                           //  setState(() {
                                           //   selectedDesignation = jsonDecode(value);
                                           //   // });

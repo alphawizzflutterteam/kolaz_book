@@ -25,19 +25,11 @@ class EditClientJob extends StatefulWidget {
 }
 
 class _EditClientJobState extends State<EditClientJob> {
-  String? _chosenValue;
-  var item = ['Kaushik Prajapati', ' Prajapati', 'Kaushik Prajapati',];
-  String? _cityValue;
-  var item2 = ['Wedding ', ' Party', '  ',];
-  String? _photography;
-  var item3 = ['Mumbai', ' indore', 'delhi ',];
 
-  var items = [
-    'Drone',
-    'Candid Photography',
-
-  ];
-  var photographer;
+  List pType = [];
+  List newList = [];
+  int typeIndex = 0 ;
+  List photographer =[];
   TextEditingController clientNameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController outputController = TextEditingController();
@@ -55,6 +47,91 @@ class _EditClientJobState extends State<EditClientJob> {
   var eventController;
   var cityController;
   int dateIndex = 0 ;
+
+  Widget photographerDropdownCard(int j){
+    var photographerName;
+    if (photographer.length < j + 1) {
+      photographer.add(photographerName);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Container(
+        height: 35,
+        padding: const EdgeInsets.only(
+            left: 10, top: 5),
+        decoration: BoxDecoration(
+            borderRadius:
+            BorderRadius.circular(0),
+            color: AppColors.datecontainer),
+        width:
+        MediaQuery.of(context).size.width /
+            2.6,
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton(
+            dropdownColor: AppColors.cardclr,
+            // Initial Value
+            value: photographer[j],
+            isExpanded: true,
+            hint: const Text(
+              "Photographer",
+              style: TextStyle(
+                  color: AppColors.textclr),
+            ),
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+              color: AppColors.textclr,
+            ),
+            // Array list of items
+            items: photographersList.map((items) {
+              return DropdownMenuItem(
+                value: items.firstName.toString(),
+                child: Text(
+                  items.firstName.toString(),
+                  style: const TextStyle(
+                      color: AppColors.textclr),
+                ),
+              );
+            }).toList(),
+            // After selecting the desired option,it will
+            // change button value to selected value
+            onChanged: (newValue) {
+              print("this is new value $newValue");
+              setState(() {
+                photographer[j] = newValue!;
+                // widget.allJobs!.photographersDetails![dateIndex].data![j].photographerName = photographer[j];
+              });
+              pType.add({
+                "photographer_type":
+                widget.allJobs!.photographersDetails![dateIndex].data![j].photographerType,
+                "photographerName": photographer[j]
+              });
+              print("this is my new response $pType");
+            },
+          ),
+        ),
+
+        // TextFormField(
+        //   style:
+        //      const TextStyle(color: AppColors.textclr),
+        //   controller: eventController,
+        //   keyboardType: TextInputType.name,
+        //   validator: (value) => value!.isEmpty
+        //       ? ' Events cannot be blank'
+        //       : null,
+        //   decoration: const InputDecoration(
+        //       hintText: 'Enter Events',
+        //       hintStyle: TextStyle(
+        //           color: AppColors.textclr,
+        //           fontSize: 14),
+        //       border: InputBorder.none,
+        //       contentPadding: EdgeInsets.only(
+        //           left: 10, bottom: 6)),
+        // ),
+
+      ),
+    );
+  }
 
   getPhotographerList() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -105,6 +182,47 @@ class _EditClientJobState extends State<EditClientJob> {
     });
   }
 
+  updateClientJob() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userId = preferences.getString('id');
+    var headers = {
+      'Cookie': 'ci_session=b222ee2ce87968a446feacdb861ad51c821bdf6d'
+    };
+
+    var request =
+    http.MultipartRequest('POST', Uri.parse(updateClientJobApi.toString()));
+
+
+    request.fields.addAll({
+      'client_name': clientNameController.toString(),
+      'city': cityNameController.text.toString(),
+      'mobile': mobileController.text.toString(),
+      'type_event': eventController.toString(),
+      'output': outputController.text.toString(),
+      'amount': amountController.text.toString(),
+      // 'event[]': selectedEvents.toString(),
+      'type': 'client',
+      'event_details': newList.toString(),
+      // 'date[]': selectedDate.toString(),
+      'user_id': userId.toString()
+    });
+    print("this is add quotation request ${request.fields.toString()}");
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String responseData =
+      await response.stream.transform(utf8.decoder).join();
+      var userData = json.decode(responseData);
+      Navigator.pop(context, true);
+      Fluttertoast.showToast(msg: userData['message']);
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   getCitiesList() async {
     var uri = Uri.parse(getCitiesApi.toString());
     // '${Apipath.getCitiesUrl}');
@@ -145,7 +263,7 @@ class _EditClientJobState extends State<EditClientJob> {
     }else{
       setState(() {
         clientNameController.text = widget.upcomingJobs!.clientName.toString();
-        // cityController = widget.upcomingJobs!.city.toString();
+        cityController = widget.upcomingJobs!.city.toString();
         cityNameController.text = widget.upcomingJobs!.city.toString();
         eventController = widget.upcomingJobs!.typeEvent.toString();
         amountController.text = widget.upcomingJobs!.amount.toString();
@@ -252,7 +370,7 @@ class _EditClientJobState extends State<EditClientJob> {
           Padding(
             padding: const EdgeInsets.all(15),
             child: Center(
-              child: Text("Edit Quotation",
+              child: Text("Edit Client Job",
                   style: TextStyle(
                       fontSize: 16,
                       color: AppColors.AppbtnColor,
@@ -652,7 +770,7 @@ class _EditClientJobState extends State<EditClientJob> {
                 height: 20,
               ),
 
-              quotationData.isNotEmpty ?
+              // quotationData.isNotEmpty ?
               Container(
                 height: 45,
                 child: ListView.builder(
@@ -664,6 +782,13 @@ class _EditClientJobState extends State<EditClientJob> {
                         onTap: (){
                           dateIndex = j ;
                           setState(() {
+                            newList.add(
+                                jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
+                                    :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
+                                  , "data": pType}));
+                            pType.clear();
+
+                            print("this is new list $newList");
                           });
                         },
                         child: Container(
@@ -684,7 +809,7 @@ class _EditClientJobState extends State<EditClientJob> {
                                 color: AppColors.datecontainer,
                               ),
                               child: Text(
-                                widget.allJobs!.photographersDetails![0].date.toString(),
+                                widget.allJobs!.photographersDetails![dateIndex].date.toString(),
                                 overflow: TextOverflow.fade,
                                 style: const TextStyle(color: AppColors.textclr),
                               ),
@@ -693,36 +818,8 @@ class _EditClientJobState extends State<EditClientJob> {
                         ),
                       );
                     }),
-              )
-                  : SizedBox.shrink(),
-              // Row(
-              //   children: [
-              //
-              //   Container(
-              //     margin: EdgeInsets.zero,
-              //     decoration: const BoxDecoration(
-              //       borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
-              //       color: AppColors.teamcard2,
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
-              //       child: Container(
-              //         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-              //         decoration: const BoxDecoration(
-              //           color:AppColors.datecontainer,
-              //
-              //         ),
-              //         child: const Text("22/2/2023",style: TextStyle(color: AppColors.textclr),),
-              //       ),
-              //     ),
-              //   ),
-              //   const Padding(
-              //     padding:  EdgeInsets.all(5.0),
-              //     child: Icon(Icons.add_circle_outline,color: AppColors.temtextclr,size: 30,),
-              //   ),
-              //   Text("Add Date",style: TextStyle(color: AppColors.temtextclr,fontSize: 16,fontWeight: FontWeight.bold),)
-              //
-              // ],),
+              ),
+                  // : SizedBox.shrink(),
               Container(
                 decoration: const BoxDecoration(
                     color: AppColors.teamcard2,
@@ -732,16 +829,16 @@ class _EditClientJobState extends State<EditClientJob> {
                         bottomLeft: Radius.circular(10))),
                 child: Column(
                   children: [
-                    const Align(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        "(For Developer User Can Hold/Or To Delete This Row)",
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: AppColors.textclr,
-                            fontSize: 12),
-                      ),
-                    ),
+                    // const Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: Text(
+                    //     "(For Developer User Can Hold/Or To Delete This Row)",
+                    //     style: TextStyle(
+                    //         fontStyle: FontStyle.italic,
+                    //         color: AppColors.textclr,
+                    //         fontSize: 12),
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -755,8 +852,8 @@ class _EditClientJobState extends State<EditClientJob> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                const Padding(
+                                  padding:  EdgeInsets.only(bottom: 8.0),
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
@@ -777,6 +874,7 @@ class _EditClientJobState extends State<EditClientJob> {
                                       // scrollDirection: Axis.horizontal,
                                       itemCount: widget.allJobs!.photographersDetails![dateIndex].data!.length,
                                       itemBuilder: (context, j) {
+                                        typeIndex = j;
                                         return Padding(
                                           padding: const EdgeInsets.only(top: 8.0),
                                           child: Container(
@@ -839,8 +937,8 @@ class _EditClientJobState extends State<EditClientJob> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 6.0),
+                                const  Padding(
+                                  padding:  EdgeInsets.only(bottom: 6.0),
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
@@ -861,75 +959,7 @@ class _EditClientJobState extends State<EditClientJob> {
                                       // scrollDirection: Axis.horizontal,
                                       itemCount: widget.allJobs!.photographersDetails![dateIndex].data!.length,
                                       itemBuilder: (context, j) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(top: 8.0),
-                                          child: Container(
-                                            height: 35,
-                                            padding: const EdgeInsets.only(
-                                                left: 10, top: 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(0),
-                                                color: AppColors.datecontainer),
-                                            width:
-                                            MediaQuery.of(context).size.width /
-                                                2.6,
-                                              child: DropdownButtonHideUnderline(
-                                                child: DropdownButton(
-                                                  dropdownColor: AppColors.cardclr,
-                                                  // Initial Value
-                                                  value: photographer,
-                                                  isExpanded: true,
-                                                  hint: const Text(
-                                                    "Photographer",
-                                                    style: TextStyle(
-                                                        color: AppColors.textclr),
-                                                  ),
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_down,
-                                                    color: AppColors.textclr,
-                                                  ),
-                                                  // Array list of items
-                                                  items: photographersList.map((items) {
-                                                    return DropdownMenuItem(
-                                                      value: items.firstName.toString(),
-                                                      child: Text(
-                                                        items.firstName.toString(),
-                                                        style: const TextStyle(
-                                                            color: AppColors.textclr),
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                                  // After selecting the desired option,it will
-                                                  // change button value to selected value
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      photographer = newValue!;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-
-                                              // TextFormField(
-                                              //   style:
-                                              //      const TextStyle(color: AppColors.textclr),
-                                              //   controller: eventController,
-                                              //   keyboardType: TextInputType.name,
-                                              //   validator: (value) => value!.isEmpty
-                                              //       ? ' Events cannot be blank'
-                                              //       : null,
-                                              //   decoration: const InputDecoration(
-                                              //       hintText: 'Enter Events',
-                                              //       hintStyle: TextStyle(
-                                              //           color: AppColors.textclr,
-                                              //           fontSize: 14),
-                                              //       border: InputBorder.none,
-                                              //       contentPadding: EdgeInsets.only(
-                                              //           left: 10, bottom: 6)),
-                                              // ),
-
-                                          ),
-                                        );
+                                        return photographerDropdownCard(j);
                                       }),
                                 )
                                     : const SizedBox.shrink(),
@@ -1078,20 +1108,30 @@ class _EditClientJobState extends State<EditClientJob> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 50,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: AppColors.AppbtnColor,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                        child: Text(
-                          "Update",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textclr,
-                              fontSize: 18),
-                        )),
+                  InkWell(
+                    onTap: (){
+                      newList.add(
+                          jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
+                              :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
+                            , "data": pType}));
+                      updateClientJob();
+                      print("this is new list $newList");
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          color: AppColors.AppbtnColor,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                          child: Text(
+                            "Update",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textclr,
+                                fontSize: 18),
+                          )),
+                    ),
                   ),
                   Image.asset(
                     "assets/images/pdf.png",
@@ -1099,6 +1139,12 @@ class _EditClientJobState extends State<EditClientJob> {
                   ),
                   InkWell(
                     onTap: () async {
+                      newList.add(
+                          jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
+                              :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
+                            , "data": pType}));
+
+                      print("this is new list $newList");
                       // await showDialog(
                       //     context: context,
                       //     builder: (context) {
@@ -1567,7 +1613,7 @@ class _EditClientJobState extends State<EditClientJob> {
                                     color: AppColors.datecontainer,
                                   ),
                                   child: Text(
-                                    widget.upcomingJobs!.photographersDetails![0].date.toString(),
+                                    widget.upcomingJobs!.photographersDetails![dateIndex].date.toString(),
                                     overflow: TextOverflow.fade,
                                     style: const TextStyle(color: AppColors.textclr),
                                   ),
@@ -1615,16 +1661,16 @@ class _EditClientJobState extends State<EditClientJob> {
                             bottomLeft: Radius.circular(10))),
                     child: Column(
                       children: [
-                        const Align(
-                          alignment: Alignment.topRight,
-                          child: Text(
-                            "(For Developer User Can Hold/Or To Delete This Row)",
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: AppColors.textclr,
-                                fontSize: 12),
-                          ),
-                        ),
+                        // const Align(
+                        //   alignment: Alignment.topRight,
+                        //   child: Text(
+                        //     "(For Developer User Can Hold/Or To Delete This Row)",
+                        //     style: TextStyle(
+                        //         fontStyle: FontStyle.italic,
+                        //         color: AppColors.textclr,
+                        //         fontSize: 12),
+                        //   ),
+                        // ),
                         const SizedBox(
                           height: 10,
                         ),
@@ -1744,75 +1790,7 @@ class _EditClientJobState extends State<EditClientJob> {
                                           // scrollDirection: Axis.horizontal,
                                           itemCount: widget.upcomingJobs!.photographersDetails![dateIndex].data!.length,
                                           itemBuilder: (context, j) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(top: 8.0),
-                                              child: Container(
-                                                height: 35,
-                                                padding: const EdgeInsets.only(
-                                                    left: 10, top: 5),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                    BorderRadius.circular(0),
-                                                    color: AppColors.datecontainer),
-                                                width:
-                                                MediaQuery.of(context).size.width /
-                                                    2.6,
-                                                child: DropdownButtonHideUnderline(
-                                                  child: DropdownButton(
-                                                    dropdownColor: AppColors.cardclr,
-                                                    // Initial Value
-                                                    value: photographer,
-                                                    isExpanded: true,
-                                                    hint: const Text(
-                                                      "Photographer",
-                                                      style: TextStyle(
-                                                          color: AppColors.textclr),
-                                                    ),
-                                                    icon: const Icon(
-                                                      Icons.keyboard_arrow_down,
-                                                      color: AppColors.textclr,
-                                                    ),
-                                                    // Array list of items
-                                                    items: photographersList.map((items) {
-                                                      return DropdownMenuItem(
-                                                        value: items.firstName.toString(),
-                                                        child: Text(
-                                                          items.firstName.toString(),
-                                                          style: const TextStyle(
-                                                              color: AppColors.textclr),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    // After selecting the desired option,it will
-                                                    // change button value to selected value
-                                                    onChanged: (newValue) {
-                                                      setState(() {
-                                                        photographer = newValue!;
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-
-                                                // TextFormField(
-                                                //   style:
-                                                //      const TextStyle(color: AppColors.textclr),
-                                                //   controller: eventController,
-                                                //   keyboardType: TextInputType.name,
-                                                //   validator: (value) => value!.isEmpty
-                                                //       ? ' Events cannot be blank'
-                                                //       : null,
-                                                //   decoration: const InputDecoration(
-                                                //       hintText: 'Enter Events',
-                                                //       hintStyle: TextStyle(
-                                                //           color: AppColors.textclr,
-                                                //           fontSize: 14),
-                                                //       border: InputBorder.none,
-                                                //       contentPadding: EdgeInsets.only(
-                                                //           left: 10, bottom: 6)),
-                                                // ),
-
-                                              ),
-                                            );
+                                            return photographerDropdownCard(j);
                                           }),
                                     )
                                         : const SizedBox.shrink(),
@@ -1961,20 +1939,30 @@ class _EditClientJobState extends State<EditClientJob> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 50,
-                        width: 150,
-                        decoration: BoxDecoration(
-                            color: AppColors.AppbtnColor,
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Center(
-                            child: Text(
-                              "Update",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textclr,
-                                  fontSize: 18),
-                            )),
+                      InkWell(
+                        onTap: (){
+                          newList.add(
+                              jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
+                                  :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
+                                , "data": pType}));
+                          updateClientJob();
+                          print("this is new list $newList");
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              color: AppColors.AppbtnColor,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Center(
+                              child: Text(
+                                "Update",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textclr,
+                                    fontSize: 18),
+                              )),
+                        ),
                       ),
                       Image.asset(
                         "assets/images/pdf.png",
@@ -1982,6 +1970,7 @@ class _EditClientJobState extends State<EditClientJob> {
                       ),
                       InkWell(
                         onTap: () async {
+
                           // await showDialog(
                           //     context: context,
                           //     builder: (context) {

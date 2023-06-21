@@ -223,7 +223,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                               color: AppColors.pdfbtn),
                                           width:
                                               MediaQuery.of(context).size.width,
-                                          child: Center(
+                                          child: const  Center(
                                               child: Text("Account",
                                                   style: TextStyle(
                                                       fontSize: 18,

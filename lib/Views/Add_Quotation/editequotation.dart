@@ -1,28 +1,29 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kolazz_book/Models/event_type_model.dart';
 import 'package:kolazz_book/Models/get_cities_model.dart';
 import 'package:kolazz_book/Models/get_quotation_model.dart';
-import 'package:kolazz_book/Services/request_keys.dart';
-import 'package:kolazz_book/Views/Add_Quotation/MoreQuatations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../Utils/colors.dart';
 import '../../Utils/strings.dart';
-import '../../Widgets/custom_appbutton.dart';
 
 class EditQuotation extends StatefulWidget {
-  final String? qid;
-  const EditQuotation({Key? key, this.qid}) : super(key: key);
+  final String? qid, id;
+  const EditQuotation({Key? key, this.qid, this.id}) : super(key: key);
 
   @override
   State<EditQuotation> createState() => _AddQuotationState();
 }
 
 class _AddQuotationState extends State<EditQuotation> {
+
   String? _chosenValue;
   var item = [
     'Kaushik Prajapati',
@@ -105,7 +106,68 @@ class _AddQuotationState extends State<EditQuotation> {
     });
   }
 
-  deleteConfirmation() {
+  // _shareQrCode({String? text}) async{
+  //
+  //     // iconVisible = true ;
+  //     var status =  await Permission.photos.request();
+  //     //Permission.manageExternalStorage.request();
+  //
+  //     //PermissionStatus storagePermission = await Permission.storage.request();
+  //     if ( status.isGranted/*storagePermission == PermissionStatus.denied*/) {
+  //       final directory = (await getApplicationDocumentsDirectory()).path;
+  //
+  //       RenderRepaintBoundary bound = keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
+  //       /*if(bound.debugNeedsPaint){
+  //       Timer(const Duration(seconds: 2),()=>_shareQrCode());
+  //       return null;
+  //     }*/
+  //       ui.Image image = await bound.toImage(pixelRatio: 10);
+  //       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  //
+  //       print('${byteData?.buffer.lengthInBytes}___________');
+  //       // this will save image screenshot in gallery
+  //       if(byteData != null ){
+  //         Uint8List pngBytes = byteData.buffer.asUint8List();
+  //         String fileName = DateTime
+  //             .now()
+  //             .microsecondsSinceEpoch
+  //             .toString();
+  //         final imagePath = await File('$directory/$fileName.png').create();
+  //         await imagePath.writeAsBytes(pngBytes);
+  //         Share.shareFiles([imagePath.path],text: text);
+  //         // final resultsave = await ImageGallerySaver.saveImage(Uint8List.fromList(pngBytes),quality: 90,name: 'screenshot-${DateTime.now()}.png');
+  //         //print(resultsave);
+  //       }
+  //       /*_screenshotController.capture().then((Uint8List? image) async {
+  //       if (image != null) {
+  //         try {
+  //           String fileName = DateTime
+  //               .now()
+  //               .microsecondsSinceEpoch
+  //               .toString();
+  //
+  //           final imagePath = await File('$directory/$fileName.png').create();
+  //           if (imagePath != null) {
+  //             await imagePath.writeAsBytes(image);
+  //             Share.shareFiles([imagePath.path],text: text);
+  //           }
+  //         } catch (error) {}
+  //       }
+  //     }).catchError((onError) {
+  //       print('Error --->> $onError');
+  //     });*/
+  //     } else if (await status.isDenied/*storagePermission == PermissionStatus.denied*/) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(content: Text('This Permission is recommended')));
+  //     } else if (await status.isPermanentlyDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
+  //       openAppSettings().then((value) {
+  //
+  //       });
+  //     }
+  //   }
+
+
+  deleteConfirmation(BuildContext context) {
     return AlertDialog(
       backgroundColor: AppColors.primary,
       title: const Text(
@@ -144,7 +206,7 @@ class _AddQuotationState extends State<EditQuotation> {
                     style: TextStyle(color: AppColors.textclr),
                   ))),
           onPressed: () {
-            deleteQuotation(quotationData[0].id.toString());
+            deleteQuotation(quotationData[0].id.toString(), context);
             Navigator.of(context).pop(true);
 
           },
@@ -153,7 +215,7 @@ class _AddQuotationState extends State<EditQuotation> {
     );
   }
 
-  deleteQuotation(String id) async {
+  deleteQuotation(String id, BuildContext context) async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();ff
     // String? userId = preferences.getString('id');
     var headers = {
@@ -205,7 +267,7 @@ class _AddQuotationState extends State<EditQuotation> {
     request.fields.addAll({
       'user_id': userId.toString(),
       'type': 'client',
-      'id': widget.qid.toString(),
+      'id': widget.id.toString(),
     });
     request.headers.addAll(headers);
     // request.fields['user_id'] = userId.toString();
@@ -226,7 +288,7 @@ class _AddQuotationState extends State<EditQuotation> {
     // clientNameController.text = quotationData![0].clientName.toString();
   }
 
-  createClientJob() async {
+  createClientJob(BuildContext context) async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
     // String? userId = preferences.getString('id');
     var uri = Uri.parse(createClientJobApi.toString());
@@ -238,7 +300,7 @@ class _AddQuotationState extends State<EditQuotation> {
     request.fields.addAll({
       // 'user_id': userId.toString(),
       // 'type': 'client',
-      'id': widget.qid.toString(),
+      'id': widget.id.toString(),
     });
     request.headers.addAll(headers);
     // request.fields['user_id'] = userId.toString();
@@ -981,21 +1043,21 @@ class _AddQuotationState extends State<EditQuotation> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 50,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: AppColors.AppbtnColor,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                        child: Text(
-                      "Update",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textclr,
-                          fontSize: 18),
-                    )),
-                  ),
+                  // Container(
+                  //   height: 50,
+                  //   width: 150,
+                  //   decoration: BoxDecoration(
+                  //       color: AppColors.AppbtnColor,
+                  //       borderRadius: BorderRadius.circular(5)),
+                  //   child: Center(
+                  //       child: Text(
+                  //     "Update",
+                  //     style: TextStyle(
+                  //         fontWeight: FontWeight.bold,
+                  //         color: AppColors.textclr,
+                  //         fontSize: 18),
+                  //   )),
+                  // ),
                   Image.asset(
                     "assets/images/pdf.png",
                     scale: 1.6,
@@ -1006,7 +1068,7 @@ class _AddQuotationState extends State<EditQuotation> {
                           context: context,
                           builder: (context) {
                             return
-                          deleteConfirmation();}
+                          deleteConfirmation(context);}
                       );
                     },
                     child: Container(
@@ -1033,7 +1095,7 @@ class _AddQuotationState extends State<EditQuotation> {
               ),
               InkWell(
                 onTap: () {
-                  createClientJob();
+                  createClientJob(context);
                   // Navigator.push(
                   //     context,
                   //     MaterialPageRoute(

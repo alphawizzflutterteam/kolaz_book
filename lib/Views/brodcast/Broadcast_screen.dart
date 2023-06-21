@@ -41,14 +41,16 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
   var photoGrapherType;
   String? message;
 
-
-
   DateTime? selectedDates;
+  List dates = [];
+  String? dateString;
   TimeOfDay selectedTime = TimeOfDay.now();
   TimeOfDay selectedTime2 = TimeOfDay.now();
   TextEditingController cityNameController = TextEditingController();
 
-  Future<void> selectDate(BuildContext context,) async {
+  Future<void> selectDate(
+    BuildContext context,
+  ) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -56,9 +58,12 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != selectedDates) {
-      setState((){
+      setState(() {
         selectedDates = pickedDate;
+        dates.add(selectedDates!);
+        dateString = dates.join(' , ');
       });
+      print("this is my date String ${dateString}");
 
       // update();
     }
@@ -98,7 +103,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     };
 
     request.headers.addAll(headers);
-     request.fields[RequestKeys.userId] =  userId.toString();
+    request.fields[RequestKeys.userId] = userId.toString();
     // request.fields['vendor_id'] = userID;
     var response = await request.send();
     print(response.statusCode);
@@ -107,12 +112,11 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
 
     var finalResult = BroadcastListModel.fromJson(userData);
 
-  setState(() {
-    message  = finalResult.leftMessage.toString();
-    broadCastList = BroadcastListModel.fromJson(userData).data!;
-  });
+    setState(() {
+      message = finalResult.leftMessage.toString();
+      broadCastList = BroadcastListModel.fromJson(userData).data!;
+    });
     print("this is my message ${finalResult.leftMessage}");
-
   }
 
   addBroadCastData() async {
@@ -126,20 +130,20 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     };
 
     request.headers.addAll(headers);
-    request.fields[RequestKeys.userId] =  userId.toString();
-    request.fields[RequestKeys.type] =  photoGrapherType.toString();
-    request.fields['date'] =  DateFormat('dd/MM/yyyy').format(selectedDates!).toString();
-    request.fields[RequestKeys.country] =  countryController.toString();
-    request.fields[RequestKeys.state] =  stateController.toString();
-    request.fields[RequestKeys.city] =  cityController.toString();
+    request.fields[RequestKeys.userId] = userId.toString();
+    request.fields[RequestKeys.type] = photoGrapherType.toString();
+    request.fields['date'] = dateString.toString();
+    request.fields[RequestKeys.country] = countryController.toString();
+    request.fields[RequestKeys.state] = stateController.toString();
+    request.fields[RequestKeys.city] = cityController.toString();
 
     print("this is add broadcast request ${request.fields.toString()}");
     // request.fields['vendor_id'] = userID;
     var response = await request.send();
     print(response.statusCode);
-    if(response.statusCode == 200) {
-      String responseData = await response.stream.transform(utf8.decoder)
-          .join();
+    if (response.statusCode == 200) {
+      String responseData =
+          await response.stream.transform(utf8.decoder).join();
       var userData = json.decode(responseData);
       if (userData['error']) {
         Fluttertoast.showToast(msg: userData['message']);
@@ -148,7 +152,6 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
         Fluttertoast.showToast(msg: userData['message']);
       }
     }
-
 
     // collectionModal = AllCateModel.fromJson(userData);
     // broadCastList = BroadcastListModel.fromJson(userData).data!;
@@ -174,9 +177,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     var userData = json.decode(responseData);
     citiesList = GetCitiesModel.fromJson(userData).data!;
     print("this is working ${citiesList.length}");
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   getStateList(String countryId) async {
@@ -195,9 +196,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
     statesList = GetStatesModel.fromJson(userData).data!;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   getCountryList() async {
@@ -216,9 +215,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
     countryList = GetCountryModel.fromJson(userData).data!;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -232,29 +229,30 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
+    return Scaffold(
         backgroundColor: AppColors.backgruond,
         appBar: AppBar(
           leading: InkWell(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
               child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
           backgroundColor: Color(0xff303030),
-
           actions: [
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 10.0,right: 10),
-                  child: const Text("Broadcast", style: TextStyle(fontSize: 18, color:Color(0xff1E90FF), fontWeight: FontWeight.bold)
-                  ),
+                  padding: const EdgeInsets.only(top: 10.0, right: 10),
+                  child: const Text("Broadcast",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xff1E90FF),
+                          fontWeight: FontWeight.bold)),
                 ),
                 Expanded(
-                  child:Padding(
+                  child: Padding(
                     padding: const EdgeInsets.only(right: 12.0),
                     child: FlutterSwitch(
                       height: 20.0,
@@ -290,384 +288,487 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
             //   init: BroadcastController(),
             //   builder: (controller){
             //     return
-                  SingleChildScrollView(
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.st,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width /2.5,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: AppColors.containerclr2,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                child: GetBuilder(
-                                    init: HomeController(),
-                                  builder: (controller) {
-                                    return controller.profiledata != null || controller.profiledata == "" ?
-                                    Center(
-                                      child: Text("Hi, ${controller.profiledata!.fname} ${controller.profiledata!.lname} ",
-                                        style: TextStyle(color: AppColors.whit,fontSize: 15),),
+            SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.st,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: AppColors.containerclr2,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: GetBuilder(
+                            init: HomeController(),
+                            builder: (controller) {
+                              return controller.profiledata != null ||
+                                      controller.profiledata == ""
+                                  ? Center(
+                                      child: Text(
+                                        "Hi, ${controller.profiledata!.fname} ${controller.profiledata!.lname} ",
+                                        style: TextStyle(
+                                            color: AppColors.whit,
+                                            fontSize: 15),
+                                      ),
                                     )
-                                        : CircularProgressIndicator();
-                                  }
-                                ),
+                                  : CircularProgressIndicator();
+                            }),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: AppColors.containerclr2,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                            child: Text(
+                          message.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: AppColors.whit),
+                        )),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: AppColors.containerclr2,
+                            borderRadius: BorderRadius.circular(10)),
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                "What You Need?",
+                                style: TextStyle(
+                                    color: Color(
+                                      0xff1E90FF,
+                                    ),
+                                    fontSize: 17),
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width /2.5,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: AppColors.containerclr2,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Photographer",
+                                    style: TextStyle(color: Color(0xff1E90FF)),
+                                  ),
+                                  Container(
+                                    height: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.backgruond,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton(
+                                          dropdownColor: AppColors.cardclr,
+                                          // Initial Value
+                                          value: photoGrapherType,
+                                          isExpanded: true,
+                                          hint: const Text(
+                                            "Type Of Photography",
+                                            style: TextStyle(
+                                                color: AppColors.textclr),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.keyboard_arrow_down,
+                                            color: AppColors.textclr,
+                                          ),
+                                          // Array list of items
+                                          items: typeofPhotographyEvent
+                                              .map((Categories items) {
+                                            return DropdownMenuItem(
+                                              value: items.resId,
+                                              child: Text(
+                                                items.resName.toString(),
+                                                style: const TextStyle(
+                                                    color: AppColors.textclr),
+                                              ),
+                                            );
+                                          }).toList(),
+                                          // After selecting the desired option,it will
+                                          // change button value to selected value
+                                          onChanged: (newValue) {
+                                            photoGrapherType =
+                                                newValue.toString();
+                                            print(
+                                                "this is photographer $photoGrapherType");
 
-                                child: Center(child: Text(message.toString(),overflow: TextOverflow.ellipsis, style: TextStyle(color: AppColors.whit),)),
+                                            setState(() {});
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Date",
+                                    style: TextStyle(color: Color(0xff1E90FF)),
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      final DateTime? pickedDate =
+                                          await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2100),
+                                      );
+                                      if (pickedDate != null &&
+                                          pickedDate != selectedDates) {
+                                        setState(() {
+                                          selectedDates = pickedDate;
+                                          String sDate =
+                                              DateFormat('dd/MM/yyyy')
+                                                  .format(selectedDates!);
+                                          dates.add(sDate);
+                                          dateString = dates.join(',');
+                                        });
+                                        // update();
+                                      }
+                                      print("this is selected dat $dateString");
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: AppColors.backgruond,
+                                      ),
+                                      child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 8.0, top: 15),
+                                          child: selectedDates != null
+                                              ? Text(dateString.toString(),
+                                                  style: const TextStyle(
+                                                      color: AppColors.whit))
+                                              : const Text(
+                                                  "Select Date",
+                                                  style: TextStyle(
+                                                      color: AppColors.whit),
+                                                )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Country",
+                                    style: TextStyle(color: Color(0xff1E90FF)),
+                                  ),
+                                  Container(
+                                    // height: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.backgruond,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8),
+                                      child: CustomSearchableDropDown(
+                                        dropdownHintText: "Country",
+                                        suffixIcon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          color: AppColors.whit,
+                                        ),
+                                        backgroundColor: AppColors.backgruond,
+                                        //Color(0xff6D6A6A),
+                                        dropdownBackgroundColor:
+                                            AppColors.containerclr2,
+                                        dropdownItemStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        // dropdownHintText: TextStyle(
+                                        //   color: AppColors.whit
+                                        // ),
+                                        items: countryList,
+                                        label: 'Country',
+                                        labelStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        multiSelectTag: 'Country',
+                                        decoration: BoxDecoration(
+                                            color: AppColors.containerclr2,
+                                            borderRadius:
+                                                BorderRadius.circular(15)
+                                            // color: Colors.white
+                                            // border: Border.all(
+                                            //   color: CustomColors.lightgray.withOpacity(0.5),
+                                            // )
+                                            ),
+                                        multiSelect: false,
+                                        dropDownMenuItems:
+                                            countryList.map((item) {
+                                                  return "${item.name}";
+                                                }).toList() ??
+                                                [],
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              countryController = value.id;
+                                            });
+                                            getStateList(
+                                                countryController.toString());
+                                          }
+                                          print(
+                                              "this is my country code ${countryController}");
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "State",
+                                    style: TextStyle(color: Color(0xff1E90FF)),
+                                  ),
+                                  Container(
+                                    // height: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.backgruond,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8),
+                                      child: CustomSearchableDropDown(
+                                        dropdownHintText: "State",
+                                        suffixIcon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          color: AppColors.whit,
+                                        ),
+                                        backgroundColor: AppColors.backgruond,
+                                        dropdownBackgroundColor:
+                                            AppColors.containerclr2,
+                                        dropdownItemStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        // dropdownHintText: TextStyle(
+                                        //   color: AppColors.whit
+                                        // ),
+                                        items: statesList,
+                                        label: 'State',
+                                        labelStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        multiSelectTag: 'State',
+                                        decoration: BoxDecoration(
+                                            color: AppColors.containerclr2,
+                                            borderRadius:
+                                                BorderRadius.circular(15)
+                                            // color: Colors.white
+                                            // border: Border.all(
+                                            //   color: CustomColors.lightgray.withOpacity(0.5),
+                                            // )
+                                            ),
+                                        multiSelect: false,
+                                        dropDownMenuItems:
+                                            statesList.map((item) {
+                                                  return "${item.name}";
+                                                }).toList() ??
+                                                [],
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              stateController = value.id;
+                                            });
+                                            getCitiesList(
+                                                stateController.toString());
+                                          }
+                                          print(
+                                              "this is my country code ${stateController}");
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "City",
+                                    style: TextStyle(color: Color(0xff1E90FF)),
+                                  ),
+                                  Container(
+                                    // height: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.backgruond,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: CustomSearchableDropDown(
+                                        dropdownHintText: "City",
+                                        suffixIcon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          color: AppColors.whit,
+                                        ),
+                                        backgroundColor: AppColors.backgruond,
+                                        dropdownBackgroundColor:
+                                            AppColors.containerclr2,
+                                        dropdownItemStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        // dropdownHintText: TextStyle(
+                                        //   color: AppColors.whit
+                                        // ),
+                                        items: citiesList,
+                                        label: 'City',
+                                        labelStyle: const TextStyle(
+                                            color: AppColors.whit),
+                                        multiSelectTag: 'City',
+                                        decoration: BoxDecoration(
+                                            color: AppColors.containerclr2,
+                                            borderRadius:
+                                                BorderRadius.circular(15)
+                                            // color: Colors.white
+                                            // border: Border.all(
+                                            //   color: CustomColors.lightgray.withOpacity(0.5),
+                                            // )
+                                            ),
+                                        multiSelect: false,
+                                        dropDownMenuItems:
+                                            citiesList.map((item) {
+                                                  return "${item.name}";
+                                                }).toList() ??
+                                                [],
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              cityController = value.id;
+                                            });
+                                            // getStateList(countryController.toString());
+                                          }
+                                          print(
+                                              "this is my country code ${cityController}");
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                  height: 50,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // if(countryController == null || stateController == null || cityController == null ||
+                                      //     photoGrapherType == null ||
+                                      // selectedDates == null) {
+                                      // Fluttertoast.showToast(msg: "Please select all required field!");
+                                      // }else{
+                                      addBroadCastData();
+                                      // }
+                                    },
+                                    child: const Text('Send'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color(0xff40ACFF),
+                                      shape: StadiumBorder(),
+                                    ),
+                                  )),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              const Text(
+                                "Note-All KalazBook User See Your Broadcasr Message You Can send 2 message in 24 hrs",
+                                style: TextStyle(
+                                    fontSize: 9, color: AppColors.whit),
                               )
                             ],
                           ),
-                          SizedBox(height: 12,),
-                          Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: AppColors.containerclr2,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                width: MediaQuery.of(context).size.width,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    children: [
-                                      Text("What You Need?",style: TextStyle(color:Color(0xff1E90FF,),fontSize: 17),),
-                                      SizedBox(height: 20,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Photographer",style: TextStyle( color:Color(0xff1E90FF)),),
-                                          Container(
-                                            height: 50,
-                                            width: MediaQuery.of(context).size.width/2,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: AppColors.backgruond,
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: DropdownButtonHideUnderline(
-                                                child: DropdownButton(
-                                                  dropdownColor: AppColors.cardclr,
-                                                  // Initial Value
-                                                  value: photoGrapherType,
-                                                  isExpanded: true,
-                                                  hint: const Text(
-                                                    "Type Of Photography",
-                                                    style: TextStyle(color: AppColors.textclr),
-                                                  ),
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_down,
-                                                    color: AppColors.textclr,
-                                                  ),
-                                                  // Array list of items
-                                                  items: typeofPhotographyEvent
-                                                      .map((Categories items) {
-                                                    return DropdownMenuItem(
-                                                      value: items.resId,
-                                                      child: Text(
-                                                        items.resName.toString(),
-                                                        style: const TextStyle(
-                                                            color: AppColors.textclr),
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                                  // After selecting the desired option,it will
-                                                  // change button value to selected value
-                                                  onChanged: (newValue) {
-                                                  photoGrapherType = newValue.toString();
-                                                  print("this is photographer $photoGrapherType");
-
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: 20,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Date",style: TextStyle( color:Color(0xff1E90FF)),),
-                                          InkWell(
-                                            onTap: () async{
-                                              final DateTime? pickedDate = await showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime(2000),
-                                                lastDate: DateTime(2100),
-                                              );
-                                              if (pickedDate != null && pickedDate != selectedDates) {
-                                                setState((){
-                                                  selectedDates = pickedDate;
-                                                });
-                                                // update();
-                                              }
-                                              print("this is selected dat $selectedDates");
-                                            },
-                                            child: Container(
-                                              height: 50,
-                                              width: MediaQuery.of(context).size.width/2,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                color: AppColors.backgruond,
-                                              ),
-                                              child:  Padding(
-                                                padding:  EdgeInsets.only(left: 8.0, top: 15),
-                                                child:
-                                                 selectedDates != null  ?
-                                                Text(DateFormat('dd/MM/yyyy').format(selectedDates!).toString(), style: const TextStyle(color: AppColors.whit))
-                                                :  const Text("Select Date", style: TextStyle(color: AppColors.whit),)
-
-                                              ),
-                                            ),
-                                          )
-                                        ],),
-
-                                      SizedBox(height: 20,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Country",style: TextStyle( color:Color(0xff1E90FF)),),
-                                          Container(
-                                            // height: 50,
-                                            width: MediaQuery.of(context).size.width/2,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: AppColors.backgruond,
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 8.0, right: 8),
-                                              child:  CustomSearchableDropDown(
-                                                dropdownHintText: "Country",
-                                                suffixIcon: const Icon(
-                                                  Icons.keyboard_arrow_down_sharp,
-                                                  color: AppColors.whit,
-                                                ),
-                                                backgroundColor: AppColors.backgruond,
-                                                //Color(0xff6D6A6A),
-                                                dropdownBackgroundColor:
-                                                AppColors.containerclr2,
-                                                dropdownItemStyle: const TextStyle(
-                                                    color: AppColors.whit),
-                                                // dropdownHintText: TextStyle(
-                                                //   color: AppColors.whit
-                                                // ),
-                                                items: countryList,
-                                                label: 'Country',
-                                                labelStyle: const TextStyle(
-                                                    color: AppColors.whit
-                                                ),
-                                                multiSelectTag: 'Country',
-                                                decoration: BoxDecoration(
-                                                    color: AppColors.containerclr2,
-                                                    borderRadius:
-                                                    BorderRadius.circular(15)
-                                                  // color: Colors.white
-                                                  // border: Border.all(
-                                                  //   color: CustomColors.lightgray.withOpacity(0.5),
-                                                  // )
-                                                ),
-                                                multiSelect: false,
-                                                dropDownMenuItems: countryList.map((item) {
-                                                  return "${item.name}";
-                                                }).toList() ??
-                                                    [],
-                                                onChanged: (value) {
-                                                  if (value != null) {
-                                                    setState((){
-                                                      countryController = value.id;
-                                                    });
-                                                    getStateList(countryController.toString());
-                                                  }
-                                                  print("this is my country code ${countryController}");
-                                                },
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: 20,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("State",style: TextStyle( color:Color(0xff1E90FF)),),
-                                          Container(
-                                            // height: 50,
-                                            width: MediaQuery.of(context).size.width/2,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: AppColors.backgruond,
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 8.0, right: 8),
-                                              child:  CustomSearchableDropDown(
-                                                dropdownHintText: "State",
-                                                suffixIcon: const Icon(
-                                                  Icons.keyboard_arrow_down_sharp,
-                                                  color: AppColors.whit,
-                                                ),
-                                                backgroundColor: AppColors.backgruond,
-                                                dropdownBackgroundColor:
-                                                AppColors.containerclr2,
-                                                dropdownItemStyle: const TextStyle(
-                                                    color: AppColors.whit),
-                                                // dropdownHintText: TextStyle(
-                                                //   color: AppColors.whit
-                                                // ),
-                                                items: statesList,
-                                                label: 'State',
-                                                labelStyle: const TextStyle(
-                                                    color: AppColors.whit
-                                                ),
-                                                multiSelectTag: 'State',
-                                                decoration: BoxDecoration(
-                                                    color: AppColors.containerclr2,
-                                                    borderRadius:
-                                                    BorderRadius.circular(15)
-                                                  // color: Colors.white
-                                                  // border: Border.all(
-                                                  //   color: CustomColors.lightgray.withOpacity(0.5),
-                                                  // )
-                                                ),
-                                                multiSelect: false,
-                                                dropDownMenuItems: statesList.map((item) {
-                                                  return "${item.name}";
-                                                }).toList() ??
-                                                    [],
-                                                onChanged: (value) {
-                                                  if (value != null) {
-                                                    setState((){
-                                                    stateController = value.id;
-                                                    });
-                                                     getCitiesList(stateController.toString());
-                                                  }
-                                                  print("this is my country code ${stateController}");
-                                                },
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: 20,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("City",style: TextStyle( color:Color(0xff1E90FF)),),
-                                          Container(
-                                            // height: 50,
-                                            width: MediaQuery.of(context).size.width/2,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: AppColors.backgruond,
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 8.0),
-                                              child:   CustomSearchableDropDown(
-                                                dropdownHintText: "City",
-                                                suffixIcon: const Icon(
-                                                  Icons.keyboard_arrow_down_sharp,
-                                                  color: AppColors.whit,
-                                                ),
-                                                backgroundColor: AppColors.backgruond,
-                                                dropdownBackgroundColor:
-                                                AppColors.containerclr2,
-                                                dropdownItemStyle: const TextStyle(
-                                                    color: AppColors.whit),
-                                                // dropdownHintText: TextStyle(
-                                                //   color: AppColors.whit
-                                                // ),
-                                                items: citiesList,
-                                                label: 'City',
-                                                labelStyle: const TextStyle(
-                                                    color: AppColors.whit
-                                                ),
-                                                multiSelectTag: 'City',
-                                                decoration: BoxDecoration(
-                                                    color: AppColors.containerclr2,
-                                                    borderRadius:
-                                                    BorderRadius.circular(15)
-                                                  // color: Colors.white
-                                                  // border: Border.all(
-                                                  //   color: CustomColors.lightgray.withOpacity(0.5),
-                                                  // )
-                                                ),
-                                                multiSelect: false,
-                                                dropDownMenuItems: citiesList.map((item) {
-                                                  return "${item.name}";
-                                                }).toList() ??
-                                                    [],
-                                                onChanged: (value) {
-                                                  if (value != null) {
-                                                    setState((){
-                                                      cityController = value.id;
-                                                    });
-                                                    // getStateList(countryController.toString());
-                                                  }
-                                                  print("this is my country code ${cityController}");
-                                                },
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: 20,),
-                                      SizedBox(height: 50,width: MediaQuery.of(context).size.width,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              // if(countryController == null || stateController == null || cityController == null ||
-                                              //     photoGrapherType == null ||
-                                              // selectedDates == null) {
-                                              // Fluttertoast.showToast(msg: "Please select all required field!");
-                                              // }else{
-                                                addBroadCastData();
-                                              // }
-                                            },
-                                            child: const Text('Send'),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color(0xff40ACFF),
-                                              shape: StadiumBorder(),
-                                            ),
-                                          )
-                                      ),
-                                      SizedBox(height: 10,),
-                                      const Text("Note-All KalazBook User See Your Broadcasr Message You Can send 2 message in 24 hrs",
-                                        style: TextStyle(fontSize: 9,color: AppColors.whit), )
-
-                                    ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 18,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            child: Text(
+                              "Kolaz Book Users",
+                              style: TextStyle(
+                                  color: Color(0xff1E90FF),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            ),
+                            alignment: Alignment.topLeft,
+                          ),
+                          GetBuilder(
+                              init: HomeController(),
+                              builder: (controller) {
+                                return Align(
+                                  child: Text(
+                                    '${controller.profiledata?.country}',
+                                    style: const TextStyle(
+                                        color: Color(0xff1E90FF),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
                                   ),
-                                ),
-
-                              ),
-                              SizedBox(height: 18,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Align(child: Text("Kolaz Book Users",style: TextStyle(color:Color(0xff1E90FF),fontWeight: FontWeight.bold,fontSize: 18),),alignment: Alignment.topLeft,),
-                                  Align(child: Text("India",style: TextStyle(color:Color(0xff1E90FF),fontWeight: FontWeight.bold,fontSize: 18),),alignment: Alignment.topLeft,),
-                                ],),
-                              SizedBox(height: 18,),
-                              broadCastList.isNotEmpty ?
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: broadCastList.length,
-                                  itemBuilder: (context, index){
+                                  alignment: Alignment.topLeft,
+                                );
+                              })
+                        ],
+                      ),
+                      SizedBox(
+                        height: 18,
+                      ),
+                      broadCastList.isNotEmpty
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: broadCastList.length,
+                              itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
@@ -675,27 +776,57 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                       borderRadius: BorderRadius.circular(10),
                                       color: Color(0xff6D6A6A),
                                     ),
-
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
                                         children: [
-                                          Align(alignment: Alignment.topRight, child: SizedBox(height:5, child: IconButton(onPressed: (){}, icon: Icon(Icons.phone,color: Color(0xff1E90FF),)))),
+                                          Align(
+                                              alignment: Alignment.topRight,
+                                              child: SizedBox(
+                                                  height: 5,
+                                                  child: IconButton(
+                                                      onPressed: () {},
+                                                      icon: Icon(
+                                                        Icons.phone,
+                                                        color:
+                                                            Color(0xff1E90FF),
+                                                      )))),
                                           Row(
                                             children: [
                                               CircleAvatar(
-                                                backgroundImage: NetworkImage('https://media.istockphoto.com/id/877022826/photo/portrait-of-a-happy-young-asian-business-man.jpg?b=1&s=170667a&w=0&k=20&c=zBdoktuoe8bFhuBsdvtQgL_nJPnrZUn2gSf7OL3X2dM='),
+                                                backgroundImage: NetworkImage(
+                                                    'https://media.istockphoto.com/id/877022826/photo/portrait-of-a-happy-young-asian-business-man.jpg?b=1&s=170667a&w=0&k=20&c=zBdoktuoe8bFhuBsdvtQgL_nJPnrZUn2gSf7OL3X2dM='),
                                                 radius: 45,
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.all(10.0),
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
-                                                    Text("${broadCastList[index].userName}",style: TextStyle(fontSize: 16, color:Color(0xff1E90FF),fontWeight: FontWeight.bold),),
-                                                    SizedBox(width: 200,
-                                                        child: Text("I need ${broadCastList[index].typeOfPhotograpym} on ${broadCastList[index].date} in ${broadCastList[index].cityName}",overflow: TextOverflow.ellipsis,maxLines: 4,style: TextStyle(color: AppColors.textclr),))
+                                                    Text(
+                                                      "${broadCastList[index].userName}",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color:
+                                                              Color(0xff1E90FF),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                        width: 200,
+                                                        child: Text(
+                                                          "I need ${broadCastList[index].typeOfPhotograpym} on ${broadCastList[index].date} in ${broadCastList[index].cityName}",
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 4,
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .textclr),
+                                                        ))
                                                   ],
                                                 ),
                                               )
@@ -707,24 +838,25 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                   ),
                                 );
                               })
-                              : Container(
-                                child: Text("No Data to show!", style: TextStyle(
-                                  color: AppColors.whit
-                                ),),
+                          : Container(
+                              child: Text(
+                                "No Data to show!",
+                                style: TextStyle(color: AppColors.whit),
                               ),
-                              SizedBox(height: 10,),
-
-                            ],
-                          )
-                        ],
+                            ),
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
-                  ),
-                )
-            //   },
-            // )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
+        //   },
+        // )
 
-
-      );
+        );
   }
 }

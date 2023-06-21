@@ -50,6 +50,8 @@ class EditProfileController extends AppBaseController {
  String? firstname;
  String? lastname;
  String? profilePic;
+ String? companyLogo;
+ String? countryId, stateId;
   UpdateProfile ? updateprofile;
  String? updatedata;
   List<CityList> citiesList = [];
@@ -129,6 +131,7 @@ class EditProfileController extends AppBaseController {
   }
 
   Future<void>getProfile() async {
+    print("working");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     id = preferences.getString('id');
     setBusy(true);
@@ -142,6 +145,7 @@ class EditProfileController extends AppBaseController {
         firstname = profiledata?.fname;
         lastname = profiledata?.lname;
         profilePic = profiledata?.profilePic;
+        companyLogo = profiledata?.companyLogo;
          SharedPreferences prefe = await SharedPreferences.getInstance();
          prefe.setString('name',firstname!);
         firstnameController.text = profiledata?.fname ?? "";
@@ -152,7 +156,9 @@ class EditProfileController extends AppBaseController {
         companynameController.text= profiledata?.companyName??'';
         companyphoneController.text= profiledata?.companyNumber??'';
         companyaddressController.text= profiledata?.companyAddress??'';
-        // cityController = profiledata?.city ?? '';
+        cityController = profiledata?.city?? "";
+        // stateController = profiledata?.st ?? "";
+         countryController = profiledata?.country ?? '';
          companyStateController.text = profiledata?.country ?? '';
         countryController.text= profiledata?.country??'';
         companyEmailController.text= profiledata?.companyLink??'';

@@ -35,9 +35,10 @@ class _JobsScreenState extends State<JobsScreen> {
   int currentindex=0;
 
 
-  List<JobData> getJobs = [];
+
 
   List<FreelancerJobs> freelancerJobs = [];
+  List<JobData> getJobs = [];
 
   getClientJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -598,7 +599,7 @@ class _JobsScreenState extends State<JobsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
                   child: InkWell(
                     onTap: (){
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>EditQuotation()));
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>EditQufotation()));
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

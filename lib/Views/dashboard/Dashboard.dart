@@ -2,7 +2,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kolazz_book/Views/AccountScreen/accounts_screen.dart';
+import 'package:kolazz_book/Views/AccountScreen/account_screen.dart';
 import 'package:kolazz_book/Views/Jobs/jobs_screen.dart';
 import 'package:kolazz_book/Views/contact_screen/Contact_screen.dart';
 import 'package:kolazz_book/Views/team_screen/team_screen.dart';

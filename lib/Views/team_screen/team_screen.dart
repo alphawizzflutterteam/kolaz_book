@@ -470,10 +470,12 @@ class _TeamScreenState extends State<TeamScreen> {
                           );
                         },
                       )
-                    : Text(
-                        "No data to show!",
-                        style: TextStyle(color: AppColors.whit),
-                      ),
+                    : Center(
+                      child: Text(
+                          "No data to show!",
+                          style: TextStyle(color: AppColors.whit),
+                        ),
+                    ),
               ),
             ),
 

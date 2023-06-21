@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kolazz_book/Controller/edit_profile_controller.dart';
 import 'package:kolazz_book/Controller/profile_controller.dart';
 import 'package:kolazz_book/Views/authView/login/login_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,10 +68,39 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       },
                       child: Stack(
                         children: [
-                          CircleAvatar(
-                              radius: 35,
-                              backgroundImage:
-                              AssetImage('assets/Google.png',)),
+                          GetBuilder(
+                              init: EditProfileController(),
+                              builder: (controller) {
+                                return GestureDetector(
+                                  onTap: (){
+                                    // Get.to(EditProfileScreen());
+                                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyProfilePage()));
+                                  },
+                                  child:  Container(
+                                    height: 70,
+                                    width: 70,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.primary,
+                                        borderRadius: BorderRadius.circular(40)),
+                                    child:   ClipRRect(
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: controller.profilePic == null || controller.profilePic == '' ?
+                                        ClipRRect(
+                                            borderRadius: BorderRadius.circular(40),
+                                            child: controller.imageFile != null
+                                                ? Image.file(controller.imageFile!, fit: BoxFit.cover, height: 70,width: 70,)
+                                                : Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 70,width: 70,)
+                                        )
+                                            : ClipRRect(
+                                            borderRadius: BorderRadius.circular(40),
+                                            child:
+                                            // rcImage != null ?
+                                            Image.network(controller.profilePic.toString(), fit: BoxFit.cover, height: 70,width: 70,)
+                                        )
+                                    ),
+                                  ),
+                                );}
+                          ),
                           Positioned(
                               top: 40,
                               left: 40,

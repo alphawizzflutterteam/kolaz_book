@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/Subscription_Controller.dart';
 import 'package:kolazz_book/Models/get_cities_model.dart';
 import 'package:kolazz_book/Models/get_country_model.dart';
+import 'package:kolazz_book/Models/get_profile_model.dart';
 import 'package:kolazz_book/Models/get_states_model.dart';
+import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/Subscription/Subscription_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Controller/edit_profile_controller.dart';
 import '../../Utils/colors.dart';
 
@@ -88,8 +91,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
     countryList = GetCountryModel.fromJson(userData).data!;
+    print("this is country list ${countryList.length}");
 
   }
+
+
+
 
  @override
  void initState() {
@@ -174,20 +181,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       Image.network(controller.profilePic.toString(), fit: BoxFit.cover, height: 90,width: 95,)
                                   )
                               ),
-
-                                  // controller.imageFile != null || controller.imageFile == "" ? Container(
-                                  //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                                  //     child: Image.file(controller.imageFile!,fit: BoxFit.fill,height: 90,width: 95,))
-                                  // : controller.profilePic == null || controller.profilePic == ''?
-                                  //     Container(
-                                  //     decoration: BoxDecoration(
-                                  //         color: AppColors.primary,
-                                  //         borderRadius: BorderRadius.circular(50)),
-                                  //     child: Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,))
-                                  // : Container(
-                                  //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                                  //     child: Image.network(controller.profilePic!,fit: BoxFit.fill,height: 90,width: 95,))
-
                                 ),
                                 Positioned(
                                     top: 65,
@@ -210,22 +203,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
                     child: Column(
                       children: [
-                        Text("${controller.firstname} ${controller.lastname}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xff1E90FF)),),
+                        Text("${controller.firstname} ${controller.lastname}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xff1E90FF)),),
                         SizedBox(height: 5,),
-                        Text("ID-001", style: TextStyle(fontSize: 15, color: Colors.white),),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 80),
-                          child: Row(
-                            children: [
-                              Text("Subscription 14 Days Free Trial", style: TextStyle(fontSize: 15, color: Colors.white),),
-                              SizedBox(width: 6,),
-                              InkWell(
+                        Text(controller.profiledata!.username.toString(), style: const TextStyle(fontSize: 15, color: Colors.white),),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            controller.profiledata != null ?
+                            controller.profiledata!.isPlanActive! == true?
+                            Text(
+                              controller.profiledata != null ?
+                              "${controller.profiledata!.remainingDays} Trial "
+                                  : "15 Days Free Trial ",style: const TextStyle(fontSize: 12),)
+                                : Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: InkWell(
                                 onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubscriptionScreen()));
+                                  Get.to(SubscriptionScreen());
                                 },
-                                  child: Text("Buy", style: TextStyle(fontSize: 15, color: Color(0xff1E90FF), decoration: TextDecoration.underline,),))
-                            ],
-                          ),
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                    decoration: BoxDecoration(
+                                        color: AppColors.lightwhite,
+
+                                        borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: const Text("Subscribe Now",style: TextStyle(color: AppColors.whit,
+                                        fontSize: 12),)),
+                              ),
+                            )
+                                : const Text("Something went wrong!", style: TextStyle(
+                                fontSize: 12
+                            ),),
+                            // Text("Subscription 14 Days Free Trial", style: TextStyle(fontSize: 15, color: Colors.white),),
+                            // SizedBox(width: 6,),
+                            // InkWell(
+                            //   onTap: (){
+                            //     Navigator.push(context, MaterialPageRoute(builder: (context) => SubscriptionScreen()));
+                            //   },
+                            //     child: Text("Buy", style: TextStyle(fontSize: 15, color: Color(0xff1E90FF), decoration: TextDecoration.underline,),))
+                          ],
                         ),
                         SizedBox(height: 10,),
                         Container(
@@ -517,7 +534,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         // dropdownHintText: TextStyle(
                                         //   color: AppColors.whit
                                         // ),
-                                        items: countryList,
+                                        items: controller.countryList,
                                         label: 'Country',
                                         labelStyle: const TextStyle(
                                             color: AppColors.whit
@@ -533,23 +550,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           // )
                                         ),
                                         multiSelect: false,
-                                        dropDownMenuItems: countryList.map((item) {
+                                        dropDownMenuItems: controller.countryList.map((item) {
                                           return "${item.name}";
                                         }).toList() ??
                                             [],
                                         onChanged: (value) {
                                           if (value != null) {
                                             setState((){
-                                              countryController = value.id;
+                                              controller.countryController = value.name;
+                                              controller.countryId = value.id;
                                             });
-                                            getStateList(countryController.toString());
+                                            controller.getStateList(controller.countryId.toString());
                                           }
-                                          print("this is my country code ${countryController}");
+                                          print("this is my country code ${controller.countryController}");
                                         },
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 5,),
+                                 const  SizedBox(height: 5,),
                                   Container(
                                     width: MediaQuery.of(context).size.width/1.1,
                                     child: Card(
@@ -569,7 +587,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         AppColors.containerclr2,
                                         dropdownItemStyle: const TextStyle(
                                             color: AppColors.whit),
-                                        items: statesList,
+                                        items: controller.statesList,
                                         label: 'State',
                                         labelStyle: const TextStyle(
                                             color: AppColors.whit
@@ -585,17 +603,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           // )
                                         ),
                                         multiSelect: false,
-                                        dropDownMenuItems: statesList.map((item) {
+                                        dropDownMenuItems: controller.statesList.map((item) {
                                           return "${item.name}";
                                         }).toList() ??
                                             [],
                                         onChanged: (value) {
                                           if (value != null) {
                                             setState((){
-                                              stateController = value.id;
+                                              controller.stateController = value.name;
+                                              controller.stateId = value.id;
                                             });
-                                             getCitiesList(stateController.toString());
-                                            print("this is city request ${cityController.toString()}");
+                                             controller.getCitiesList(controller.stateId.toString());
+                                            print("this is state request ${controller.stateController.toString()}");
                                           }
 
                                         },
@@ -625,7 +644,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         // dropdownHintText: TextStyle(
                                         //   color: AppColors.whit
                                         // ),
-                                        items: citiesList,
+                                        items: controller.citiesList,
                                         label: 'City',
                                         labelStyle: const TextStyle(
                                             color: AppColors.whit
@@ -641,14 +660,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           // )
                                         ),
                                         multiSelect: false,
-                                        dropDownMenuItems: citiesList.map((item) {
+                                        dropDownMenuItems: controller.citiesList.map((item) {
                                           return "${item.name}";
                                         }).toList() ??
                                             [],
                                         onChanged: (value) {
                                           if (value != null) {
                                             setState((){
-                                              cityController = value.id;
+                                              controller.cityController = value.name;
                                             });
                                             // getCitiesList(stateController.toString());
                                           }
@@ -667,14 +686,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       height: 100,
                                       width: MediaQuery.of(context).size.width/1.1,
                                       child: Card(
-                                        color: Color(0xff6D6A6A),
+                                        color: const Color(0xff6D6A6A),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10.0),
                                         ),
                                         elevation: 5,
-                                        child: controller.imageFile2 != null || controller.imageFile2 == "" ? Container(
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                                            child: Image.file(controller.imageFile2!,fit: BoxFit.fill,height: 80,)) : Center(child: const Text("Upload Company Logo",style: TextStyle(fontSize: 18),))
+                                        child: controller.companyLogo == null || controller.companyLogo == '' ?
+                                        ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: controller.imageFile2 != null
+                                                ? Image.file(controller.imageFile2!, fit: BoxFit.cover, height: 90,width: 95,)
+                                                : const Center(child: Text("Upload Company Logo",style: TextStyle(fontSize: 18),))
+                                            // Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,)
+                                        )
+                                            : ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child:
+                                            // rcImage != null ?
+                                            Image.network(controller.companyLogo.toString(), fit: BoxFit.cover, height: 90,width: 95,)
+                                        )
+
+                                        // controller.imageFile2 != null || controller.imageFile2 == "" ? Container(
+                                        //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                                        //     child: Image.file(controller.imageFile2!,fit: BoxFit.fill,height: 80,)) : Center(child: const Text("Upload Company Logo",style: TextStyle(fontSize: 18),))
                                       ),
                                     ),
                                   ),

@@ -120,7 +120,8 @@ class _MoreQuatationsState extends State<MoreQuatations> {
                  child: InkWell(
                    onTap: ()async {
                      var result = await Navigator.push(context, MaterialPageRoute(builder: (context)=>EditQuotation(
-                       qid: getQuotation[index].id.toString(),
+                       qid: getQuotation[index].qid.toString(),
+                       id: getQuotation[index].id.toString(),
                      )));
                      if(result != null){
                        setState(() {
@@ -208,6 +209,7 @@ class _MoreQuatationsState extends State<MoreQuatations> {
                 onTap: ()async {
                  var result = await Navigator.push(context, MaterialPageRoute(builder: (context)=>EditQuotation(
                     qid: controller.getQuotation[index].qid.toString(),
+                   id: controller.getQuotation[index].id.toString(),
                   )));
                  if(result != null){
                    controller.getQuotations();
