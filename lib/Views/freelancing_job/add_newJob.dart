@@ -1308,7 +1308,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
     final result = PhotographerListModel.fromJson(userData);
     setState(() {
       photographersList = result.data!;
-      photographeridd = photographersList[0].id;
+      // photographeridd = photographersList[0].id;
     });
     print("this is photographersList ${photographersList[0].firstName}");
   }
@@ -2150,95 +2150,93 @@ class _freelancing_job_updateState extends State<addNewJob> {
                       ),
                       SizedBox(
                         height: 200,
-                        child: Expanded(
-                          child: ListView.builder(
-                            // physics: const NeverScrollableScrollPhysics(),
-                            itemCount: jsonData.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Container(
-                                  height: 45,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: const Color(0xff8B8B8B),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            // controller.selectDate(
-                                            //     context, index);
-                                            // selectDates = controller
-                                            //     .selectedDates
-                                            //     .join(',');
-                                            // print(
-                                            //     'this is selected dates $selectDates');
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 5),
-                                            decoration: const BoxDecoration(
-                                              // color:AppColors.datecontainer,
-                                            ),
-                                            child: Text(
-                                              // jsonData[index]['date'] != null
-                                              //     ?
-                                              ' ${jsonData[index]['date']}',
-                                              // : 'Select Date ',
-                                              style: const TextStyle(
-                                                  color: AppColors.textclr,
-                                                  fontSize: 12),
-                                            ),
+                        child: ListView.builder(
+                          // physics: const NeverScrollableScrollPhysics(),
+                          itemCount: jsonData.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Container(
+                                height: 45,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: const Color(0xff8B8B8B),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          // controller.selectDate(
+                                          //     context, index);
+                                          // selectDates = controller
+                                          //     .selectedDates
+                                          //     .join(',');
+                                          // print(
+                                          //     'this is selected dates $selectDates');
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 5),
+                                          decoration: const BoxDecoration(
+                                            // color:AppColors.datecontainer,
+                                          ),
+                                          child: Text(
+                                            // jsonData[index]['date'] != null
+                                            //     ?
+                                            ' ${jsonData[index]['date']}',
+                                            // : 'Select Date ',
+                                            style: const TextStyle(
+                                                color: AppColors.textclr,
+                                                fontSize: 12),
                                           ),
                                         ),
-                                        // Text("(MM-DD-YYYY)",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                        InkWell(
-                                          onTap: () {
-                                            // controller.selectTime(context);
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 5),
-                                            decoration: const BoxDecoration(
-                                              // color:AppColors.datecontainer,
-                                            ),
-                                            child: Text(
-                                              jsonData[index]['from_time'] != null
-                                                  ? ' ${
-                                                  jsonData[index]['from_time']} to ${jsonData[index]['to_time']}'
-                                                  : 'Select Time For Bookings',
-                                              style: const TextStyle(
-                                                  color: AppColors.textclr,
-                                                  fontSize: 12),
-                                            ),
+                                      ),
+                                      // Text("(MM-DD-YYYY)",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                      InkWell(
+                                        onTap: () {
+                                          // controller.selectTime(context);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 5),
+                                          decoration: const BoxDecoration(
+                                            // color:AppColors.datecontainer,
+                                          ),
+                                          child: Text(
+                                            jsonData[index]['from_time'] != null
+                                                ? ' ${
+                                                jsonData[index]['from_time']} to ${jsonData[index]['to_time']}'
+                                                : 'Select Time For Bookings',
+                                            style: const TextStyle(
+                                                color: AppColors.textclr,
+                                                fontSize: 12),
                                           ),
                                         ),
-                                        Text(
-                                          jsonData[index]['amount'] != null
-                                              ? ' ${jsonData[index]['amount']}'
-                                              : 'Select Time For Bookings',
-                                          style: const TextStyle(
-                                              color: AppColors.textclr,
-                                              fontSize: 12),
-                                        ),
+                                      ),
+                                      Text(
+                                        jsonData[index]['amount'] != null
+                                            ? ' ${jsonData[index]['amount']}'
+                                            : 'Select Time For Bookings',
+                                        style: const TextStyle(
+                                            color: AppColors.textclr,
+                                            fontSize: 12),
+                                      ),
 
-                                        // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                        // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                      ],
-                                    ),
+                                      // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                      // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                    ],
                                   ),
                                 ),
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       InkWell(
