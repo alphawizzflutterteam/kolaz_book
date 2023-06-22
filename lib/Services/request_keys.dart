@@ -31,7 +31,7 @@ class RequestKeys {
   static String type = 'type';
   static String userType = 'user_type';
   static String searchText = 'search_text';
-  static String companyImage = 'company_logo';
+  static String companyImage = 'company_image';
   static String profileImage = 'profile_pic';
   static String clientName = 'client_name';
   static String outPut = 'output';

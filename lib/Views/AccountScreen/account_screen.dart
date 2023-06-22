@@ -72,8 +72,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
     };
 
     request.headers.addAll(headers);
-    request.fields[RequestKeys.userId] = "4";
-    //id!;
+    request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.userType] = 'client';
     print("this is account request ${request.fields.toString()} and $getAccountsDataApi");
     var response = await request.send();

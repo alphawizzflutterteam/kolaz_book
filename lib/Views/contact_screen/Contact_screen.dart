@@ -263,13 +263,16 @@ class _ContactScreenState extends State<ContactScreen> {
                                                 index]
                                                     .city
                                                     .toString();
+                                            // controller.categoryValue =  controller
+                                            //     .getphotographetClient[
+                                            // index].photographerType;
                                             // TextEditingController(text: controller.getphotographetClient[index].city.toString());
                                             controller.mobileController.text =
                                                 controller
                                                     .getphotographetClient[index]
                                                     .mobile
                                                     .toString();
-                                            controller.categoryValue?.resId =
+                                            controller.categoryValue =
                                                 controller
                                                     .getphotographetClient[
                                                 index].photographerType;
@@ -297,7 +300,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                 color: AppColors.lightwhite,
                                                 borderRadius:
                                                     BorderRadius.circular(5)),
-                                            child: Center(
+                                            child: const Center(
                                               child: Text(
                                                 "Edit",
                                                 style: TextStyle(
@@ -976,9 +979,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                             items: controller
                                                 .typeofPhotographyEvent
                                                 .map((Categories items) {
-                                              return DropdownMenuItem<
-                                                  Categories>(
-                                                value: items,
+                                              return DropdownMenuItem(
+                                                value: items.resId,
                                                 child: Text(
                                                   items.resName.toString(),
                                                   style: TextStyle(
@@ -991,8 +993,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                             onChanged: (newValue) {
                                               setState(() {
                                                 controller.categoryValue =
-                                                    newValue;
+                                                    newValue ;
                                               });
+                                              print("this is my selected value ${controller.categoryValue}");
                                             },
                                           ),
                                         ),
@@ -1058,7 +1061,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                               controller.perdayController,
                                           keyboardType: TextInputType.name,
                                           validator: (value) => value!.isEmpty
-                                              ? 'City cannot be blank'
+                                              ? 'Per day charges cannot be blank'
                                               : null,
                                           decoration: const InputDecoration(
                                               hintText: 'Add Per Day Charges',
@@ -1715,9 +1718,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                                               .typeofPhotographyEvent
                                                               .map((Categories
                                                                   items) {
-                                                            return DropdownMenuItem<
-                                                                Categories>(
-                                                              value: items,
+                                                            return DropdownMenuItem(
+                                                              value: items.resId,
                                                               child: Text(
                                                                 items.resName
                                                                     .toString(),

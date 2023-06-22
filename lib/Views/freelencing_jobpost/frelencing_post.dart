@@ -5,8 +5,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../Utils/colors.dart';
 import '../Add_Quotation/MoreQuatations.dart';
-import '../freelancing_job/add_newJob.dart';
-import '../freelancing_job/edit_job.dart';
+import '../freelancing_job/add_freelance_job.dart';
+import '../freelancing_job/edit_freelance_job.dart';
 
 class freelencingPost extends StatefulWidget {
   const freelencingPost({Key? key}) : super(key: key);

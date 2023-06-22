@@ -28,7 +28,7 @@ class _TeamScreenState extends State<TeamScreen> {
 
   getUpcomingTeamJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? userId = preferences.getString('userId');
+    String? userId = preferences.getString('id');
     var headers = {
       'Cookie': 'ci_session=fd488e599591e4d13d6ae441c1876300c07b77d5'
     };
@@ -38,9 +38,9 @@ class _TeamScreenState extends State<TeamScreen> {
     //   'user_id': userId.toString(),
     //   'type': 'client'
     // });
-    print('_____Surendra_____${request.fields}_________');
     request.headers.addAll(headers);
     request.fields.addAll({"user_id": userId.toString(), "type": "client"});
+    print('_____Surendra_____${request.fields}______$getUpcomingJobsTeamApi');
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var result = await response.stream.bytesToString();

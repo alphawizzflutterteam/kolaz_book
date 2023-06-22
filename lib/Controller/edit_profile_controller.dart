@@ -158,7 +158,8 @@ class EditProfileController extends AppBaseController {
         companyaddressController.text= profiledata?.companyAddress??'';
         cityController = profiledata?.city?? "";
         // stateController = profiledata?.st ?? "";
-         countryController = profiledata?.country ?? '';
+        //  countryController = profiledata?.country ?? '';
+         // stateController = profiledata?.sta
          companyStateController.text = profiledata?.country ?? '';
         countryController.text= profiledata?.country??'';
         companyEmailController.text= profiledata?.companyLink??'';

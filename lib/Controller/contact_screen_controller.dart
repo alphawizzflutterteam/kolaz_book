@@ -31,7 +31,8 @@ class addPhotographerController extends AppBaseController {
 
   String? userId;
   String? id;
-  Categories? categoryValue;
+  // Categories?
+  var categoryValue;
   String? newValue;
 
 
@@ -164,7 +165,7 @@ class addPhotographerController extends AppBaseController {
       body[RequestKeys.lastname] = lastnameController.text.trim();
       body[RequestKeys.city] = cityController.text.trim();
       body[RequestKeys.mobile] = mobileController.text.trim();
-      body[RequestKeys.photographertype] =categoryValue?.resId.toString() ?? '';
+      body[RequestKeys.photographertype] =categoryValue.toString() ?? '';
       body[RequestKeys.companyname] = companyController.text.trim();
       body[RequestKeys.perdaycharge] = perdayController.text.trim();
       body[RequestKeys.userId] = userId!;

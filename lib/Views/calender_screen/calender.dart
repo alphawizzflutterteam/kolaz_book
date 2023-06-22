@@ -223,7 +223,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       // ),
       body: Column(
         children: [
-          const SizedBox(height: 25,),
+          const SizedBox(height: 20,),
           Container(
             // height: MediaQuery.of(context).size.height/3,
             color: AppColors.grd1,

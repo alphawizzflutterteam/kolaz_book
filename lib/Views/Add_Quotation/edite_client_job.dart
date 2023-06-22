@@ -625,45 +625,26 @@ class _EditClientJobState extends State<EditClientJob> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 0),
                             child: Container(
-                              padding: EdgeInsets.only(left: 8),
+                              // padding: EdgeInsets.only(left: 5, top: 8),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: AppColors.containerclr2),
                               width: MediaQuery.of(context).size.width / 2.1,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: AppColors.cardclr,
-                                  // Initial Value
-                                  value: cityController,
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    "City",
-                                    style: TextStyle(color: AppColors.textclr),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: AppColors.textclr,
-                                  ),
-                                  // Array list of items
-
-                                  items: citiesList.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id.toString(),
-                                      child: Text(
-                                        items.name.toString(),
-                                        style: const TextStyle(
-                                            color: AppColors.textclr),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  // After selecting the desired option,it will
-                                  // change button value to selected value
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      cityController = newValue;
-                                    });
-                                  },
-                                ),
+                              child: TextFormField(
+                                style:
+                                const TextStyle(color: AppColors.textclr),
+                                controller: cityNameController,
+                                keyboardType: TextInputType.name,
+                                validator: (value) => value!.isEmpty
+                                    ? 'City/Venue cannot be blank'
+                                    : null,
+                                decoration: const InputDecoration(
+                                    hintText: 'Enter City Name',
+                                    hintStyle: TextStyle(
+                                        color: AppColors.textclr, fontSize: 14),
+                                    border: InputBorder.none,
+                                    contentPadding:
+                                    EdgeInsets.only(left: 8, top: 5)),
                               ),
 
                               // TextFormField(

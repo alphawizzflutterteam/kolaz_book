@@ -17,8 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/colors.dart';
 import '../Add_Quotation/MoreQuatations.dart';
 import '../Add_Quotation/edite_client_job.dart';
-import '../freelancing_job/add_newJob.dart';
-import '../freelancing_job/edit_job.dart';
+import '../freelancing_job/add_freelance_job.dart';
+import '../freelancing_job/edit_freelance_job.dart';
 import 'package:http/http.dart' as http;
 
 class JobsScreen extends StatefulWidget {
@@ -499,107 +499,14 @@ class _JobsScreenState extends State<JobsScreen> {
             physics: ScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               var data = freelancerJobs[0].allJobs![index];
-              return GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>freelancing_job_update()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
-                    child: InkWell(
-                      onTap: (){
-                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>EditQuotation()));
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                        color: Colors.black12,
-                        elevation: 1,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Job ID",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
-                                  Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 14,vertical: 3),
-                                      decoration: BoxDecoration(
-                                          color: AppColors.lightwhite,
-
-                                          borderRadius: BorderRadius.circular(5)
-                                      ),
-                                      child: Text("${data.uid}",style: TextStyle(color: AppColors.whit,),)),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Photographer Name",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 14),),
-                                  Text("${data.photographerName}",style: const TextStyle(color: AppColors.whit),),
-                                ],
-                              ),
-                            ),
-                            // Padding(
-                            //   padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       const Text("Date",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 14),),
-                            //       Text("${data.jsonData![0].date}",style: const TextStyle(color: AppColors.whit),),
-                            //     ],
-                            //   ),
-                            // ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Event",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
-                                  Text("${data.eventName}",style: TextStyle(color: AppColors.whit),),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const   Text("Venue",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
-                                  Text("${data.cityName}",style: const TextStyle(color: AppColors.whit),),
-                                ],
-                              ),
-                            ),
-
-                          ],
-                        ),),
-                    ),
-                  )
-              );
-            },
-          ),
-        )
-            :  Container(
-          height: MediaQuery.of(context).size.height/1.8,
-          width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: freelancerJobs[0].upcomingJobs!.length ,
-            physics: ScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              var data = freelancerJobs[0].upcomingJobs![index];
-              return GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>freelancing_job_update()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
-                  child: InkWell(
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
+                child: GestureDetector(
                     onTap: (){
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>EditQufotation()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFreelanceJob(
+                          type: true,
+                          allJobs: freelancerJobs[0].allJobs![index]
+                      )));
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -659,16 +566,105 @@ class _JobsScreenState extends State<JobsScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              const   Text("Venue",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
+                                const   Text("Venue",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
                                 Text("${data.cityName}",style: const TextStyle(color: AppColors.whit),),
                               ],
                             ),
                           ),
 
                         ],
-                      ),),
-                  ),
-                )
+                      ),)
+                ),
+              );
+            },
+          ),
+        )
+            :  Container(
+          height: MediaQuery.of(context).size.height/1.8,
+          width: MediaQuery.of(context).size.width,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemCount: freelancerJobs[0].upcomingJobs!.length ,
+            physics: ScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              var data = freelancerJobs[0].upcomingJobs![index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
+                child: InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFreelanceJob(
+                        type: true,
+                        allJobs: freelancerJobs[0].allJobs![index]
+                    )));
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    color: Colors.black12,
+                    elevation: 1,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Job ID",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
+                              Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 14,vertical: 3),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.lightwhite,
+
+                                      borderRadius: BorderRadius.circular(5)
+                                  ),
+                                  child: Text("${data.uid}",style: TextStyle(color: AppColors.whit,),)),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("Photographer Name",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 14),),
+                              Text("${data.photographerName}",style: const TextStyle(color: AppColors.whit),),
+                            ],
+                          ),
+                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       const Text("Date",style: TextStyle(color: AppColors.pdfbtn,fontWeight: FontWeight.bold,fontSize: 14),),
+                        //       Text("${data.jsonData![0].date}",style: const TextStyle(color: AppColors.whit),),
+                        //     ],
+                        //   ),
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("Event",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
+                              Text("${data.eventName}",style: TextStyle(color: AppColors.whit),),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                            const   Text("Venue",style: TextStyle(color: AppColors.pdfbtn,fontSize: 14,fontWeight: FontWeight.bold),),
+                              Text("${data.cityName}",style: const TextStyle(color: AppColors.whit),),
+                            ],
+                          ),
+                        ),
+
+                      ],
+                    ),),
+                ),
               );
             },
           ),
@@ -761,8 +757,11 @@ class _JobsScreenState extends State<JobsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => addNewJob()));
+              onTap: () async{
+               var result = await  Navigator.push(context, MaterialPageRoute(builder: (context) => AddFreelanceJob()));
+               if(result != null) {
+                 getFreelancingJobs();
+               }
               },
               child: Container(
                 height: 50,
@@ -806,7 +805,7 @@ class _JobsScreenState extends State<JobsScreen> {
        ),
       body: Column(
         children: [
-
+          const SizedBox(height: 10,),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

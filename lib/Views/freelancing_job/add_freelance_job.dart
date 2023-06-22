@@ -1170,34 +1170,17 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/colors.dart';
 
-class addNewJob extends StatefulWidget {
-  const addNewJob({Key? key}) : super(key: key);
+class AddFreelanceJob extends StatefulWidget {
+  const AddFreelanceJob({Key? key}) : super(key: key);
 
   @override
-  State<addNewJob> createState() => _freelancing_job_updateState();
+  State<AddFreelanceJob> createState() => AddFreelanceJobState();
 }
 
-class _freelancing_job_updateState extends State<addNewJob> {
-  String? _chosenValue;
-  var item = [
-    'Kaushik Prajapati',
-    ' Prajapati',
-    'Kaushik Prajapati',
-  ];
-  String? _cityValue;
-  var item2 = [
-    'Mumbai',
-    ' indore',
-    'delhi ',
-  ];
-  String? _photography;
-  var item3 = [
-    'Mumbai',
-    ' indore',
-    'delhi ',
-  ];
+class AddFreelanceJobState extends State<AddFreelanceJob> {
 
   List jsonData = [];
+  List jsData = [];
 
   List<Categories> typeofPhotographyEvent = [];
   List<Data> photographersList = [];
@@ -1206,23 +1189,25 @@ class _freelancing_job_updateState extends State<addNewJob> {
   TextEditingController amountt = TextEditingController();
   var photographerName;
 
+
   var eventController;
   var cityController;
   var photographerType;
   var photographer;
   // String? selectDates;
   // String? selectTimes;
-  var photographeridd;
+  var photographerid;
   var totall = 0;
+  double totalAmount   = 0.0;
   List<int> amountlist = [];
 
   // List<DateTime> selectedDates = [DateTime.now()];
   DateTime? selectedDates;
-  TimeOfDay selectedTime = TimeOfDay.now();
-  TimeOfDay selectedTime2 = TimeOfDay.now();
+  TimeOfDay? selectedTime;
+  TimeOfDay? selectedTime2 ;
   TextEditingController cityNameController = TextEditingController();
 
-  Future<void> selectDate(BuildContext context,) async {
+  Future<void> selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -1230,7 +1215,9 @@ class _freelancing_job_updateState extends State<addNewJob> {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != selectedDates) {
-      selectedDates = pickedDate;
+      setState(() {
+        selectedDates = pickedDate;
+      });
       // update();
     }
   }
@@ -1238,7 +1225,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: selectedTime,
+      initialTime: TimeOfDay.now(),
     );
 
     if (pickedTime != null && pickedTime != selectedTime) {
@@ -1252,7 +1239,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
   Future<void> selectTime2(BuildContext context) async {
     final TimeOfDay? pickedTime2 = await showTimePicker(
       context: context,
-      initialTime: selectedTime2,
+      initialTime: TimeOfDay.now(),
     );
 
     if (pickedTime2 != null && pickedTime2 != selectedTime2) {
@@ -1383,8 +1370,8 @@ class _freelancing_job_updateState extends State<addNewJob> {
                       //   ),
                       // ),
                       InkWell(
-                        onTap: () {
-                          selectDate(
+                        onTap: () async {
+                         await  selectDate(
                               context);
                           setState(() {
 
@@ -1418,8 +1405,8 @@ class _freelancing_job_updateState extends State<addNewJob> {
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, bottom: 5),
                         child: InkWell(
-                          onTap: () {
-                            selectTime(context);
+                          onTap: () async {
+                           await selectTime(context);
                             dialogState((){
                             });
                             setState(() {
@@ -1436,7 +1423,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                 color: AppColors.containerclr2),
                             child: Text(
                               selectedTime != null
-                                  ? ' ${selectedTime.format(context)}'
+                                  ? ' ${selectedTime!.format(context)}'
                                   : 'Start Time For Bookings',
                               style: const TextStyle(
                                   color: AppColors.textclr,
@@ -1453,8 +1440,8 @@ class _freelancing_job_updateState extends State<addNewJob> {
                       //   ),
                       // ),
                       InkWell(
-                        onTap: () {
-                          selectTime2(context);
+                        onTap: () async{
+                        await   selectTime2(context);
                           dialogState((){
                           });
                           setState(() {
@@ -1471,7 +1458,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
                               color: AppColors.containerclr2),
                           child: Text(
                             selectedTime2 != null
-                                ? ' ${selectedTime2.format(context)}'
+                                ? ' ${selectedTime2!.format(context)}'
                                 : 'End Time For Bookings',
                             style: const TextStyle(
                                 color: AppColors.textclr,
@@ -1521,11 +1508,14 @@ class _freelancing_job_updateState extends State<addNewJob> {
                         alignment: Alignment.center,
                         child: InkWell(
                           onTap: () {
-                            jsonData.add({
-                              "date": DateFormat('yyyy-MM-dd').format(selectedDates!).toString(), "from_time": selectedTime.format(context), "to_time": selectedTime2.format(context), "amount": amountt.text.toString()
+                            jsonData.add(jsonEncode({
+                              "date": DateFormat('yyyy-MM-dd').format(selectedDates!).toString(), "from_time": selectedTime!.format(context), "to_time": selectedTime2!.format(context), "amount": amountt.text.toString()
+                            }));
+                            jsData.add({
+                              "date": DateFormat('yyyy-MM-dd').format(selectedDates!).toString(), "from_time": selectedTime!.format(context), "to_time": selectedTime2!.format(context), "amount": amountt.text.toString()
                             });
                             setState(() {
-
+                              totalAmount += double.parse(amountt.text.toString());
                             });
                             print("this is my new json data $jsonData");
                             Navigator.pop(context);
@@ -1588,6 +1578,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
   }
 
   addFreelancerJob() async {
+    print("working1");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('id');
     var headers = {
@@ -1608,9 +1599,9 @@ class _freelancing_job_updateState extends State<addNewJob> {
       // 'total': totall.toString(),
       'type_of_photography': photographerType.toString(),
       'user_id': userId.toString(),
-      'photographer_id': photographerName.toString(),
+      'photographer_id': photographerid.toString(),
     });
-    print("this is add freelancer job request ${request.fields.toString()}");
+    print("this is add freelancer job request ${request.fields.toString()} and $addFreelancerJobApi");
 
     request.headers.addAll(headers);
 
@@ -1621,7 +1612,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
       await response.stream.transform(utf8.decoder).join();
       var userData = json.decode(responseData);
 
-      Navigator.pop(context);
+      Navigator.pop(context, true);
       Fluttertoast.showToast(msg: userData['message']);
     } else {
       print(response.reasonPhrase);
@@ -1705,81 +1696,66 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 0),
                                   child: Container(
-                                    padding: EdgeInsets.only(left: 8),
+                                    // padding: EdgeInsets.only(left: 8),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
                                     MediaQuery.of(context).size.width / 2.1,
-                                    child:  Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            color: AppColors.containerclr2),
-                                        // padding: EdgeInsets.symmetric(vertical: 1),
-                                        width:
-                                        MediaQuery.of(context).size.width / 2.1,
-                                        child: CustomSearchableDropDown(
-                                          dropdownHintText: "Photographer",
-                                          suffixIcon: const Icon(
-                                            Icons.keyboard_arrow_down_sharp,
-                                            color: AppColors.whit,
-                                          ),
-                                          backgroundColor: AppColors.containerclr2,
-                                          dropdownBackgroundColor:
-                                          AppColors.containerclr2,
-                                          dropdownItemStyle: const TextStyle(
-                                              color: AppColors.whit),
-                                          // dropdownHintText: TextStyle(
-                                          //   color: AppColors.whit
-                                          // ),
-                                          items: photographersList,
-                                          label: 'Photographer',
-                                          labelStyle: const TextStyle(
-                                              color: AppColors.whit
-                                          ),
-                                          multiSelectTag: 'Names',
-                                          decoration: BoxDecoration(
-                                              color: AppColors.containerclr2,
-                                              borderRadius:
-                                              BorderRadius.circular(15)
-                                            // color: Colors.white
-                                            // border: Border.all(
-                                            //   color: CustomColors.lightgray.withOpacity(0.5),
-                                            // )
-                                          ),
-                                          multiSelect: false,
-                                          // prefixIcon: Padding(
-                                          //   padding: const EdgeInsets.all(2.0),
-                                          //   child: Container(
-                                          //       height: 30,
-                                          //       width: 30,
-                                          //       child: Image.asset(
-                                          //         "assets/drawerImages/designation.png", scale: 1.5,)
-                                          //   ),
-                                          // ),
-                                          dropDownMenuItems: photographersList.map((item) {
-                                            return "${item.firstName} ${item.lastName}";
-                                          }).toList() ??
-                                              [],
-                                          onChanged: (value) {
-                                            if (value != null) {
-                                              photographerName = value;
-                                              //  setState(() {
-                                              //   selectedDesignation = jsonDecode(value);
-                                              //   // });
-                                              // }
-                                              // else {
-                                              //   //setState(() {
-                                              //   selectedDesignation.clear();
-                                              // });
-                                            }
-                                          },
-                                        ),
 
+                                    child:  CustomSearchableDropDown(
+                                      dropdownHintText: "Photographer",
+                                      suffixIcon: const Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        color: AppColors.whit,
                                       ),
+                                      backgroundColor: AppColors.containerclr2,
+                                      dropdownBackgroundColor:
+                                      AppColors.containerclr2,
+                                      dropdownItemStyle: const TextStyle(
+                                          color: AppColors.whit),
+                                      // dropdownHintText: TextStyle(
+                                      //   color: AppColors.whit
+                                      // ),
+                                      items: photographersList,
+                                      label: 'Photographer',
+                                      labelStyle: const TextStyle(
+                                          color: AppColors.whit
+                                      ),
+                                      multiSelectTag: 'Names',
+                                      decoration: BoxDecoration(
+                                          color: AppColors.containerclr2,
+                                          borderRadius:
+                                          BorderRadius.circular(15)
+                                        // color: Colors.white
+                                        // border: Border.all(
+                                        //   color: CustomColors.lightgray.withOpacity(0.5),
+                                        // )
+                                      ),
+                                      multiSelect: false,
+                                      // prefixIcon: Padding(
+                                      //   padding: const EdgeInsets.all(2.0),
+                                      //   child: Container(
+                                      //       height: 30,
+                                      //       width: 30,
+                                      //       child: Image.asset(
+                                      //         "assets/drawerImages/designation.png", scale: 1.5,)
+                                      //   ),
+                                      // ),
+                                      dropDownMenuItems: photographersList.map((item) {
+                                        return "${item.firstName} ${item.lastName}";
+                                      }).toList() ??
+                                          [],
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                         setState(() {
+                                           photographerName = "${value.firstName} ${value.lastName}";
+                                           photographerid = value.id;
+                                           cityNameController.text = value.city;
+                                         });
+                                       print("this is my photogrpher data $photographerName and $photographerid");
+                                        }
+                                      },
                                     ),
                                     //  DropdownButtonHideUnderline(
                                     //   child: DropdownButton(
@@ -2152,7 +2128,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
                         height: 200,
                         child: ListView.builder(
                           // physics: const NeverScrollableScrollPhysics(),
-                          itemCount: jsonData.length,
+                          itemCount: jsData.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.only(top: 5.0),
@@ -2190,7 +2166,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                           child: Text(
                                             // jsonData[index]['date'] != null
                                             //     ?
-                                            ' ${jsonData[index]['date']}',
+                                            ' ${jsData[index]['date']}',
                                             // : 'Select Date ',
                                             style: const TextStyle(
                                                 color: AppColors.textclr,
@@ -2198,7 +2174,6 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                           ),
                                         ),
                                       ),
-                                      // Text("(MM-DD-YYYY)",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
                                       InkWell(
                                         onTap: () {
                                           // controller.selectTime(context);
@@ -2210,9 +2185,9 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                             // color:AppColors.datecontainer,
                                           ),
                                           child: Text(
-                                            jsonData[index]['from_time'] != null
+                                            jsData[index]['from_time'] != null
                                                 ? ' ${
-                                                jsonData[index]['from_time']} to ${jsonData[index]['to_time']}'
+                                                jsData[index]['from_time']} to ${jsData[index]['to_time']}'
                                                 : 'Select Time For Bookings',
                                             style: const TextStyle(
                                                 color: AppColors.textclr,
@@ -2221,11 +2196,12 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                         ),
                                       ),
                                       Text(
-                                        jsonData[index]['amount'] != null
-                                            ? ' ${jsonData[index]['amount']}'
-                                            : 'Select Time For Bookings',
+                                        jsData[index]['amount'] != null
+                                            ? '₹ ${jsData[index]['amount']}'
+                                            : 'Amount',
                                         style: const TextStyle(
                                             color: AppColors.textclr,
+                                            fontWeight: FontWeight.w600,
                                             fontSize: 12),
                                       ),
 
@@ -2257,7 +2233,13 @@ class _freelancing_job_updateState extends State<addNewJob> {
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
                               onTap: () async {
+                                selectedDates = null;
+                                selectedTime = null ;
+                                selectedTime2 = null;
+                                amountt.clear();
+
                                 await showAddInformationDialog(context);
+
                                 // if (controller.formKey.currentState!
                                 //     .validate()) {
                                 //   controller.increment();
@@ -2306,6 +2288,7 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                         color: AppColors.whit),
                                   )),
                               Container(
+                                padding: EdgeInsets.only(right: 8),
                                 height: 30,
                                 width: 230,
                                 decoration: BoxDecoration(
@@ -2314,10 +2297,12 @@ class _freelancing_job_updateState extends State<addNewJob> {
                                 ),
                                 child: Align(
                                     alignment: Alignment.centerRight,
-                                    child: Text(
-                                      "${totall}   =Sum(Amount)",
-                                      style: TextStyle(
-                                          color: AppColors.whit,
+                                    child:  Text(
+                                      "₹ ${totalAmount.toStringAsFixed(2)}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
                                           fontStyle: FontStyle.italic),
                                     )),
                               )
@@ -2332,7 +2317,12 @@ class _freelancing_job_updateState extends State<addNewJob> {
                         alignment: Alignment.center,
                         child: InkWell(
                           onTap: () {
-                            addFreelancerJob();
+                            print("working");
+                            if(totalAmount != 0 ) {
+                              addFreelancerJob();
+                            }else{
+                              Fluttertoast.showToast(msg: "Please fill all the details first");
+                            }
                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
                           },
                           child: Container(
