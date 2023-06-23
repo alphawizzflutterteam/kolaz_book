@@ -111,7 +111,8 @@ class ProfileData {
       String? isGold, 
       String? address, 
       dynamic companyAddress, 
-      String? city, 
+      String? city,
+    String? state,
       String? country, 
       String? deviceToken, 
       String? date, 
@@ -149,6 +150,7 @@ class ProfileData {
     _address = address;
     _companyAddress = companyAddress;
     _city = city;
+    _state = state;
     _country = country;
     _deviceToken = deviceToken;
     _date = date;
@@ -189,6 +191,7 @@ class ProfileData {
     _address = json['address'];
     _companyAddress = json['company_address'];
     _city = json['city'];
+    _state = json['state'];
     _country = json['country'];
     _deviceToken = json['device_token'];
     _date = json['date'];
@@ -227,6 +230,7 @@ class ProfileData {
   String? _address;
   dynamic _companyAddress;
   String? _city;
+  String? _state;
   String? _country;
   String? _deviceToken;
   String? _date;
@@ -264,6 +268,7 @@ ProfileData copyWith({  String? id,
   String? address,
   dynamic companyAddress,
   String? city,
+  String? state,
   String? country,
   String? deviceToken,
   String? date,
@@ -301,6 +306,7 @@ ProfileData copyWith({  String? id,
   address: address ?? _address,
   companyAddress: companyAddress ?? _companyAddress,
   city: city ?? _city,
+  state: state ?? _state,
   country: country ?? _country,
   deviceToken: deviceToken ?? _deviceToken,
   date: date ?? _date,
@@ -339,6 +345,7 @@ ProfileData copyWith({  String? id,
   String? get address => _address;
   dynamic get companyAddress => _companyAddress;
   String? get city => _city;
+  String? get state => _state;
   String? get country => _country;
   String? get deviceToken => _deviceToken;
   String? get date => _date;
@@ -379,6 +386,7 @@ ProfileData copyWith({  String? id,
     map['address'] = _address;
     map['company_address'] = _companyAddress;
     map['city'] = _city;
+    map['state'] = _state;
     map['country'] = _country;
     map['device_token'] = _deviceToken;
     map['date'] = _date;

@@ -752,6 +752,7 @@ class _EditClientJobState extends State<EditClientJob> {
               ),
 
               // quotationData.isNotEmpty ?
+              widget.type == true ?
               Container(
                 height: 45,
                 child: ListView.builder(
@@ -791,6 +792,54 @@ class _EditClientJobState extends State<EditClientJob> {
                               ),
                               child: Text(
                                 widget.allJobs!.photographersDetails![dateIndex].date.toString(),
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(color: AppColors.textclr),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+              )
+              :  Container(
+                height: 45,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.upcomingJobs!.photographersDetails!.length,
+                    itemBuilder: (context, j) {
+                      return InkWell(
+                        onTap: (){
+                          dateIndex = j ;
+                          setState(() {
+                            newList.add(
+                                jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
+                                    :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
+                                  , "data": pType}));
+                            pType.clear();
+
+                            print("this is new list $newList");
+                          });
+                        },
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8),
+                                topLeft: Radius.circular(8)),
+                            color: AppColors.teamcard2,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 8),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 5),
+                              decoration: const BoxDecoration(
+                                color: AppColors.datecontainer,
+                              ),
+                              child: Text(
+                                widget.upcomingJobs!.photographersDetails![dateIndex].date.toString(),
                                 overflow: TextOverflow.fade,
                                 style: const TextStyle(color: AppColors.textclr),
                               ),

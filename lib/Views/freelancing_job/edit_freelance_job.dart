@@ -1057,16 +1057,20 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                               borderRadius: BorderRadius.circular(8),
                               color: Color(0xffbfbfbf),
                             ),
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  widget.type == true ?
-                                  "₹ ${widget.allJobs!.jsonData![0].amount.toString()}"
-                                  :  "₹ ${widget.upcomingJobs!.jsonData![0].amount.toString()}",
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontStyle: FontStyle.italic),
-                                )),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+
+                                    widget.type == true ?
+                                    "₹ ${widget.allJobs!.jsonData![0].amount.toString()}"
+                                    :  "₹ ${widget.upcomingJobs!.jsonData![0].amount.toString()}",
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontStyle: FontStyle.italic),
+                                  )),
+                            ),
                           )
                         ],
                       )

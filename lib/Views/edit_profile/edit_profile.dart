@@ -32,6 +32,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var cityController;
   var countryController;
   var stateController;
+  bool isCountry = true;
+  bool isState = true;
+  bool isCity = true;
 
 
   getCitiesList(String stateId) async {
@@ -511,152 +514,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 5,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width/1.1,
-                                    child: Card(
-                                      color: Color(0xff6D6A6A),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      child:
-                                  DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      dropdownColor: AppColors.cardclr,
-                                      // Initial Value
-                                      value: controller.countryController,
-                                      isExpanded: true,
-                                      hint: const Text(
-                                        "Country",
-                                        style: TextStyle(
-                                            color: AppColors.textclr),
-                                      ),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: AppColors.textclr,
-                                      ),
-                                      // Array list of items
-                                      items: controller.countryList.map((items) {
-                                        return DropdownMenuItem(
-                                          value: items.id.toString(),
-                                          child: Text(
-                                            items.name.toString(),
-                                            style: const TextStyle(
-                                                color: AppColors.textclr),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      // After selecting the desired option,it will
-                                      // change button value to selected value
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          // controller.countryController = newValue;
-                                          // controller.countryId = newValue!.id.toString();
-                                          controller.getStateList(controller.countryController);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width/1.1,
-                                    child: Card(
-                                      color: Color(0xff6D6A6A),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      child:
-                                      DropdownButtonHideUnderline(
-                                        child: DropdownButton(
-                                          dropdownColor: AppColors.cardclr,
-                                          // Initial Value
-                                          value: controller.stateController,
-                                          isExpanded: true,
-                                          hint: const Text(
-                                            "State",
-                                            style: TextStyle(
-                                                color: AppColors.textclr),
-                                          ),
-                                          icon: const Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: AppColors.textclr,
-                                          ),
-                                          // Array list of items
-                                          items: controller.statesList.map((items) {
-                                            return DropdownMenuItem(
-                                              value: items.id.toString(),
-                                              child: Text(
-                                                items.name.toString(),
-                                                style: const TextStyle(
-                                                    color: AppColors.textclr),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          // After selecting the desired option,it will
-                                          // change button value to selected value
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              controller.stateController = newValue;
-                                              controller.getCitiesList(controller.stateController);
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width/1.1,
-                                    child: Card(
-                                      color: Color(0xff6D6A6A),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      child:
-                                      DropdownButtonHideUnderline(
-                                        child: DropdownButton(
-                                          dropdownColor: AppColors.cardclr,
-                                          // Initial Value
-                                          value: controller.cityController,
-                                          isExpanded: true,
-                                          hint: const Text(
-                                            "City",
-                                            style: TextStyle(
-                                                color: AppColors.textclr),
-                                          ),
-                                          icon: const Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: AppColors.textclr,
-                                          ),
-                                          // Array list of items
-                                          items: controller.citiesList.map((items) {
-                                            return DropdownMenuItem(
-                                              value: items.id.toString(),
-                                              child: Text(
-                                                items.name.toString(),
-                                                style: const TextStyle(
-                                                    color: AppColors.textclr),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          // After selecting the desired option,it will
-                                          // change button value to selected value
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              controller.cityController = newValue;
-                                              // controller.getStateList(controller.stateController);
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ///SEARCHABLE DROPDOWN COUNTRY
+                                  // SizedBox(height: 5,),
                                   // Container(
                                   //   width: MediaQuery.of(context).size.width/1.1,
                                   //   child: Card(
@@ -665,60 +523,218 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   //       borderRadius: BorderRadius.circular(10.0),
                                   //     ),
                                   //     elevation: 5,
-                                  //     child: CustomSearchableDropDown(
-                                  //       dropdownHintText: "Country",
-                                  //       suffixIcon: const Icon(
-                                  //         Icons.keyboard_arrow_down_sharp,
-                                  //         color: AppColors.whit,
-                                  //       ),
-                                  //       backgroundColor: Color(0xff6D6A6A),
-                                  //       dropdownBackgroundColor:
-                                  //       AppColors.containerclr2,
-                                  //       dropdownItemStyle: const TextStyle(
-                                  //           color: AppColors.whit),
-                                  //       // dropdownHintText: TextStyle(
-                                  //       //   color: AppColors.whit
-                                  //       // ),
-                                  //       items: controller.countryList,
-                                  //       initialValue:  [
-                                  //         { 'parameter':
-                                  //                     '${controller
-                                  //             .countryController}'
-                                  //                   },
-                                  //
-                                  //                 ],
-                                  //       label: 'Country',
-                                  //       labelStyle: const TextStyle(
-                                  //           color: AppColors.whit
-                                  //       ),
-                                  //       multiSelectTag: 'Country',
-                                  //       decoration: BoxDecoration(
-                                  //           color: AppColors.containerclr2,
-                                  //           borderRadius:
-                                  //           BorderRadius.circular(15)
-                                  //         // color: Colors.white
-                                  //         // border: Border.all(
-                                  //         //   color: CustomColors.lightgray.withOpacity(0.5),
-                                  //         // )
-                                  //       ),
-                                  //       multiSelect: false,
-                                  //       dropDownMenuItems: controller.countryList.map((item) {
-                                  //         return "${item.name}";
-                                  //       }).toList() ??
-                                  //           [],
-                                  //       onChanged: (value) {
-                                  //         if (value != null) {
-                                  //           setState((){
-                                  //             controller.countryController = value.name;
-                                  //             controller.countryId = value.id;
+                                  //     child:
+                                  // DropdownButtonHideUnderline(
+                                  //   child: DropdownButton(
+                                  //     dropdownColor: AppColors.cardclr,
+                                  //     // Initial Value
+                                  //     value: controller.countryController,
+                                  //     isExpanded: true,
+                                  //     hint: const Text(
+                                  //       "Country",
+                                  //       style: TextStyle(
+                                  //           color: AppColors.textclr),
+                                  //     ),
+                                  //     icon: const Icon(
+                                  //       Icons.keyboard_arrow_down,
+                                  //       color: AppColors.textclr,
+                                  //     ),
+                                  //     // Array list of items
+                                  //     items: controller.countryList.map((items) {
+                                  //       return DropdownMenuItem(
+                                  //         value: items,
+                                  //         child: Text(
+                                  //           items.name.toString(),
+                                  //           style: const TextStyle(
+                                  //               color: AppColors.textclr),
+                                  //         ),
+                                  //       );
+                                  //     }).toList(),
+                                  //     // After selecting the desired option,it will
+                                  //     // change button value to selected value
+                                  //     onChanged: (newValue) {
+                                  //       setState(() {
+                                  //          controller.countryController = newValue;
+                                  //          controller.countryId;
+                                  //         controller.getStateList(controller.countryController);
+                                  //       });
+                                  //     },
+                                  //   ),
+                                  // ),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(height: 5,),
+                                  // Container(
+                                  //   width: MediaQuery.of(context).size.width/1.1,
+                                  //   child: Card(
+                                  //     color: Color(0xff6D6A6A),
+                                  //     shape: RoundedRectangleBorder(
+                                  //       borderRadius: BorderRadius.circular(10.0),
+                                  //     ),
+                                  //     elevation: 5,
+                                  //     child:
+                                  //     DropdownButtonHideUnderline(
+                                  //       child: DropdownButton(
+                                  //         dropdownColor: AppColors.cardclr,
+                                  //         // Initial Value
+                                  //         value: controller.stateController,
+                                  //         isExpanded: true,
+                                  //         hint: const Text(
+                                  //           "State",
+                                  //           style: TextStyle(
+                                  //               color: AppColors.textclr),
+                                  //         ),
+                                  //         icon: const Icon(
+                                  //           Icons.keyboard_arrow_down,
+                                  //           color: AppColors.textclr,
+                                  //         ),
+                                  //         // Array list of items
+                                  //         items: controller.statesList.map((items) {
+                                  //           return DropdownMenuItem(
+                                  //             value: items.id.toString(),
+                                  //             child: Text(
+                                  //               items.name.toString(),
+                                  //               style: const TextStyle(
+                                  //                   color: AppColors.textclr),
+                                  //             ),
+                                  //           );
+                                  //         }).toList(),
+                                  //         // After selecting the desired option,it will
+                                  //         // change button value to selected value
+                                  //         onChanged: (newValue) {
+                                  //           setState(() {
+                                  //             controller.stateController = newValue;
+                                  //             controller.getCitiesList(controller.stateController);
                                   //           });
-                                  //           controller.getStateList(controller.countryId.toString());
-                                  //         }
-                                  //         print("this is my country code ${controller.countryController}");
-                                  //       },
+                                  //         },
+                                  //       ),
                                   //     ),
                                   //   ),
                                   // ),
+                                  // SizedBox(height: 5,),
+                                  // Container(
+                                  //   width: MediaQuery.of(context).size.width/1.1,
+                                  //   child: Card(
+                                  //     color: Color(0xff6D6A6A),
+                                  //     shape: RoundedRectangleBorder(
+                                  //       borderRadius: BorderRadius.circular(10.0),
+                                  //     ),
+                                  //     elevation: 5,
+                                  //     child:
+                                  //     DropdownButtonHideUnderline(
+                                  //       child: DropdownButton(
+                                  //         dropdownColor: AppColors.cardclr,
+                                  //         // Initial Value
+                                  //         value: controller.cityController,
+                                  //         isExpanded: true,
+                                  //         hint: const Text(
+                                  //           "City",
+                                  //           style: TextStyle(
+                                  //               color: AppColors.textclr),
+                                  //         ),
+                                  //         icon: const Icon(
+                                  //           Icons.keyboard_arrow_down,
+                                  //           color: AppColors.textclr,
+                                  //         ),
+                                  //         // Array list of items
+                                  //         items: controller.citiesList.map((items) {
+                                  //           return DropdownMenuItem(
+                                  //             value: items.id.toString(),
+                                  //             child: Text(
+                                  //               items.name.toString(),
+                                  //               style: const TextStyle(
+                                  //                   color: AppColors.textclr),
+                                  //             ),
+                                  //           );
+                                  //         }).toList(),
+                                  //         // After selecting the desired option,it will
+                                  //         // change button value to selected value
+                                  //         onChanged: (newValue) {
+                                  //           setState(() {
+                                  //             controller.cityController = newValue;
+                                  //             // controller.getStateList(controller.stateController);
+                                  //           });
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  ///SEARCHABLE DROPDOWN COUNTRY
+
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/1.1,
+                                    child: Card(
+                                      color: Color(0xff6D6A6A),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(
+                                        children: [
+                                          CustomSearchableDropDown(
+                                            // dropdownHintText: "Country",
+                                            suffixIcon: const Icon(
+                                              Icons.keyboard_arrow_down_sharp,
+                                              color: AppColors.whit,
+                                            ),
+                                            backgroundColor: Color(0xff6D6A6A),
+                                            dropdownBackgroundColor:
+                                            AppColors.containerclr2,
+                                            dropdownItemStyle: const TextStyle(
+                                                color: AppColors.whit),
+                                            // dropdownHintText: TextStyle(
+                                            //   color: AppColors.whit
+                                            // ),
+                                            items: controller.countryList,
+                                            // initialValue:  controller.countryList,
+                                            label: '',
+                                            labelStyle: const TextStyle(
+                                                color: AppColors.whit
+                                            ),
+                                            multiSelectTag: 'Country',
+                                            decoration: BoxDecoration(
+                                                color: AppColors.containerclr2,
+                                                borderRadius:
+                                                BorderRadius.circular(15)
+                                              // color: Colors.white
+                                              // border: Border.all(
+                                              //   color: CustomColors.lightgray.withOpacity(0.5),
+                                              // )
+                                            ),
+                                            multiSelect: false,
+                                            dropDownMenuItems: controller.countryList.map((item) {
+                                              return "${item.name}";
+                                            }).toList() ??
+                                                [],
+                                            onChanged: (value) {
+                                              if (value != null) {
+                                                setState((){
+                                                  controller.countryController = value.name;
+                                                  controller.countryId = value.id;
+                                                isCountry = false;
+                                                });
+                                                controller.getStateList(controller.countryId.toString());
+                                              }
+                                              print("this is my country code ${controller.countryController}");
+                                            },
+                                          ),
+                                          // controller.isCountry ?
+                                          Positioned(
+                                            left: 10,
+                                              top: 15,
+                                              // child: controller.isCountry ?
+                                            child:  Text(
+                                                controller.countryController ?? "", style:  TextStyle(
+                                                color: isCountry ? Colors.black : Colors.transparent,
+                                                fontSize: 15
+                                              ),)
+                                          )
+                                          // : Text(""))
+                                          // : const SizedBox.shrink(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                   ///SEARCHABLE DROPDOWN COUNTRY
                                  const  SizedBox(height: 5,),
                                   Container(
@@ -729,49 +745,64 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       elevation: 5,
-                                      child: CustomSearchableDropDown(
-                                        // initialValue: [],
-                                        dropdownHintText: "State",
-                                        suffixIcon: const Icon(
-                                          Icons.keyboard_arrow_down_sharp,
-                                          color: AppColors.whit,
-                                        ),
-                                        backgroundColor: Color(0xff6D6A6A),
-                                        dropdownBackgroundColor:
-                                        AppColors.containerclr2,
-                                        dropdownItemStyle: const TextStyle(
-                                            color: AppColors.whit),
-                                        items: controller.statesList,
-                                        label: 'State',
-                                        labelStyle: const TextStyle(
-                                            color: AppColors.whit
-                                        ),
-                                        multiSelectTag: 'State',
-                                        decoration: BoxDecoration(
-                                            color: AppColors.containerclr2,
-                                            borderRadius:
-                                            BorderRadius.circular(15)
-                                          // color: Colors.white
-                                          // border: Border.all(
-                                          //   color: CustomColors.lightgray.withOpacity(0.5),
-                                          // )
-                                        ),
-                                        multiSelect: false,
-                                        dropDownMenuItems: controller.statesList.map((item) {
-                                          return "${item.name}";
-                                        }).toList() ??
-                                            [],
-                                        onChanged: (value) {
-                                          if (value != null) {
-                                            setState((){
-                                              controller.stateController = value.name;
-                                              controller.stateId = value.id;
-                                            });
-                                             controller.getCitiesList(controller.stateId.toString());
-                                            print("this is state request ${controller.stateController.toString()}");
-                                          }
+                                      child: Stack(
+                                        children: [
+                                          CustomSearchableDropDown(
+                                            // initialValue: [],
+                                            // dropdownHintText: "State",
+                                            suffixIcon: const Icon(
+                                              Icons.keyboard_arrow_down_sharp,
+                                              color: AppColors.whit,
+                                            ),
+                                            backgroundColor: Color(0xff6D6A6A),
+                                            dropdownBackgroundColor:
+                                            AppColors.containerclr2,
+                                            dropdownItemStyle: const TextStyle(
+                                                color: AppColors.whit),
+                                            items: controller.statesList,
+                                            label: '',
+                                            labelStyle: const TextStyle(
+                                                color: AppColors.whit
+                                            ),
+                                            multiSelectTag: 'State',
+                                            decoration: BoxDecoration(
+                                                color: AppColors.containerclr2,
+                                                borderRadius:
+                                                BorderRadius.circular(15)
+                                              // color: Colors.white
+                                              // border: Border.all(
+                                              //   color: CustomColors.lightgray.withOpacity(0.5),
+                                              // )
+                                            ),
+                                            multiSelect: false,
+                                            dropDownMenuItems: controller.statesList.map((item) {
+                                              return "${item.name}";
+                                            }).toList() ??
+                                                [],
+                                            onChanged: (value) {
+                                              if (value != null) {
+                                                setState((){
+                                                  controller.stateController = value.name;
+                                                  controller.stateId = value.id;
+                                                  isState = false;
+                                                });
+                                                 controller.getCitiesList(controller.stateId.toString());
+                                                print("this is state request ${controller.stateController.toString()}");
+                                              }
 
-                                        },
+                                            },
+                                          ),
+                                          // controller.isState?
+                                          Positioned(
+                                              left: 10,
+                                              top: 15,
+                                              child: Text(
+                                                controller.stateController ?? "", style:  TextStyle(
+                                                  fontSize: 15,
+                                                  color: isState ? Colors.black : Colors.transparent
+                                              ),))
+                                              // : const SizedBox.shrink(),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -784,49 +815,64 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       elevation: 5,
-                                      child: CustomSearchableDropDown(
-                                        dropdownHintText: "City",
-                                        suffixIcon: const Icon(
-                                          Icons.keyboard_arrow_down_sharp,
-                                          color: AppColors.whit,
-                                        ),
-                                        backgroundColor: Color(0xff6D6A6A),
-                                        dropdownBackgroundColor:
-                                        AppColors.containerclr2,
-                                        dropdownItemStyle: const TextStyle(
-                                            color: AppColors.whit),
-                                        // dropdownHintText: TextStyle(
-                                        //   color: AppColors.whit
-                                        // ),
-                                        items: controller.citiesList,
-                                        label: 'City',
-                                        labelStyle: const TextStyle(
-                                            color: AppColors.whit
-                                        ),
-                                        multiSelectTag: 'City',
-                                        decoration: BoxDecoration(
-                                            color: AppColors.containerclr2,
-                                            borderRadius:
-                                            BorderRadius.circular(15)
-                                          // color: Colors.white
-                                          // border: Border.all(
-                                          //   color: CustomColors.lightgray.withOpacity(0.5),
-                                          // )
-                                        ),
-                                        multiSelect: false,
-                                        dropDownMenuItems: controller.citiesList.map((item) {
-                                          return "${item.name}";
-                                        }).toList() ??
-                                            [],
-                                        onChanged: (value) {
-                                          if (value != null) {
-                                            setState((){
-                                              controller.cityController = value.name;
-                                            });
-                                            // getCitiesList(stateController.toString());
-                                          }
-                                          print("this is my country code ${cityController}");
-                                        },
+                                      child: Stack(
+                                        children: [
+                                          CustomSearchableDropDown(
+                                            // dropdownHintText: "City",
+                                            suffixIcon: const Icon(
+                                              Icons.keyboard_arrow_down_sharp,
+                                              color: AppColors.whit,
+                                            ),
+                                            backgroundColor: Color(0xff6D6A6A),
+                                            dropdownBackgroundColor:
+                                            AppColors.containerclr2,
+                                            dropdownItemStyle: const TextStyle(
+                                                color: AppColors.whit),
+                                            // dropdownHintText: TextStyle(
+                                            //   color: AppColors.whit
+                                            // ),
+                                            items: controller.citiesList,
+                                            label: '',
+                                            labelStyle: const TextStyle(
+                                                color: AppColors.whit
+                                            ),
+                                            multiSelectTag: 'City',
+                                            decoration: BoxDecoration(
+                                                color: AppColors.containerclr2,
+                                                borderRadius:
+                                                BorderRadius.circular(15)
+                                              // color: Colors.white
+                                              // border: Border.all(
+                                              //   color: CustomColors.lightgray.withOpacity(0.5),
+                                              // )
+                                            ),
+                                            multiSelect: false,
+                                            dropDownMenuItems: controller.citiesList.map((item) {
+                                              return "${item.name}";
+                                            }).toList() ??
+                                                [],
+                                            onChanged: (value) {
+                                              if (value != null) {
+                                                setState((){
+                                                  controller.cityController = value.name;
+                                                  isCity = false;
+                                                });
+                                                // getCitiesList(stateController.toString());
+                                              }
+                                              print("this is my country code ${cityController}");
+                                            },
+                                          ),
+                                          // controller.isCity ? z
+                                        Positioned(
+                                              left: 10,
+                                              top: 15,
+                                              child: Text(
+                                                controller.cityController ?? "", style:  TextStyle(
+                                                  fontSize: 15,
+                                                color: isCity ? Colors.black : Colors.transparent
+                                              ),))
+                                              // : const SizedBox.shrink(),
+                                        ],
                                       ),
                                     ),
                                   ),

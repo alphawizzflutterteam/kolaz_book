@@ -61,6 +61,10 @@ class EditProfileController extends AppBaseController {
   var countryController;
   var stateController;
 
+  bool isCountry = true;
+  bool isState = true;
+  bool isCity = true;
+
 
   getCitiesList(String stateId) async {
     var uri = Uri.parse(getCitiesApi.toString());
@@ -156,12 +160,16 @@ class EditProfileController extends AppBaseController {
         companynameController.text= profiledata?.companyName??'';
         companyphoneController.text= profiledata?.companyNumber??'';
         companyaddressController.text= profiledata?.companyAddress??'';
+        countryController = profiledata?.country??'';
+        isCountry = true;
+        stateController = profiledata?.state ?? "";
+        isState =true;
         cityController = profiledata?.city?? "";
-        // stateController = profiledata?.st ?? "";
+        isCity = true;
         //  countryController = profiledata?.country ?? '';
          // stateController = profiledata?.sta
-         companyStateController.text = profiledata?.country ?? '';
-        countryController.text= profiledata?.country??'';
+         // companyStateController.text = profiledata?.country ?? '';
+
         companyEmailController.text= profiledata?.companyLink??'';
         facebookController.text= profiledata?.facebook??'';
         instagramController.text= profiledata?.instagram??'';
@@ -441,18 +449,6 @@ class EditProfileController extends AppBaseController {
     getCropImage(context, i, image);
    // back();
   }
-  Future getImageGallery(ImgSource source, BuildContext context, int i) async {
-    var image = await ImagePickerGC.pickImage(
-      context: context,
-      source: source,
-      cameraIcon: const Icon(
-        Icons.add,
-        color: Colors.red,
-      ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
-    );
-    getCropImage(context, i, image);
-   // back();
-  }
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
       sourcePath: image.path,
@@ -465,14 +461,27 @@ class EditProfileController extends AppBaseController {
       ],
     );
     update();
-      if (i == 1) {
-        imageFile = File(croppedFile!.path);
-      } else if (i == 2) {
-        imageFile2 = File(croppedFile!.path);
-      }
+    if (i == 1) {
+      imageFile = File(croppedFile!.path);
+    } else if (i == 2) {
+      imageFile2 = File(croppedFile!.path);
+    }
     updateProfile();
-      update();
-      back();
+    update();
+    back();
   }
+  Future getImageGallery(ImgSource source, BuildContext context, int i) async {
+    var image = await ImagePickerGC.pickImage(
+      context: context,
+      source: source,
+      cameraIcon: const Icon(
+        Icons.add,
+        color: Colors.red,
+      ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
+    );
+    getCropImage(context, i, image);
+   // back();
+  }
+
 
 }
