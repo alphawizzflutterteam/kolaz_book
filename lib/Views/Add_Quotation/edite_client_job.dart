@@ -30,6 +30,7 @@ class _EditClientJobState extends State<EditClientJob> {
   List newList = [];
   int typeIndex = 0 ;
   List photographer =[];
+  List photographerIds = [];
   TextEditingController clientNameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController outputController = TextEditingController();
@@ -50,8 +51,10 @@ class _EditClientJobState extends State<EditClientJob> {
 
   Widget photographerDropdownCard(int j){
     var photographerName;
+    var pId;
     if (photographer.length < j + 1) {
       photographer.add(photographerName);
+      photographerIds.add(pId);
     }
 
     return Padding(
@@ -85,7 +88,7 @@ class _EditClientJobState extends State<EditClientJob> {
             // Array list of items
             items: photographersList.map((items) {
               return DropdownMenuItem(
-                value: items.firstName.toString(),
+                value: items.id.toString(),
                 child: Text(
                   items.firstName.toString(),
                   style: const TextStyle(
@@ -99,12 +102,14 @@ class _EditClientJobState extends State<EditClientJob> {
               print("this is new value $newValue");
               setState(() {
                 photographer[j] = newValue!;
+
                 // widget.allJobs!.photographersDetails![dateIndex].data![j].photographerName = photographer[j];
               });
               pType.add({
                 "photographer_type":
-                widget.allJobs!.photographersDetails![dateIndex].data![j].photographerType,
-                "photographerName": photographer[j]
+              widget.type == true ?   widget.allJobs!.photographersDetails![dateIndex].data![j].photographerType
+                :  widget.upcomingJobs!.photographersDetails![dateIndex].data![j].photographerType,
+                "photographer_id": photographer[j]
               });
               print("this is my new response $pType");
             },
@@ -191,15 +196,15 @@ class _EditClientJobState extends State<EditClientJob> {
 
     var request =
     http.MultipartRequest('POST', Uri.parse(updateClientJobApi.toString()));
-
-
     request.fields.addAll({
-      'client_name': clientNameController.toString(),
+      'client_name': clientNameController.text.toString(),
       'city': cityNameController.text.toString(),
       'mobile': mobileController.text.toString(),
       'type_event': eventController.toString(),
       'output': outputController.text.toString(),
       'amount': amountController.text.toString(),
+      'id': widget.type == true ? widget.allJobs!.id.toString()
+    : widget.upcomingJobs!.id.toString(),
       // 'event[]': selectedEvents.toString(),
       'type': 'client',
       'event_details': newList.toString(),
@@ -752,7 +757,7 @@ class _EditClientJobState extends State<EditClientJob> {
               ),
 
               // quotationData.isNotEmpty ?
-              widget.type == true ?
+              // widget.type == true ?
               Container(
                 height: 45,
                 child: ListView.builder(
@@ -800,55 +805,8 @@ class _EditClientJobState extends State<EditClientJob> {
                         ),
                       );
                     }),
-              )
-              :  Container(
-                height: 45,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.upcomingJobs!.photographersDetails!.length,
-                    itemBuilder: (context, j) {
-                      return InkWell(
-                        onTap: (){
-                          dateIndex = j ;
-                          setState(() {
-                            newList.add(
-                                jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
-                                    :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
-                                  , "data": pType}));
-                            pType.clear();
-
-                            print("this is new list $newList");
-                          });
-                        },
-                        child: Container(
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(8),
-                                topLeft: Radius.circular(8)),
-                            color: AppColors.teamcard2,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 8),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 5),
-                              decoration: const BoxDecoration(
-                                color: AppColors.datecontainer,
-                              ),
-                              child: Text(
-                                widget.upcomingJobs!.photographersDetails![dateIndex].date.toString(),
-                                overflow: TextOverflow.fade,
-                                style: const TextStyle(color: AppColors.textclr),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
               ),
+
                   // : SizedBox.shrink(),
               Container(
                 decoration: const BoxDecoration(
@@ -1611,6 +1569,54 @@ class _EditClientJobState extends State<EditClientJob> {
                     height: 20,
                   ),
 
+                  Container(
+                    height: 45,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.upcomingJobs!.photographersDetails!.length,
+                        itemBuilder: (context, j) {
+                          return InkWell(
+                            onTap: (){
+                              dateIndex = j ;
+                              setState(() {
+                                newList.add(
+                                    jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
+                                        :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
+                                      , "data": pType}));
+                                pType.clear();
+
+                                print("this is new list $newList");
+                              });
+                            },
+                            child: Container(
+                              width: 100,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    topLeft: Radius.circular(8)),
+                                color: AppColors.teamcard2,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 5),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.datecontainer,
+                                  ),
+                                  child: Text(
+                                    widget.upcomingJobs!.photographersDetails![dateIndex].date.toString(),
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(color: AppColors.textclr),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
                   quotationData.isNotEmpty ?
                   Container(
                     height: 45,

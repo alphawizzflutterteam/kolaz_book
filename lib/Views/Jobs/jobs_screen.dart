@@ -1,8 +1,11 @@
 
 
 import 'dart:convert';
-
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:kolazz_book/Controller/addQuatation_controller.dart';
@@ -13,6 +16,8 @@ import 'package:kolazz_book/Models/get_quotation_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/Add_Quotation/editequotation.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/colors.dart';
 import '../Add_Quotation/MoreQuatations.dart';
@@ -20,6 +25,7 @@ import '../Add_Quotation/edite_client_job.dart';
 import '../freelancing_job/add_freelance_job.dart';
 import '../freelancing_job/edit_freelance_job.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 class JobsScreen extends StatefulWidget {
   const JobsScreen({Key? key}) : super(key: key);
@@ -33,8 +39,67 @@ class _JobsScreenState extends State<JobsScreen> {
   bool isClickable = true;
   bool isSelected = false;
   int currentindex=0;
+  GlobalKey keyList = GlobalKey();
 
 
+  takeScreenShot() async {
+    // iconVisible = true ;
+    var status =  await Permission.photos.request();
+    //Permission.manageExternalStorage.request();
+
+    //PermissionStatus storagePermission = await Permission.storage.request();
+    if ( status.isGranted/*storagePermission == PermissionStatus.denied*/) {
+      final directory = (await getApplicationDocumentsDirectory()).path;
+
+      RenderRepaintBoundary bound = keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      /*if(bound.debugNeedsPaint){
+        Timer(const Duration(seconds: 2),()=>_shareQrCode());
+        return null;
+      }*/
+      ui.Image image = await bound.toImage(pixelRatio: 10);
+      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+
+      print('${byteData?.buffer.lengthInBytes}___________');
+      // this will save image screenshot in gallery
+      if(byteData != null ){
+        Uint8List pngBytes = byteData.buffer.asUint8List();
+        String fileName = DateTime
+            .now()
+            .microsecondsSinceEpoch
+            .toString();
+        final imagePath = await File('$directory/$fileName.png').create();
+        await imagePath.writeAsBytes(pngBytes);
+        Share.shareFiles([imagePath.path],text: '');
+        // final resultsave = await ImageGallerySaver.saveImage(Uint8List.fromList(pngBytes),quality: 90,name: 'screenshot-${DateTime.now()}.png');
+        //print(resultsave);
+      }
+      /*_screenshotController.capture().then((Uint8List? image) async {
+        if (image != null) {
+          try {
+            String fileName = DateTime
+                .now()
+                .microsecondsSinceEpoch
+                .toString();
+
+            final imagePath = await File('$directory/$fileName.png').create();
+            if (imagePath != null) {
+              await imagePath.writeAsBytes(image);
+              Share.shareFiles([imagePath.path],text: text);
+            }
+          } catch (error) {}
+        }
+      }).catchError((onError) {
+        print('Error --->> $onError');
+      });*/
+    } else if (await status.isDenied/*storagePermission == PermissionStatus.denied*/) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('This Permission is recommended')));
+    } else if (await status.isPermanentlyDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
+      openAppSettings().then((value) {
+
+      });
+    }
+  }
 
 
   List<FreelancerJobs> freelancerJobs = [];
@@ -747,7 +812,11 @@ class _JobsScreenState extends State<JobsScreen> {
                 ),
               ),
             ),
-            Image.asset("assets/images/pdf.png", scale: 1.6,),
+            InkWell(
+              onTap: (){
+                takeScreenShot();
+              },
+                child: Image.asset("assets/images/pdf.png", scale: 1.6,)),
           ],
         ),
       ) :
@@ -774,7 +843,11 @@ class _JobsScreenState extends State<JobsScreen> {
                 ),
               ),
             ),
-            Image.asset("assets/images/pdf.png", scale: 1.6,),
+            InkWell(
+              onTap: (){
+                takeScreenShot();
+              },
+                child: Image.asset("assets/images/pdf.png", scale: 1.6,)),
           ],
         ),
       ),
@@ -803,140 +876,142 @@ class _JobsScreenState extends State<JobsScreen> {
            ),
          ],
        ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10,),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: AppColors.containerclr,
-                    borderRadius: BorderRadius.circular(10)),
-
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          isSelected = true;
-                        });
-                      },
-                      child: Container(
-                          height: 50,
-                          width: 120,
-                          child:  Center(
-                            child: Text(
-                              'Client',
-                              style: TextStyle(
-                                color: isSelected
-                                    ? Color(0xffffffff)
-                                    : Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.AppbtnColor
-                                : AppColors.containerclr,
-                            // border: Border.all(color: AppColors.AppbtnColor),
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          // Navigator.of(context).push(MaterialPageRoute(
-                          //   builder: (context) => NextPage(),
-                          // ));
-                          isSelected = false;
-                        });
-                      },
-                      child: Container(
-                          height: 50,
-                          width: 130,
-                          child: Center(
-                            child: Text(
-                              'Freelancing',
-                              style: TextStyle(
-                                color: isSelected
-                                    ? AppColors.whit
-                                    : Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                              color: isSelected
-                                  ? AppColors.containerclr
-                                  : AppColors.AppbtnColor,
-                              borderRadius: BorderRadius.circular(10))),
-                    ),
-                  ],
-                ),)
-
-            ],
-          ),
-
-
-          SizedBox(height: 15,),
-          Padding(
-            padding: const EdgeInsets.only(left:30,right: 30),
-            child: Row(
-             mainAxisAlignment: MainAxisAlignment.center,
+      body: RepaintBoundary(
+        key: keyList,
+        child: Column(
+          children: [
+            const SizedBox(height: 10,),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(
-                  onTap: (){
-                    setState(() {
-                      currentindex= 0;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColors.containerclr,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isSelected = true;
+                          });
+                        },
+                        child: Container(
+                            height: 50,
+                            width: 120,
+                            child:  Center(
+                              child: Text(
+                                'Client',
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Color(0xffffffff)
+                                      : Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? AppColors.AppbtnColor
+                                  : AppColors.containerclr,
+                              // border: Border.all(color: AppColors.AppbtnColor),
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //   builder: (context) => NextPage(),
+                            // ));
+                            isSelected = false;
+                          });
+                        },
+                        child: Container(
+                            height: 50,
+                            width: 130,
+                            child: Center(
+                              child: Text(
+                                'Freelancing',
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? AppColors.whit
+                                      : Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppColors.containerclr
+                                    : AppColors.AppbtnColor,
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                    ],
+                  ),)
 
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color:
-
-                    currentindex==0
-                        ? AppColors.AppbtnColor:
-                    Color(0xff8B8B8B)
-                    ),
-                    child: const Center(child: Text("All Jobs", style: TextStyle(color:
-
-
-                    Color(0xffFFFFFF), fontSize: 16))),
-                  ),
-                ),
-
-                const SizedBox(width: 15,),
-                InkWell(
-                  onTap: (){
-
-                    setState(() {
-                      currentindex = 1;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color:
-                    currentindex==1
-                        ?
-                    AppColors.AppbtnColor:Color(0xff8B8B8B)
-
-                    ),
-                    child: const Center(child: Text("Upcoming Jobs", style: TextStyle(color: Color(0xffFFFFFF), fontSize: 16),)),
-                  ),
-                ),
               ],
             ),
-          ),
 
-          SizedBox(height: 5,),
-          isSelected ? _client() : _freelancing(),
 
-        ],
+            SizedBox(height: 15,),
+            Padding(
+              padding: const EdgeInsets.only(left:30,right: 30),
+              child: Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      setState(() {
+                        currentindex= 0;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color:
+
+                      currentindex==0
+                          ? AppColors.AppbtnColor:
+                      Color(0xff8B8B8B)
+                      ),
+                      child: const Center(child: Text("All Jobs", style: TextStyle(color:
+
+
+                      Color(0xffFFFFFF), fontSize: 16))),
+                    ),
+                  ),
+
+                  const SizedBox(width: 15,),
+                  InkWell(
+                    onTap: (){
+
+                      setState(() {
+                        currentindex = 1;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color:
+                      currentindex==1
+                          ?
+                      AppColors.AppbtnColor:Color(0xff8B8B8B)
+
+                      ),
+                      child: const Center(child: Text("Upcoming Jobs", style: TextStyle(color: Color(0xffFFFFFF), fontSize: 16),)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 5,),
+            isSelected ? _client() : _freelancing(),
+
+          ],
+        ),
       ),
     );
   }

@@ -285,11 +285,11 @@ class _HomepageState extends State<Homepage> {
               _clientCard2(context)
               : Container(
                 height: 150,
-                child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),),
+                child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
               )
               : Container(
                 height: 150,
-                child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),),
+                child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
               ),
               SizedBox(height: 30,),
 
@@ -299,8 +299,11 @@ class _HomepageState extends State<Homepage> {
                     width: double.infinity,
                     child: Text("Photographer Yet To Be Allotment Clients Jobs ", style: TextStyle(fontSize: 17, color:AppColors.whit, fontWeight: FontWeight.w700,overflow: TextOverflow.ellipsis))),
               ),
-
-              _clientCard3(context),
+              Container(
+                height: 150,
+                child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
+              ),
+              // _clientCard3(context),
               SizedBox(height: 50,),
               _homeLogo(),
 

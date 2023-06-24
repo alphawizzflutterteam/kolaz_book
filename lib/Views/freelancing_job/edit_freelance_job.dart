@@ -1050,28 +1050,28 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.whit),
                               )),
-                          Container(
-                            height: 30,
-                            width: 230,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Color(0xffbfbfbf),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-
-                                    widget.type == true ?
-                                    "₹ ${widget.allJobs!.jsonData![0].amount.toString()}"
-                                    :  "₹ ${widget.upcomingJobs!.jsonData![0].amount.toString()}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontStyle: FontStyle.italic),
-                                  )),
-                            ),
-                          )
+                          // Container(
+                          //   height: 30,
+                          //   width: 230,
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(8),
+                          //     color: Color(0xffbfbfbf),
+                          //   ),
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.only(right: 8.0),
+                          //     child: Align(
+                          //         alignment: Alignment.centerRight,
+                          //         child: Text(
+                          //
+                          //           widget.type == true ?
+                          //           "₹ ${widget.allJobs!.jsonData![0].amount.toString()}"
+                          //           :  "₹ ${widget.upcomingJobs!.jsonData![0].amount.toString()}",
+                          //           style: const TextStyle(
+                          //               color: Colors.black,
+                          //               fontStyle: FontStyle.italic),
+                          //         )),
+                          //   ),
+                          // )
                         ],
                       )
                     ],

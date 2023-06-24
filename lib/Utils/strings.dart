@@ -7,6 +7,8 @@ final Uri updateClientJobApi = Uri.parse('${baseUrl}update_job');
 
 final Uri getClientJobsApi = Uri.parse('${baseUrl}get_job_list');
 final Uri getAccountsDataApi = Uri.parse('${baseUrl}accounts');
+final Uri ledgerDataApi = Uri.parse('${baseUrl}ledger_entries');
+final Uri addPayoutApi = Uri.parse('${baseUrl}add_amount');
 final Uri getCalendarJobsApi = Uri.parse('${baseUrl}calender_jobs');
 final Uri getFreelancingJobsApi = Uri.parse('${baseUrl}get_freelance_job');
 final Uri deleteQuotationApi = Uri.parse('${baseUrl}delete_quatation');

@@ -37,6 +37,7 @@ class RequestKeys {
   static String outPut = 'output';
   static String amount = 'amount';
   static String typePhotographer = 'event[]';
+  static String photographerId = 'photographer_id';
   static String date  = 'date[]';
   static String event  = 'event';
 }

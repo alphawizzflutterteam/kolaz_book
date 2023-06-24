@@ -37,6 +37,7 @@ class addPhotographerController extends AppBaseController {
 
 
   Future<void>AddPhotographerr() async {
+    print("working here!!");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     id = preferences.getString('id');
     setBusy(true);
@@ -47,7 +48,7 @@ class addPhotographerController extends AppBaseController {
       body[RequestKeys.lastname] = lastnameController.text.trim();
       body[RequestKeys.city] = cityController.text.trim();
       body[RequestKeys.mobile] = mobileController.text.trim();
-      body[RequestKeys.photographertype] =categoryValue?.resId.toString() ?? '';
+      body[RequestKeys.photographertype] =categoryValue?.toString() ?? '';
       body[RequestKeys.companyname] = companyController.text.trim();
       body[RequestKeys.perdaycharge] = perdayController.text.trim();
       body[RequestKeys.userId] = id!;
