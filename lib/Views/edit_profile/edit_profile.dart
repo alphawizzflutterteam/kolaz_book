@@ -1049,17 +1049,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       height: 40,
                       width: MediaQuery.of(context).size.width/2.2,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Color(0xff1E90FF)),
-                      child: Center(child: Text("Edit / Update",
+                      child: const Center(child: Text("Update",
                         style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
                       ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,)
+                 const SizedBox(height: 20,)
                 ],
               ),
             ),
-          ): Center(child: CircularProgressIndicator())
+          ): const Center(child: CircularProgressIndicator())
         ),
       );
     },);

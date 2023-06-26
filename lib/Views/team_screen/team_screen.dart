@@ -140,21 +140,21 @@ class _TeamScreenState extends State<TeamScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Client Name: ${result.clientName}",
+                                        "${result.clientName}",
                                         style: const TextStyle(
                                             color: AppColors.textclr,
                                             fontSize: 11,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "Event: ${result.eventName}",
+                                        "${result.eventName}",
                                         style: const TextStyle(
                                             color: AppColors.textclr,
                                             fontSize: 11,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "Vanue: ${result.cityName}",
+                                        "${result.cityName}",
                                         style: const TextStyle(
                                             color: AppColors.textclr,
                                             fontSize: 11,

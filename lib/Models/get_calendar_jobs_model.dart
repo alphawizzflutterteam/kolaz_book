@@ -1,15 +1,18 @@
 /// error : false
 /// message : "All Job Lists"
-/// data : [{"id":"122","client_name":"Shivani","mobile":"9787846641","city":"9","qid":"3639","user_id":"5","output":"lko uxudududus","amount":"100000","type":"client","type_event":"1","booking_id":"0","grapher_id":"0","status":"1","photographers_details":[{"date":"2023-06-15","data":[{"photographer_type":"Candid Cinematography","photographer_name":""},{"photographer_type":"LED Wall","photographer_name":""}]},{"date":"2023-06-17","data":[{"photographer_type":"LED Wall","photographer_name":""},{"photographer_type":"Traditional Photography","photographer_name":""},{"photographer_type":"Candid Photography","photographer_name":""}]},{"date":"2023-06-20","data":[{"photographer_type":"Candid Photography","photographer_name":""}]}],"update_date":"2023-06-15 10:26:51","event_name":"Weding"}]
+/// data : [{"id":"162","client_name":"Harish choudhary","mobile":"","city":"Itarsi","qid":"QUA00001","user_id":"5","output":"I want a best offer from you for this full package","amount":"50000","type":"client","type_event":"2","booking_id":"0","grapher_id":"0","status":"1","photographers_details":[{"date":"2023-06-26","data":[{"photographer_type":"LED Wall","photographer_id":"248","photographer_name":""},{"photographer_type":"Candid Cinematography","photographer_id":"249","photographer_name":""}]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]}],"update_date":"2023-06-24 12:06:43","event_name":"Pre Wedding"}]
+/// dates : ["2023-06-24","2023-06-25","2023-06-26","2023-06-27","2023-06-28","2023-06-29","2023-06-30","2023-07-20","2023-09-14","2023-09-15"]
 
 class GetCalendarJobsModel {
   GetCalendarJobsModel({
       bool? error, 
       String? message, 
-      List<CalendarJobs>? data,}){
+      List<CalendarJobs>? data,
+      List<String>? dates,}){
     _error = error;
     _message = message;
     _data = data;
+    _dates = dates;
 }
 
   GetCalendarJobsModel.fromJson(dynamic json) {
@@ -21,20 +24,25 @@ class GetCalendarJobsModel {
         _data?.add(CalendarJobs.fromJson(v));
       });
     }
+    _dates = json['dates'] != null ? json['dates'].cast<String>() : [];
   }
   bool? _error;
   String? _message;
   List<CalendarJobs>? _data;
+  List<String>? _dates;
 GetCalendarJobsModel copyWith({  bool? error,
   String? message,
   List<CalendarJobs>? data,
+  List<String>? dates,
 }) => GetCalendarJobsModel(  error: error ?? _error,
   message: message ?? _message,
   data: data ?? _data,
+  dates: dates ?? _dates,
 );
   bool? get error => _error;
   String? get message => _message;
   List<CalendarJobs>? get data => _data;
+  List<String>? get dates => _dates;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -43,27 +51,28 @@ GetCalendarJobsModel copyWith({  bool? error,
     if (_data != null) {
       map['data'] = _data?.map((v) => v.toJson()).toList();
     }
+    map['dates'] = _dates;
     return map;
   }
 
 }
 
-/// id : "122"
-/// client_name : "Shivani"
-/// mobile : "9787846641"
-/// city : "9"
-/// qid : "3639"
+/// id : "162"
+/// client_name : "Harish choudhary"
+/// mobile : ""
+/// city : "Itarsi"
+/// qid : "QUA00001"
 /// user_id : "5"
-/// output : "lko uxudududus"
-/// amount : "100000"
+/// output : "I want a best offer from you for this full package"
+/// amount : "50000"
 /// type : "client"
-/// type_event : "1"
+/// type_event : "2"
 /// booking_id : "0"
 /// grapher_id : "0"
 /// status : "1"
-/// photographers_details : [{"date":"2023-06-15","data":[{"photographer_type":"Candid Cinematography","photographer_name":""},{"photographer_type":"LED Wall","photographer_name":""}]},{"date":"2023-06-17","data":[{"photographer_type":"LED Wall","photographer_name":""},{"photographer_type":"Traditional Photography","photographer_name":""},{"photographer_type":"Candid Photography","photographer_name":""}]},{"date":"2023-06-20","data":[{"photographer_type":"Candid Photography","photographer_name":""}]}]
-/// update_date : "2023-06-15 10:26:51"
-/// event_name : "Weding"
+/// photographers_details : [{"date":"2023-06-26","data":[{"photographer_type":"LED Wall","photographer_id":"248","photographer_name":""},{"photographer_type":"Candid Cinematography","photographer_id":"249","photographer_name":""}]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]}]
+/// update_date : "2023-06-24 12:06:43"
+/// event_name : "Pre Wedding"
 
 class CalendarJobs {
   CalendarJobs({
@@ -215,8 +224,8 @@ CalendarJobs copyWith({  String? id,
 
 }
 
-/// date : "2023-06-15"
-/// data : [{"photographer_type":"Candid Cinematography","photographer_name":""},{"photographer_type":"LED Wall","photographer_name":""}]
+/// date : "2023-06-26"
+/// data : [{"photographer_type":"LED Wall","photographer_id":"248","photographer_name":""},{"photographer_type":"Candid Cinematography","photographer_id":"249","photographer_name":""}]
 
 class PhotographersDetails {
   PhotographersDetails({
@@ -256,34 +265,43 @@ PhotographersDetails copyWith({  String? date,
 
 }
 
-/// photographer_type : "Candid Cinematography"
+/// photographer_type : "LED Wall"
+/// photographer_id : "248"
 /// photographer_name : ""
 
 class Data {
   Data({
       String? photographerType, 
+      String? photographerId, 
       String? photographerName,}){
     _photographerType = photographerType;
+    _photographerId = photographerId;
     _photographerName = photographerName;
 }
 
   Data.fromJson(dynamic json) {
     _photographerType = json['photographer_type'];
+    _photographerId = json['photographer_id'];
     _photographerName = json['photographer_name'];
   }
   String? _photographerType;
+  String? _photographerId;
   String? _photographerName;
 Data copyWith({  String? photographerType,
+  String? photographerId,
   String? photographerName,
 }) => Data(  photographerType: photographerType ?? _photographerType,
+  photographerId: photographerId ?? _photographerId,
   photographerName: photographerName ?? _photographerName,
 );
   String? get photographerType => _photographerType;
+  String? get photographerId => _photographerId;
   String? get photographerName => _photographerName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['photographer_type'] = _photographerType;
+    map['photographer_id'] = _photographerId;
     map['photographer_name'] = _photographerName;
     return map;
   }

@@ -160,6 +160,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _selectedDay = DateTime.now();
 
   List<CalendarJobs> getJobs = [];
+  List<String> dates = [];
 
   getCalendarJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -189,15 +190,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     setState(() {
       getJobs = GetCalendarJobsModel.fromJson(userData).data!;
+      dates = GetCalendarJobsModel.fromJson(userData).dates!;
     });
+   for(var i = 0; i < dates.length; i++ ){
+     setState(() {
+       _selectedDates.add(DateTime.parse(dates[i]));
+     });
+     print("this is selected dates $_selectedDates}");
+   }
   }
 
   @override
   void initState() {
     super.initState();
     getCalendarJobs();
-
   }
+
+   Set<DateTime> _selectedDates = {};
 
   @override
   Widget build(BuildContext context) {
@@ -228,16 +237,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
             // height: MediaQuery.of(context).size.height/3,
             color: AppColors.grd1,
             child: TableCalendar(
-              daysOfWeekHeight: 40,
-              calendarStyle:  CalendarStyle(
-                todayDecoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.AppbtnColor.withOpacity(0.4)
-                ),
-                  selectedTextStyle: TextStyle(color: AppColors.whit),
-                  disabledTextStyle: TextStyle(color: AppColors.back)),
               headerStyle: const HeaderStyle(
-                leftChevronVisible: false,
+                  leftChevronVisible: false,
                   titleCentered: true,
                   formatButtonVisible: false,
                   rightChevronVisible: false,
@@ -246,37 +247,93 @@ class _CalendarScreenState extends State<CalendarScreen> {
               daysOfWeekStyle: const DaysOfWeekStyle(
                   weekdayStyle: TextStyle(color: AppColors.whit),
                   weekendStyle: TextStyle(color: AppColors.back)),
-              firstDay: kFirstDay,
-              lastDay: kLastDay,
+              // firstDay: kFirstDay,
+              // lastDay: kLastDay,
+              firstDay: DateTime.utc(2023, 1, 1),
+              lastDay: DateTime.utc(2023, 12, 31),
+              daysOfWeekHeight: 40,
+              calendarStyle:  CalendarStyle(
+                  todayDecoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.AppbtnColor.withOpacity(0.4)
+                  ),
+                  selectedTextStyle: const TextStyle(color: AppColors.whit),
+                  disabledTextStyle: const TextStyle(color: AppColors.back)),
               focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
               selectedDayPredicate: (day) {
-                return isSameDay(_selectedDay, day);
+                return _selectedDates.contains(day);
               },
               onDaySelected: (selectedDay, focusedDay) {
-                if (!isSameDay(_selectedDay, selectedDay)) {
-                  // Call `setState()` when updating the selected day
-                  setState(() {
-                    _selectedDay = selectedDay;
-                    _focusedDay = focusedDay;
-                  });
-                  getCalendarJobs();
-                  print("this is selected date $_selectedDay");
-                }
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                  _selectedDates.add(selectedDay);
+                });
               },
               onFormatChanged: (format) {
-                if (_calendarFormat != format) {
-                  // Call `setState()` when updating calendar format
-                  setState(() {
-                    _calendarFormat = format;
-                  });
-                }
+                setState(() {
+                  _calendarFormat = format;
+                });
               },
               onPageChanged: (focusedDay) {
-                // No need to call `setState()` here
                 _focusedDay = focusedDay;
               },
             ),
+
+            // TableCalendar(
+            //   daysOfWeekHeight: 40,
+            //   calendarStyle:  CalendarStyle(
+            //     todayDecoration: BoxDecoration(
+            //       shape: BoxShape.circle,
+            //       color: AppColors.AppbtnColor.withOpacity(0.4)
+            //     ),
+            //       selectedTextStyle: TextStyle(color: AppColors.whit),
+            //       disabledTextStyle: TextStyle(color: AppColors.back)),
+            //   selectedDayPredicate: (day) {
+            //     return _selectedDates.contains(day);
+            //   },
+            //   headerStyle: const HeaderStyle(
+            //     leftChevronVisible: false,
+            //       titleCentered: true,
+            //       formatButtonVisible: false,
+            //       rightChevronVisible: false,
+            //       decoration: BoxDecoration(color: AppColors.primary5),
+            //       titleTextStyle: TextStyle(color: AppColors.whit)),
+            //   daysOfWeekStyle: const DaysOfWeekStyle(
+            //       weekdayStyle: TextStyle(color: AppColors.whit),
+            //       weekendStyle: TextStyle(color: AppColors.back)),
+            //   firstDay: kFirstDay,
+            //   lastDay: kLastDay,
+            //   focusedDay: _focusedDay,
+            //   calendarFormat: _calendarFormat,
+            //   selectedDayPredicate: (day) {
+            //     return isSameDay(_selectedDay, day);
+            //   },
+            //   onDaySelected: (selectedDay, focusedDay) {
+            //     if (!isSameDay(_selectedDay, selectedDay)) {
+            //       // Call `setState()` when updating the selected day
+            //       setState(() {
+            //         _selectedDay = selectedDay;
+            //         _focusedDay = focusedDay;
+            //       });
+            //       getCalendarJobs();
+            //       print("this is selected date $_selectedDay");
+            //     }
+            //   },
+            //   onFormatChanged: (format) {
+            //     if (_calendarFormat != format) {
+            //       // Call `setState()` when updating calendar format
+            //       setState(() {
+            //         _calendarFormat = format;
+            //       });
+            //     }
+            //   },
+            //   onPageChanged: (focusedDay) {
+            //     // No need to call `setState()` here
+            //     _focusedDay = focusedDay;
+            //   },
+            // ),
           ),
           Container(
             height: MediaQuery.of(context).size.height/3.2,

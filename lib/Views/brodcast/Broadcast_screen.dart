@@ -38,6 +38,9 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
   var cityController;
   var countryController;
   var stateController;
+  var cityName;
+  var countryName;
+  var stateName;
   var photoGrapherType;
   String? message;
 
@@ -92,9 +95,10 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     print("this is photographer $typeofPhotographyEvent");
   }
 
+  String? userId;
   getBroadCastData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? userId = preferences.getString('id');
+     userId = preferences.getString('id');
     var uri = Uri.parse(getBroadcastListApi.toString());
     // '${Apipath.getCitiesUrl}');
     var request = http.MultipartRequest("POST", uri);
@@ -133,9 +137,9 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     request.fields[RequestKeys.userId] = userId.toString();
     request.fields[RequestKeys.type] = photoGrapherType.toString();
     request.fields['date'] = dateString.toString();
-    request.fields[RequestKeys.country] = countryController.toString();
-    request.fields[RequestKeys.state] = stateController.toString();
-    request.fields[RequestKeys.city] = cityController.toString();
+    request.fields[RequestKeys.country] = countryName.toString();
+    request.fields[RequestKeys.state] = stateName.toString();
+    request.fields[RequestKeys.city] = cityName.toString();
 
     print("this is add broadcast request ${request.fields.toString()}");
     // request.fields['vendor_id'] = userID;
@@ -541,6 +545,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                           if (value != null) {
                                             setState(() {
                                               countryController = value.id;
+                                              countryName = value.name;
                                             });
                                             getStateList(
                                                 countryController.toString());
@@ -613,6 +618,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                           if (value != null) {
                                             setState(() {
                                               stateController = value.id;
+                                              stateName = value.name;
                                             });
                                             getCitiesList(
                                                 stateController.toString());
@@ -684,6 +690,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                           if (value != null) {
                                             setState(() {
                                               cityController = value.id;
+                                              cityName = value.name;
                                             });
                                             // getStateList(countryController.toString());
                                           }
@@ -784,16 +791,17 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                               alignment: Alignment.topRight,
                                               child: SizedBox(
                                                   height: 5,
-                                                  child: IconButton(
+                                                  child: broadCastList[index].userId == userId ?
+                                                      IconButton(onPressed: (){}, icon: const Icon(Icons.clear, color: AppColors.AppbtnColor,))
+                                                 :  IconButton(
                                                       onPressed: () {},
-                                                      icon: Icon(
+                                                      icon: const Icon(
                                                         Icons.phone,
-                                                        color:
-                                                            Color(0xff1E90FF),
+                                                        color: AppColors.AppbtnColor,
                                                       )))),
                                           Row(
-                                            children: [
-                                              CircleAvatar(
+                                            children:  [
+                                           const  CircleAvatar(
                                                 backgroundImage: NetworkImage(
                                                     'https://media.istockphoto.com/id/877022826/photo/portrait-of-a-happy-young-asian-business-man.jpg?b=1&s=170667a&w=0&k=20&c=zBdoktuoe8bFhuBsdvtQgL_nJPnrZUn2gSf7OL3X2dM='),
                                                 radius: 45,
@@ -819,7 +827,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                                     SizedBox(
                                                         width: 200,
                                                         child: Text(
-                                                          "I need ${broadCastList[index].typeOfPhotograpym} on ${broadCastList[index].date} in ${broadCastList[index].cityName}",
+                                                          "I need ${broadCastList[index].typeOfPhotograpym} on ${broadCastList[index].date} in ${broadCastList[index].cityName} ${broadCastList[index].statename}",
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                           maxLines: 4,

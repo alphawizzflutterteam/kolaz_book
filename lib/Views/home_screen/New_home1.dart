@@ -90,6 +90,7 @@ class _HomepageState extends State<Homepage> {
     getFreelancingJobs();
     getClientJobs();
   }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -313,6 +314,7 @@ class _HomepageState extends State<Homepage> {
       );
     },);
   }
+
   Widget _clientCard(BuildContext context){
     return
     Container(
@@ -388,10 +390,10 @@ class _HomepageState extends State<Homepage> {
             ),
           );
         },
-
       ),
     );
   }
+
   Widget _clientCard2(BuildContext context){
     return
       Container(
