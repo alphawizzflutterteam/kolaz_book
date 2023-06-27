@@ -51,7 +51,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
     getPhotographerList();
     getEventTypes();
     getCitiesList();
-    print("this is my data ${widget.allJobs!.photographerId.toString()}");
+
     if (widget.type == true) {
       setState(() {
         cityNameController.text = widget.allJobs!.cityName.toString();
@@ -66,7 +66,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
         cityNameController.text = widget.upcomingJobs!.cityName.toString();
         eventController = widget.upcomingJobs!.eventId.toString();
         photographerid = widget.upcomingJobs!.photographerId.toString();
-        photographerType = widget.allJobs!.typeOfPhotography;
+        photographerType = widget.upcomingJobs!.typeOfPhotography;
         // amountController.text = widget.upcomingJobs!.amount.toString();
         // outputController.text = widget.upcomingJobs!.output.toString();
       });
@@ -489,7 +489,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                       borderRadius: BorderRadius.circular(10),
                       color: Color(0xff3B3B3B),
                     ),
-                    child: Column(
+                     child: Column(
                       children: [
                         // Padding(
                         //   padding: const EdgeInsets.all(8.0),
@@ -899,33 +899,141 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                       color: Color(0xff42ACFE),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 40.0, left: 8),
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children:  [
                           Text(
                             "Date",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.whit),
                           ),
-                          Text(
-                            "Time",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.whit),
+                          const SizedBox(width: 40,),
+                          Container(
+                            width: MediaQuery.of(context).size.width/2 - 30,
+                            child: Text(
+                              "Description",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.whit),
+                            ),
                           ),
-                          Text(
-                            "Amount",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.whit),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 30.0),
+                            child: Text(
+                              "Amount",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.whit),
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
+                  // SizedBox(
+                  //   height: 200,
+                  //   child: ListView.builder(
+                  //
+                  //     // physics: const NeverScrollableScrollPhysics(),
+                  //     itemCount: jsData.length,
+                  //     itemBuilder: (context, index) {
+                  //       return InkWell(
+                  //         onTap: () async{
+                  //           //  setState(() {
+                  //           //    selectedDates = DateTime.parse(jsData[index]['date']);
+                  //           //    descriptionController.text = jsData[index]['description'];
+                  //           //    amountController.text = jsData[index]['amount'];
+                  //           //  });
+                  //           // await editUpdateInformationDialog(context);
+                  //         },
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.only(top: 5.0),
+                  //           child: Container(
+                  //             height: 50,
+                  //             width: MediaQuery.of(context).size.width,
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(8),
+                  //               color: const Color(0xff8B8B8B),
+                  //             ),
+                  //             child: Padding(
+                  //               padding: const EdgeInsets.all(8.0),
+                  //               child: Row(
+                  //                 mainAxisAlignment:
+                  //                 MainAxisAlignment.spaceBetween,
+                  //                 crossAxisAlignment:
+                  //                 CrossAxisAlignment.center,
+                  //                 children: [
+                  //                   Container(
+                  //                     padding: const EdgeInsets.symmetric(
+                  //                         vertical: 5),
+                  //                     decoration: const BoxDecoration(
+                  //                       // color:AppColors.datecontainer,
+                  //                     ),
+                  //                     child: Text(
+                  //                       // jsonData[index]['date'] != null
+                  //                       //     ?
+                  //                       ' ${jsData[index]['date']}',
+                  //                       // : 'Select Date ',
+                  //                       style: const TextStyle(
+                  //                           color: AppColors.textclr,
+                  //                           fontSize: 12),
+                  //                     ),
+                  //                   ),
+                  //                   Container(
+                  //                     width: MediaQuery.of(context).size.width/2 - 10,
+                  //                     padding: const EdgeInsets.symmetric(
+                  //                         horizontal: 8, vertical: 5),
+                  //                     decoration: const BoxDecoration(
+                  //                       // color:AppColors.datecontainer,
+                  //                     ),
+                  //                     child: Text(
+                  //                       jsData[index]['description'] != null
+                  //                           ? ' ${
+                  //                           jsData[index]['description']}'
+                  //                           : 'Description',
+                  //                       style: const TextStyle(
+                  //                           color: AppColors.textclr,
+                  //                           fontSize: 12),
+                  //                     ),
+                  //                   ),
+                  //                   Text(
+                  //                     jsData[index]['amount'] != null
+                  //                         ? '₹ ${jsData[index]['amount']}'
+                  //                         : 'Amount',
+                  //                     style: const TextStyle(
+                  //                         color: AppColors.textclr,
+                  //                         fontWeight: FontWeight.w600,
+                  //                         fontSize: 12),
+                  //                   ),
+                  //                   // IconButton(onPressed: (){
+                  //                   //   jsData.removeAt(index);
+                  //                   //   setState(() {
+                  //                   //
+                  //                   //   });
+                  //                   // }, icon: const
+                  //                   InkWell(
+                  //                       onTap: (){
+                  //                         jsData.removeAt(index);
+                  //                         setState(() {
+                  //                         });
+                  //                       },
+                  //                       child: Icon(Icons.delete_forever, color: Colors.red,))
+                  //                   // )
+                  //
+                  //                   // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                  //                   // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   Container(
                     height: 200,
                     child: ListView.builder(
@@ -936,99 +1044,189 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                         itemBuilder: (context, index) {
                           if (widget.type == true) {
                             var data = widget.allJobs!.jsonData![index];
-                            return Container(
-                              height: 45,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Color(0xff8B8B8B),
-                              ),
+                            return InkWell(
+                              onTap: () async{
+                                //  setState(() {
+                                //    selectedDates = DateTime.parse(jsData[index]['date']);
+                                //    descriptionController.text = jsData[index]['description'];
+                                //    amountController.text = jsData[index]['amount'];
+                                //  });
+                                // await editUpdateInformationDialog(context);
+                              },
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      data.date.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.whit),
-                                    ),
-                                    Text(
-                                      '${data.fromTime} to ${data.toTime}',
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.whit),
-                                    ),
-                                    Row(
+                                padding: const EdgeInsets.only(top: 5.0, bottom: 5),
+                                child: Container(
+                                  height: 50,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: const Color(0xff8B8B8B),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          '₹ ${data.amount.toString()}',
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.whit),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          decoration: const BoxDecoration(
+                                            // color:AppColors.datecontainer,
+                                          ),
+                                          child: Text(
+                                            // jsonData[index]['date'] != null
+                                            //     ?
+                                            ' ${data.date}',
+                                            // : 'Select Date ',
+                                            style: const TextStyle(
+                                                color: AppColors.textclr,
+                                                fontSize: 12),
+                                          ),
                                         ),
-                                        // IconButton(
-                                        //     onPressed: () {},
-                                        //     icon: Icon(Icons.delete))
+                                        Container(
+                                          width: MediaQuery.of(context).size.width/2 - 10,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 5),
+                                          decoration: const BoxDecoration(
+                                            // color:AppColors.datecontainer,
+                                          ),
+                                          child: Text(
+                                            data.description != null
+                                                ? ' ${data.description}'
+                                                :
+                                            'Description',
+                                            style: const TextStyle(
+                                                color: AppColors.textclr,
+                                                fontSize: 12),
+                                          ),
+                                        ),
+                                        Text(
+                                          data.amount != null
+                                              ? '₹ ${data.amount}'
+                                              : 'Amount',
+                                          style: const TextStyle(
+                                              color: AppColors.textclr,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12),
+                                        ),
+                                        // IconButton(onPressed: (){
+                                        //   jsData.removeAt(index);
+                                        //   setState(() {
+                                        //
+                                        //   });
+                                        // }, icon: const
+                                        InkWell(
+                                            onTap: (){
+                                              widget.allJobs!.jsonData!.removeAt(index);
+                                               // data.removeAt(index);
+                                              setState(() {
+                                              });
+                                            },
+                                            child: Icon(Icons.delete_forever, color: Colors.red,))
+                                        // )
+
+                                        // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                        // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
                                       ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             );
                           }
                           var data = widget.upcomingJobs!.jsonData![index];
-                          return Container(
-                            height: 45,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Color(0xff8B8B8B),
-                            ),
+                          return InkWell(
+                            onTap: () async{
+                              //  setState(() {
+                              //    selectedDates = DateTime.parse(jsData[index]['date']);
+                              //    descriptionController.text = jsData[index]['description'];
+                              //    amountController.text = jsData[index]['amount'];
+                              //  });
+                              // await editUpdateInformationDialog(context);
+                            },
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    data.date.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.whit),
-                                  ),
-                                  Text(
-                                    '${data.fromTime} to ${data.toTime}',
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.whit),
-                                  ),
-                                  Row(
+                              padding: const EdgeInsets.only(top: 5.0, bottom: 5),
+                              child: Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: const Color(0xff8B8B8B),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        '₹ ${data.amount.toString()}',
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.whit),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        decoration: const BoxDecoration(
+                                          // color:AppColors.datecontainer,
+                                        ),
+                                        child: Text(
+                                          // jsonData[index]['date'] != null
+                                          //     ?
+                                          ' ${data.date}',
+                                          // : 'Select Date ',
+                                          style: const TextStyle(
+                                              color: AppColors.textclr,
+                                              fontSize: 12),
+                                        ),
                                       ),
-                                      // IconButton(
-                                      //     onPressed: () {},
-                                      //     icon: Icon(Icons.delete))
+                                      Container(
+                                        width: MediaQuery.of(context).size.width/2 - 10,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 5),
+                                        decoration: const BoxDecoration(
+                                          // color:AppColors.datecontainer,
+                                        ),
+                                        child: Text(
+                                          data.description != null
+                                              ? ' ${data.description}'
+                                              :
+                                          'Description',
+                                          style: const TextStyle(
+                                              color: AppColors.textclr,
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                      Text(
+                                        data.amount != null
+                                            ? '₹ ${data.amount}'
+                                            : 'Amount',
+                                        style: const TextStyle(
+                                            color: AppColors.textclr,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12),
+                                      ),
+                                      // IconButton(onPressed: (){
+                                      //   jsData.removeAt(index);
+                                      //   setState(() {
+                                      //
+                                      //   });
+                                      // }, icon: const
+                                      InkWell(
+                                          onTap: (){
+                                            widget.allJobs!.jsonData!.removeAt(index);
+                                            // data.removeAt(index);
+                                            setState(() {
+                                            });
+                                          },
+                                          child: Icon(Icons.delete_forever, color: Colors.red,))
+                                      // )
+
+                                      // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                      // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
                                     ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           );

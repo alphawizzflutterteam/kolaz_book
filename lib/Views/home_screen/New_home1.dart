@@ -12,6 +12,8 @@ import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/Add_Quotation/edite_client_job.dart';
 import 'package:kolazz_book/Views/Subscription/Subscription_screen.dart';
+import 'package:kolazz_book/Views/freelancing_job/edit_freelance_job.dart';
+import 'package:kolazz_book/Views/portfolio/portfolio_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/colors.dart';
 import '../brodcast/Broadcast_screen.dart';
@@ -180,11 +182,28 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
                     onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> PortfolioScreen()));
+                    },
+                    child: Container(
+                        height: 33,
+                        width: 33,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.primary
+
+                        ),
+                        child: Icon(Icons.search_rounded)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: GestureDetector(
+                    onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> Notification_screen()));
                     },
                     child: Container(
-                        height: 37,
-                        width: 40,
+                        height: 33,
+                        width: 33,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: AppColors.primary
@@ -200,8 +219,8 @@ class _HomepageState extends State<Homepage> {
                       Navigator.push(context, MaterialPageRoute(builder: (c)=>Broadcast_screen()));
                     },
                     child: Container(
-                        height: 37,
-                        width: 40,
+                        height: 33,
+                        width: 33,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: AppColors.primary
@@ -217,8 +236,8 @@ class _HomepageState extends State<Homepage> {
                       Get.to(MyProfilePage());
                     },
                     child: Container(
-                        height: 37,
-                        width: 40,
+                        height: 33,
+                        width: 33,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: AppColors.primary,
@@ -257,17 +276,17 @@ class _HomepageState extends State<Homepage> {
               ),
               SizedBox(height: 5,),
 
-              getJobs.isNotEmpty ?
-              _clientCard(context)
-              : Container(
+              getJobs.isEmpty ?
+              Container(
                 height: 150,
                 child: Center(
                   child: Text("No Data to show!", style: TextStyle(
-                    color: AppColors.whit
+                      color: AppColors.whit
 
                   ),),
                 ),
-              ),
+              )
+              : _clientCard(context),
               SizedBox(height: 30,),
               Align(
                 alignment: Alignment.centerLeft,
@@ -410,7 +429,10 @@ class _HomepageState extends State<Homepage> {
             var data = freelancerJobs[0].upcomingJobs![index];
             return InkWell(
               onTap: () {
-
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFreelanceJob(
+                    type: false,
+                    upcomingJobs: freelancerJobs[0].upcomingJobs![index]
+                )));
               },
               child: Padding(
                 padding: EdgeInsets.all(5),

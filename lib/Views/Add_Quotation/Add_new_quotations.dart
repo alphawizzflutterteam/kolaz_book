@@ -227,7 +227,7 @@ class _AddQuotationState extends State<AddQuotation> {
     if (picked != null && picked != adquatationDate) {
       setState(() {
         adquatationDate = picked;
-        String date = DateFormat('yyyy-MM-dd').format(picked);
+        String date = DateFormat('dd-MM-yyyy').format(picked);
         print("this is selected date $date");
         showSelectedDate.add(date);
         selectedDate = showSelectedDate.join(',');
@@ -468,50 +468,60 @@ class _AddQuotationState extends State<AddQuotation> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 0.0, vertical: 5),
-                        child: Container(
-                          height: 30,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              color: AppColors.datecontainer),
-                          width: MediaQuery.of(context).size.width / 1.0,
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              dropdownColor: AppColors.cardclr,
-                              // Initial Value
-                              value:
-                                  typeofPhotographyEvent[index].selectedValue,
-                              isExpanded: true,
-                              hint: const Text(
-                                "Type Of Photography",
-                                style: TextStyle(color: AppColors.textclr),
-                              ),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: AppColors.textclr,
-                              ),
-                              // Array list of items
-                              items: typeofPhotographyEvent
-                                  .map((Categories items) {
-                                return DropdownMenuItem<Categories>(
-                                  value: items,
-                                  child: Text(
-                                    items.resName.toString(),
-                                    style: const TextStyle(
-                                        color: AppColors.textclr),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 30,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(0),
+                                  color: AppColors.datecontainer),
+                              width: MediaQuery.of(context).size.width / 1.4,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  dropdownColor: AppColors.cardclr,
+                                  // Initial Value
+                                  value:
+                                      typeofPhotographyEvent[index].selectedValue,
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    "Type Of Photography",
+                                    style: TextStyle(color: AppColors.textclr),
                                   ),
-                                );
-                              }).toList(),
-                              // After selecting the desired option,it will
-                              // change button value to selected value
-                              onChanged: (newValue) {
-                                selectValue(newValue ?? Categories(), index);
+                                  icon: const Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: AppColors.textclr,
+                                  ),
+                                  // Array list of items
+                                  items: typeofPhotographyEvent
+                                      .map((Categories items) {
+                                    return DropdownMenuItem<Categories>(
+                                      value: items,
+                                      child: Text(
+                                        items.resName.toString(),
+                                        style: const TextStyle(
+                                            color: AppColors.textclr),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  // After selecting the desired option,it will
+                                  // change button value to selected value
+                                  onChanged: (newValue) {
+                                    selectValue(newValue ?? Categories(), index);
 
-                                setState(() {});
-                              },
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                            IconButton(onPressed: (){
+                              up.removeAt(index);
+                              setState(() {
+
+                              });
+                            }, icon: Icon(Icons.delete_forever, color: Colors.red,))
+                          ],
                         ),
                       );
                     },
@@ -607,7 +617,11 @@ class _AddQuotationState extends State<AddQuotation> {
               top: -17,
               child: IconButton(
                   onPressed: () {
-                    removeDate(index);
+                    setState(() {
+
+                    });
+                    showSelectedDate.removeAt(index);
+                    // removeDate(index);
                   },
                   icon: const Icon(
                     Icons.remove_circle_outline,
@@ -1492,7 +1506,7 @@ class _AddQuotationState extends State<AddQuotation> {
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                 maxLines: 4,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: AppColors.textclr, fontSize: 14),
                                 controller: outputController,
                                 keyboardType: TextInputType.name,
@@ -1557,7 +1571,7 @@ class _AddQuotationState extends State<AddQuotation> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     InkWell(
@@ -1568,7 +1582,9 @@ class _AddQuotationState extends State<AddQuotation> {
                             "data": pType
                           }));
                           print("this final List $newList");
-                          addQuotation();
+                          if(eventController != null) {
+                            addQuotation();
+                          }
                         } else {
                           Fluttertoast.showToast(
                               msg: "Please select city or event!");

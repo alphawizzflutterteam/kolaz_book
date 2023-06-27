@@ -30,6 +30,7 @@ final Uri getClientPhotographersApi = Uri.parse('${baseUrl}get_photographer_clie
 final Uri getQuotationDetailsApi = Uri.parse('${baseUrl}get_quatation_by_id');
 final Uri getSubscriptionPlansApi = Uri.parse('${baseUrl}get_plans');
 final Uri planPurchaseApi = Uri.parse('${baseUrl}purchase_plan');
+final Uri getPortfolioApi = Uri.parse('${baseUrl}get_portfolio');
 final Uri getUpcomingJobsTeamApi = Uri.parse('${baseUrl}upcoming_clients_jobs');
 
 // final Uri de = Uri.parse('${baseUrl}get_sellers');

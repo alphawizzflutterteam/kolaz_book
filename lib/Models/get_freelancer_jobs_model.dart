@@ -1,6 +1,6 @@
 /// error : false
 /// message : "Freelance job list"
-/// data : [{"all_jobs":[{"type_of_photography":"249","photographer_name":"atul1 gautam","event_name":"Weding","id":"8","user_id":"3","uid":"52348","photographer_id":"8","event_id":"1","city_name":"Indore","json_data":[{"id":"1","job_id":"8","date":"2023-06-25","from_time":"10","to_time":"18","amount":"10000","is_paid":"0","created_at":"2023-06-16 09:21:05","updated_at":"2023-06-16 08:24:52"}],"created_at":"2023-06-16 08:24:52","updated_at":"2023-06-16 08:24:52"}],"upcoming_jobs":[{"type_of_photography":"249","photographer_name":"atul1 gautam","event_name":"Weding","id":"8","user_id":"3","uid":"52348","photographer_id":"8","event_id":"1","city_name":"Indore","json_data":[{"id":"1","job_id":"8","date":"2023-06-25","from_time":"10","to_time":"18","amount":"10000","is_paid":"0","created_at":"2023-06-16 09:21:05","updated_at":"2023-06-16 08:24:52"}],"created_at":"2023-06-16 08:24:52","updated_at":"2023-06-16 08:24:52"}]}]
+/// data : [{"all_jobs":[{"type_of_photography":"249","photographer_name":"Ajay M","event_name":"Pre Wedding","id":"30","user_id":"3","uid":"FRJ00002","photographer_id":"263","event_id":"2","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description ","amount":"50000"},{"date":"27-06-2023","description":"this is new description data for tetsing","amount":"5000"},{"date":"28-06-2023","description":"description testing hg gdg yg y fydfyfy yyugdcy ygyg ydgg w6dqrwtdf cxcvxg","amount":"100000"}],"created_at":"2023-06-27 07:49:45","updated_at":"2023-06-27 07:49:45"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"33","user_id":"3","uid":"FRJ00005","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"}],"created_at":"2023-06-27 07:51:36","updated_at":"2023-06-27 07:51:36"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"34","user_id":"3","uid":"FRJ00006","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"},{"date":"28-06-2023","description":"this is another description this is another description","amount":"80000"}],"created_at":"2023-06-27 07:52:25","updated_at":"2023-06-27 07:52:25"},{"type_of_photography":"249","photographer_name":"Shivani Verma","event_name":"Engagement","id":"35","user_id":"3","uid":"FRJ00007","photographer_id":"264","event_id":"3","city_name":"Dewas","json_data":[{"date":"27-06-2023","description":"test ","amount":"10000"},{"date":"28-06-2023","description":"test tset tsest test tsettet testt testtt testttt","amount":"10000"}],"created_at":"2023-06-27 10:46:13","updated_at":"2023-06-27 10:46:13"}],"upcoming_jobs":[{"type_of_photography":"249","photographer_name":"Ajay M","event_name":"Pre Wedding","id":"30","user_id":"3","uid":"FRJ00002","photographer_id":"263","event_id":"2","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description ","amount":"50000"},{"date":"27-06-2023","description":"this is new description data for tetsing","amount":"5000"},{"date":"28-06-2023","description":"description testing hg gdg yg y fydfyfy yyugdcy ygyg ydgg w6dqrwtdf cxcvxg","amount":"100000"}],"created_at":"2023-06-27 07:49:45","updated_at":"2023-06-27 07:49:45"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"33","user_id":"3","uid":"FRJ00005","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"}],"created_at":"2023-06-27 07:51:36","updated_at":"2023-06-27 07:51:36"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"34","user_id":"3","uid":"FRJ00006","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"},{"date":"28-06-2023","description":"this is another description this is another description","amount":"80000"}],"created_at":"2023-06-27 07:52:25","updated_at":"2023-06-27 07:52:25"},{"type_of_photography":"249","photographer_name":"Shivani Verma","event_name":"Engagement","id":"35","user_id":"3","uid":"FRJ00007","photographer_id":"264","event_id":"3","city_name":"Dewas","json_data":[{"date":"27-06-2023","description":"test ","amount":"10000"},{"date":"28-06-2023","description":"test tset tsest test tsettet testt testtt testttt","amount":"10000"}],"created_at":"2023-06-27 10:46:13","updated_at":"2023-06-27 10:46:13"}]}]
 
 class GetFreelancerJobsModel {
   GetFreelancerJobsModel({
@@ -48,8 +48,8 @@ GetFreelancerJobsModel copyWith({  bool? error,
 
 }
 
-/// all_jobs : [{"type_of_photography":"249","photographer_name":"atul1 gautam","event_name":"Weding","id":"8","user_id":"3","uid":"52348","photographer_id":"8","event_id":"1","city_name":"Indore","json_data":[{"id":"1","job_id":"8","date":"2023-06-25","from_time":"10","to_time":"18","amount":"10000","is_paid":"0","created_at":"2023-06-16 09:21:05","updated_at":"2023-06-16 08:24:52"}],"created_at":"2023-06-16 08:24:52","updated_at":"2023-06-16 08:24:52"}]
-/// upcoming_jobs : [{"type_of_photography":"249","photographer_name":"atul1 gautam","event_name":"Weding","id":"8","user_id":"3","uid":"52348","photographer_id":"8","event_id":"1","city_name":"Indore","json_data":[{"id":"1","job_id":"8","date":"2023-06-25","from_time":"10","to_time":"18","amount":"10000","is_paid":"0","created_at":"2023-06-16 09:21:05","updated_at":"2023-06-16 08:24:52"}],"created_at":"2023-06-16 08:24:52","updated_at":"2023-06-16 08:24:52"}]
+/// all_jobs : [{"type_of_photography":"249","photographer_name":"Ajay M","event_name":"Pre Wedding","id":"30","user_id":"3","uid":"FRJ00002","photographer_id":"263","event_id":"2","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description ","amount":"50000"},{"date":"27-06-2023","description":"this is new description data for tetsing","amount":"5000"},{"date":"28-06-2023","description":"description testing hg gdg yg y fydfyfy yyugdcy ygyg ydgg w6dqrwtdf cxcvxg","amount":"100000"}],"created_at":"2023-06-27 07:49:45","updated_at":"2023-06-27 07:49:45"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"33","user_id":"3","uid":"FRJ00005","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"}],"created_at":"2023-06-27 07:51:36","updated_at":"2023-06-27 07:51:36"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"34","user_id":"3","uid":"FRJ00006","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"},{"date":"28-06-2023","description":"this is another description this is another description","amount":"80000"}],"created_at":"2023-06-27 07:52:25","updated_at":"2023-06-27 07:52:25"},{"type_of_photography":"249","photographer_name":"Shivani Verma","event_name":"Engagement","id":"35","user_id":"3","uid":"FRJ00007","photographer_id":"264","event_id":"3","city_name":"Dewas","json_data":[{"date":"27-06-2023","description":"test ","amount":"10000"},{"date":"28-06-2023","description":"test tset tsest test tsettet testt testtt testttt","amount":"10000"}],"created_at":"2023-06-27 10:46:13","updated_at":"2023-06-27 10:46:13"}]
+/// upcoming_jobs : [{"type_of_photography":"249","photographer_name":"Ajay M","event_name":"Pre Wedding","id":"30","user_id":"3","uid":"FRJ00002","photographer_id":"263","event_id":"2","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description ","amount":"50000"},{"date":"27-06-2023","description":"this is new description data for tetsing","amount":"5000"},{"date":"28-06-2023","description":"description testing hg gdg yg y fydfyfy yyugdcy ygyg ydgg w6dqrwtdf cxcvxg","amount":"100000"}],"created_at":"2023-06-27 07:49:45","updated_at":"2023-06-27 07:49:45"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"33","user_id":"3","uid":"FRJ00005","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"}],"created_at":"2023-06-27 07:51:36","updated_at":"2023-06-27 07:51:36"},{"type_of_photography":"254","photographer_name":"Ajay M","event_name":"Wedding","id":"34","user_id":"3","uid":"FRJ00006","photographer_id":"263","event_id":"1","city_name":"Indore","json_data":[{"date":"27-06-2023","description":"this is my new description jfsd","amount":"50000"},{"date":"28-06-2023","description":"this is another description this is another description","amount":"80000"}],"created_at":"2023-06-27 07:52:25","updated_at":"2023-06-27 07:52:25"},{"type_of_photography":"249","photographer_name":"Shivani Verma","event_name":"Engagement","id":"35","user_id":"3","uid":"FRJ00007","photographer_id":"264","event_id":"3","city_name":"Dewas","json_data":[{"date":"27-06-2023","description":"test ","amount":"10000"},{"date":"28-06-2023","description":"test tset tsest test tsettet testt testtt testttt","amount":"10000"}],"created_at":"2023-06-27 10:46:13","updated_at":"2023-06-27 10:46:13"}]
 
 class FreelancerJobs {
   FreelancerJobs({
@@ -97,17 +97,17 @@ FreelancerJobs copyWith({  List<AllJobs>? allJobs,
 }
 
 /// type_of_photography : "249"
-/// photographer_name : "atul1 gautam"
-/// event_name : "Weding"
-/// id : "8"
+/// photographer_name : "Ajay M"
+/// event_name : "Pre Wedding"
+/// id : "30"
 /// user_id : "3"
-/// uid : "52348"
-/// photographer_id : "8"
-/// event_id : "1"
+/// uid : "FRJ00002"
+/// photographer_id : "263"
+/// event_id : "2"
 /// city_name : "Indore"
-/// json_data : [{"id":"1","job_id":"8","date":"2023-06-25","from_time":"10","to_time":"18","amount":"10000","is_paid":"0","created_at":"2023-06-16 09:21:05","updated_at":"2023-06-16 08:24:52"}]
-/// created_at : "2023-06-16 08:24:52"
-/// updated_at : "2023-06-16 08:24:52"
+/// json_data : [{"date":"27-06-2023","description":"this is my new description ","amount":"50000"},{"date":"27-06-2023","description":"this is new description data for tetsing","amount":"5000"},{"date":"28-06-2023","description":"description testing hg gdg yg y fydfyfy yyugdcy ygyg ydgg w6dqrwtdf cxcvxg","amount":"100000"}]
+/// created_at : "2023-06-27 07:49:45"
+/// updated_at : "2023-06-27 07:49:45"
 
 class UpcomingJobs {
   UpcomingJobs({
@@ -227,115 +227,61 @@ UpcomingJobs copyWith({  String? typeOfPhotography,
 
 }
 
-/// id : "1"
-/// job_id : "8"
-/// date : "2023-06-25"
-/// from_time : "10"
-/// to_time : "18"
-/// amount : "10000"
-/// is_paid : "0"
-/// created_at : "2023-06-16 09:21:05"
-/// updated_at : "2023-06-16 08:24:52"
+/// date : "27-06-2023"
+/// description : "this is my new description "
+/// amount : "50000"
 
 class JsonData {
   JsonData({
-      String? id, 
-      String? jobId, 
       String? date, 
-      String? fromTime, 
-      String? toTime, 
-      String? amount, 
-      String? isPaid, 
-      String? createdAt, 
-      String? updatedAt,}){
-    _id = id;
-    _jobId = jobId;
+      String? description, 
+      String? amount,}){
     _date = date;
-    _fromTime = fromTime;
-    _toTime = toTime;
+    _description = description;
     _amount = amount;
-    _isPaid = isPaid;
-    _createdAt = createdAt;
-    _updatedAt = updatedAt;
 }
 
   JsonData.fromJson(dynamic json) {
-    _id = json['id'];
-    _jobId = json['job_id'];
     _date = json['date'];
-    _fromTime = json['from_time'];
-    _toTime = json['to_time'];
+    _description = json['description'];
     _amount = json['amount'];
-    _isPaid = json['is_paid'];
-    _createdAt = json['created_at'];
-    _updatedAt = json['updated_at'];
   }
-  String? _id;
-  String? _jobId;
   String? _date;
-  String? _fromTime;
-  String? _toTime;
+  String? _description;
   String? _amount;
-  String? _isPaid;
-  String? _createdAt;
-  String? _updatedAt;
-JsonData copyWith({  String? id,
-  String? jobId,
-  String? date,
-  String? fromTime,
-  String? toTime,
+JsonData copyWith({  String? date,
+  String? description,
   String? amount,
-  String? isPaid,
-  String? createdAt,
-  String? updatedAt,
-}) => JsonData(  id: id ?? _id,
-  jobId: jobId ?? _jobId,
-  date: date ?? _date,
-  fromTime: fromTime ?? _fromTime,
-  toTime: toTime ?? _toTime,
+}) => JsonData(  date: date ?? _date,
+  description: description ?? _description,
   amount: amount ?? _amount,
-  isPaid: isPaid ?? _isPaid,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
 );
-  String? get id => _id;
-  String? get jobId => _jobId;
   String? get date => _date;
-  String? get fromTime => _fromTime;
-  String? get toTime => _toTime;
+  String? get description => _description;
   String? get amount => _amount;
-  String? get isPaid => _isPaid;
-  String? get createdAt => _createdAt;
-  String? get updatedAt => _updatedAt;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['job_id'] = _jobId;
     map['date'] = _date;
-    map['from_time'] = _fromTime;
-    map['to_time'] = _toTime;
+    map['description'] = _description;
     map['amount'] = _amount;
-    map['is_paid'] = _isPaid;
-    map['created_at'] = _createdAt;
-    map['updated_at'] = _updatedAt;
     return map;
   }
 
 }
 
 /// type_of_photography : "249"
-/// photographer_name : "atul1 gautam"
-/// event_name : "Weding"
-/// id : "8"
+/// photographer_name : "Ajay M"
+/// event_name : "Pre Wedding"
+/// id : "30"
 /// user_id : "3"
-/// uid : "52348"
-/// photographer_id : "8"
-/// event_id : "1"
+/// uid : "FRJ00002"
+/// photographer_id : "263"
+/// event_id : "2"
 /// city_name : "Indore"
-/// json_data : [{"id":"1","job_id":"8","date":"2023-06-25","from_time":"10","to_time":"18","amount":"10000","is_paid":"0","created_at":"2023-06-16 09:21:05","updated_at":"2023-06-16 08:24:52"}]
-/// created_at : "2023-06-16 08:24:52"
-/// updated_at : "2023-06-16 08:24:52"
+/// json_data : [{"date":"27-06-2023","description":"this is my new description ","amount":"50000"},{"date":"27-06-2023","description":"this is new description data for tetsing","amount":"5000"},{"date":"28-06-2023","description":"description testing hg gdg yg y fydfyfy yyugdcy ygyg ydgg w6dqrwtdf cxcvxg","amount":"100000"}]
+/// created_at : "2023-06-27 07:49:45"
+/// updated_at : "2023-06-27 07:49:45"
 
 class AllJobs {
   AllJobs({
@@ -455,99 +401,7 @@ AllJobs copyWith({  String? typeOfPhotography,
 
 }
 
-/// id : "1"
-/// job_id : "8"
-/// date : "2023-06-25"
-/// from_time : "10"
-/// to_time : "18"
-/// amount : "10000"
-/// is_paid : "0"
-/// created_at : "2023-06-16 09:21:05"
-/// updated_at : "2023-06-16 08:24:52"
+/// date : "27-06-2023"
+/// description : "this is my new description "
+/// amount : "50000"
 
-class JsonData1 {
-  JsonData1({
-      String? id, 
-      String? jobId, 
-      String? date, 
-      String? fromTime, 
-      String? toTime, 
-      String? amount, 
-      String? isPaid, 
-      String? createdAt, 
-      String? updatedAt,}){
-    _id = id;
-    _jobId = jobId;
-    _date = date;
-    _fromTime = fromTime;
-    _toTime = toTime;
-    _amount = amount;
-    _isPaid = isPaid;
-    _createdAt = createdAt;
-    _updatedAt = updatedAt;
-}
-
-  JsonData1.fromJson(dynamic json) {
-    _id = json['id'];
-    _jobId = json['job_id'];
-    _date = json['date'];
-    _fromTime = json['from_time'];
-    _toTime = json['to_time'];
-    _amount = json['amount'];
-    _isPaid = json['is_paid'];
-    _createdAt = json['created_at'];
-    _updatedAt = json['updated_at'];
-  }
-  String? _id;
-  String? _jobId;
-  String? _date;
-  String? _fromTime;
-  String? _toTime;
-  String? _amount;
-  String? _isPaid;
-  String? _createdAt;
-  String? _updatedAt;
-JsonData1 copyWith({  String? id,
-  String? jobId,
-  String? date,
-  String? fromTime,
-  String? toTime,
-  String? amount,
-  String? isPaid,
-  String? createdAt,
-  String? updatedAt,
-}) => JsonData1(  id: id ?? _id,
-  jobId: jobId ?? _jobId,
-  date: date ?? _date,
-  fromTime: fromTime ?? _fromTime,
-  toTime: toTime ?? _toTime,
-  amount: amount ?? _amount,
-  isPaid: isPaid ?? _isPaid,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-);
-  String? get id => _id;
-  String? get jobId => _jobId;
-  String? get date => _date;
-  String? get fromTime => _fromTime;
-  String? get toTime => _toTime;
-  String? get amount => _amount;
-  String? get isPaid => _isPaid;
-  String? get createdAt => _createdAt;
-  String? get updatedAt => _updatedAt;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['job_id'] = _jobId;
-    map['date'] = _date;
-    map['from_time'] = _fromTime;
-    map['to_time'] = _toTime;
-    map['amount'] = _amount;
-    map['is_paid'] = _isPaid;
-    map['created_at'] = _createdAt;
-    map['updated_at'] = _updatedAt;
-    return map;
-  }
-
-}

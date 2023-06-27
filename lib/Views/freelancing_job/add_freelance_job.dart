@@ -1186,7 +1186,8 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
   List<Data> photographersList = [];
   List<EventType> eventList = [];
   List<CityList> citiesList = [];
-  TextEditingController amountt = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   var photographerName;
 
 
@@ -1207,7 +1208,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
   TimeOfDay? selectedTime2 ;
   TextEditingController cityNameController = TextEditingController();
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> selectDate(BuildContext context, setState) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -1353,7 +1354,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
         context: context,
         builder: (context) {
           bool isChecked = false;
-          return StatefulBuilder(builder: (context, dialogState) {
+          return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               backgroundColor: AppColors.back,
               content: Form(
@@ -1371,22 +1372,39 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                       // ),
                       InkWell(
                         onTap: () async {
-                         await  selectDate(
-                              context);
-                          setState(() {
 
-                          });
+                       await selectDate(context,setState);
+                          // final DateTime? pickedDate = await showDatePicker(
+                          //   context: context,
+                          //   initialDate: DateTime.now(),
+                          //   firstDate: DateTime(2000),
+                          //   lastDate: DateTime(2100),
+                          // );
+                          // setState(() {
+                          //
+                          // });
+                          // if (pickedDate != null && pickedDate != selectedDates) {
+                          //   setState(() {
+                          //     selectedDates = pickedDate;
+                          //   });
+                          //   // update();
+                          // }
+                         // await  selectDate(
+                         //      context);
+                         //  setState(() {
+                         //
+                         //  });
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width /2,
-                          height: 35,
+                          height: 40,
                           padding: const EdgeInsets.only(
                               left: 8, top: 10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: AppColors.containerclr2),
                           child: Text(selectedDates != null
-                              ? ' ${DateFormat('MM-dd-yyyy').format(selectedDates!)}'
+                              ? ' ${DateFormat('dd-MM-yyyy').format(selectedDates!)}'
                               : 'Select Date ',
                             style: const TextStyle(
                                 color: AppColors.textclr,
@@ -1394,92 +1412,13 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-                      //   child: Text(
-                      //     "Start Time",
-                      //     style: TextStyle(color: AppColors.pdfbtn),
-                      //   ),
-                      // ),
-
                       Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 5),
-                        child: InkWell(
-                          onTap: () async {
-                           await selectTime(context);
-                            dialogState((){
-                            });
-                            setState(() {
-
-                            });
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width /2,
-                            height: 35,
-                            padding: const EdgeInsets.only(
-                                left: 8, top: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.containerclr2),
-                            child: Text(
-                              selectedTime != null
-                                  ? ' ${selectedTime!.format(context)}'
-                                  : 'Start Time For Bookings',
-                              style: const TextStyle(
-                                  color: AppColors.textclr,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-                      //   child: Text(
-                      //     "End Time",
-                      //     style: TextStyle(color: AppColors.pdfbtn),
-                      //   ),
-                      // ),
-                      InkWell(
-                        onTap: () async{
-                        await   selectTime2(context);
-                          dialogState((){
-                          });
-                          setState(() {
-
-                          });
-                        },
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15),
                         child: Container(
                           width: MediaQuery.of(context).size.width /2,
-                          height: 35,
+                          height: 40,
                           padding: const EdgeInsets.only(
-                              left: 8, top: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: AppColors.containerclr2),
-                          child: Text(
-                            selectedTime2 != null
-                                ? ' ${selectedTime2!.format(context)}'
-                                : 'End Time For Bookings',
-                            style: const TextStyle(
-                                color: AppColors.textclr,
-                                fontSize: 12),
-                          ),
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-                      //   child: Text(
-                      //     "Amount",
-                      //     style: TextStyle(color: AppColors.pdfbtn),
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 15),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width /2,
-                          height: 35,
-                          padding: const EdgeInsets.only(
-                              left: 8, top: 10),
+                              left: 8, top: 6),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: AppColors.containerclr2),
@@ -1488,11 +1427,12 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                 color: AppColors.textclr),
                             // controller: controller.outputController,
                             keyboardType: TextInputType.number,
-                            controller: amountt,
+                            controller: amountController,
                             validator: (value) => value!.isEmpty
                                 ? 'Amount cannot be blank'
                                 : null,
                             decoration: const InputDecoration(
+                              // contentPadding: EdgeInsets.only(bottom: 5),
                               hintText: 'Enter Amount',
                               hintStyle: TextStyle(
                                   color: AppColors.textclr,
@@ -1504,18 +1444,51 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, bottom: 15),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 60,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: TextFormField(
+                            style: const TextStyle(
+                                color: AppColors.textclr),
+                            // controller: controller.outputController,
+                            keyboardType: TextInputType.text,
+                            maxLines: 4,
+                            controller: descriptionController,
+                            validator: (value) => value!.isEmpty
+                                ? 'Description cannot be blank'
+                                : null,
+                            decoration: const InputDecoration(
+                              hintText: 'Enter Description',
+                              hintStyle: TextStyle(
+                                  color: AppColors.textclr,
+                                  fontSize: 14),
+                              border: InputBorder.none,
+                              // contentPadding: EdgeInsets.only(
+                              //     left: 8)
+                            ),
+                          ),
+                        ),
+                      ),
+
                       Align(
                         alignment: Alignment.center,
                         child: InkWell(
                           onTap: () {
                             jsonData.add(jsonEncode({
-                              "date": DateFormat('yyyy-MM-dd').format(selectedDates!).toString(), "from_time": selectedTime!.format(context), "to_time": selectedTime2!.format(context), "amount": amountt.text.toString()
+                              "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
                             }));
                             jsData.add({
-                              "date": DateFormat('yyyy-MM-dd').format(selectedDates!).toString(), "from_time": selectedTime!.format(context), "to_time": selectedTime2!.format(context), "amount": amountt.text.toString()
+                              "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
                             });
                             setState(() {
-                              totalAmount += double.parse(amountt.text.toString());
+                              totalAmount += double.parse(amountController.text.toString());
                             });
                             print("this is my new json data $jsonData");
                             Navigator.pop(context);
@@ -1566,6 +1539,197 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
           });
         });
   }
+
+  // Future<void> editUpdateInformationDialog(BuildContext context) async {
+  //   return await showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         bool isChecked = false;
+  //         return StatefulBuilder(builder: (context, setState) {
+  //           return AlertDialog(
+  //             backgroundColor: AppColors.back,
+  //             content: Form(
+  //                 key: _formKey,
+  //                 child: Column(
+  //                   // crossAxisAlignment: CrossAxisAlignment.start,
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     // Padding(
+  //                     //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
+  //                     //   child: Text(
+  //                     //     "Date",
+  //                     //     style: TextStyle(color: AppColors.pdfbtn),
+  //                     //   ),
+  //                     // ),
+  //                     InkWell(
+  //                       onTap: () async {
+  //
+  //                         await selectDate(context,setState);
+  //                         // final DateTime? pickedDate = await showDatePicker(
+  //                         //   context: context,
+  //                         //   initialDate: DateTime.now(),
+  //                         //   firstDate: DateTime(2000),
+  //                         //   lastDate: DateTime(2100),
+  //                         // );
+  //                         // setState(() {
+  //                         //
+  //                         // });
+  //                         // if (pickedDate != null && pickedDate != selectedDates) {
+  //                         //   setState(() {
+  //                         //     selectedDates = pickedDate;
+  //                         //   });
+  //                         //   // update();
+  //                         // }
+  //                         // await  selectDate(
+  //                         //      context);
+  //                         //  setState(() {
+  //                         //
+  //                         //  });
+  //                       },
+  //                       child: Container(
+  //                         width: MediaQuery.of(context).size.width /2,
+  //                         height: 40,
+  //                         padding: const EdgeInsets.only(
+  //                             left: 8, top: 10),
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                             color: AppColors.containerclr2),
+  //                         child: Text(selectedDates != null
+  //                             ? ' ${DateFormat('MM-dd-yyyy').format(selectedDates!)}'
+  //                             : 'Select Date ',
+  //                           style: const TextStyle(
+  //                               color: AppColors.textclr,
+  //                               fontSize: 12),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Padding(
+  //                       padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+  //                       child: Container(
+  //                         width: MediaQuery.of(context).size.width /2,
+  //                         height: 40,
+  //                         padding: const EdgeInsets.only(
+  //                             left: 8, top: 6),
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                             color: AppColors.containerclr2),
+  //                         child: TextFormField(
+  //                           style: const TextStyle(
+  //                               color: AppColors.textclr),
+  //                           // controller: controller.outputController,
+  //                           keyboardType: TextInputType.number,
+  //                           controller: amountController,
+  //                           validator: (value) => value!.isEmpty
+  //                               ? 'Amount cannot be blank'
+  //                               : null,
+  //                           decoration: const InputDecoration(
+  //                             // contentPadding: EdgeInsets.only(bottom: 5),
+  //                             hintText: 'Enter Amount',
+  //                             hintStyle: TextStyle(
+  //                                 color: AppColors.textclr,
+  //                                 fontSize: 14),
+  //                             border: InputBorder.none,
+  //                             // contentPadding: EdgeInsets.only(
+  //                             //     left: 8)
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Padding(
+  //                       padding: const EdgeInsets.only(top: 5.0, bottom: 15),
+  //                       child: Container(
+  //                         width: MediaQuery.of(context).size.width /2,
+  //                         height: 60,
+  //                         padding: const EdgeInsets.only(
+  //                             left: 8, top: 5),
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                             color: AppColors.containerclr2),
+  //                         child: TextFormField(
+  //                           style: const TextStyle(
+  //                               color: AppColors.textclr),
+  //                           // controller: controller.outputController,
+  //                           keyboardType: TextInputType.text,
+  //                           maxLines: 4,
+  //                           controller: descriptionController,
+  //                           validator: (value) => value!.isEmpty
+  //                               ? 'Description cannot be blank'
+  //                               : null,
+  //                           decoration: const InputDecoration(
+  //                             hintText: 'Enter Description',
+  //                             hintStyle: TextStyle(
+  //                                 color: AppColors.textclr,
+  //                                 fontSize: 14),
+  //                             border: InputBorder.none,
+  //                             // contentPadding: EdgeInsets.only(
+  //                             //     left: 8)
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //
+  //                     Align(
+  //                       alignment: Alignment.center,
+  //                       child: InkWell(
+  //                         onTap: () {
+  //                           jsonData.add(jsonEncode({
+  //                             "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
+  //                           }));
+  //                           jsData.add({
+  //                             "date": DateFormat('yyyy-MM-dd').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
+  //                           });
+  //                           setState(() {
+  //                             totalAmount += double.parse(amountController.text.toString());
+  //                           });
+  //                           print("this is my new json data $jsonData");
+  //                           Navigator.pop(context);
+  //                           // addFreelancer();
+  //                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
+  //                         },
+  //                         child: Container(
+  //                             height: 40,
+  //                             decoration: BoxDecoration(
+  //                                 borderRadius: BorderRadius.circular(50),
+  //                                 color: AppColors.pdfbtn),
+  //                             width: MediaQuery.of(context).size.width / 2,
+  //                             child: const Center(
+  //                                 child: Text("Add",
+  //                                     style: TextStyle(
+  //                                         fontSize: 18,
+  //                                         color: AppColors.textclr)))),
+  //                       ),
+  //                     ),
+  //                     // Row(
+  //                     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     //   children: [
+  //                     //     Text("Choice Box"),
+  //                     //     Checkbox(
+  //                     //         value: isChecked,
+  //                     //         onChanged: (checked) {
+  //                     //           setState(() {
+  //                     //             isChecked = checked;
+  //                     //           });
+  //                     //         })
+  //                     //   ],
+  //                     // ) ̰ e
+  //                   ],
+  //                 )),
+  //             // title: Text(''),
+  //             // actions: <Widget>[
+  //             //   InkWell(
+  //             //     child: Text('ADD'),
+  //             //     onTap: () {
+  //             //       if (_formKey.currentState!.validate()) {
+  //             //         // Do something like updating SharedPreferences or User Settings etc.
+  //             //         Navigator.of(context).pop();
+  //             //       }
+  //             //     },
+  //             //   ),
+  //             // ],
+  //           );
+  //         });
+  //       });
+  // }
 
   @override
   void initState() {
@@ -1941,74 +2105,6 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                 )
                               ],
                             ),
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text("City/Venue",
-                            //         style: TextStyle(color: Color(0xff42ACFE),fontWeight: FontWeight.bold),),
-                            //       Container(width:180,
-                            //         height: 30,
-                            //         decoration: BoxDecoration(
-                            //           borderRadius: BorderRadius.circular(8),
-                            //           color: AppColors.backgruond,
-                            //         ),
-                            //         child: Align(alignment: Alignment.centerLeft, child: Padding(
-                            //           padding: const EdgeInsets.all(8.0),
-                            //           child: Text("Mumbai",style: TextStyle(color: AppColors.whit),),
-                            //         )),)
-                            //     ],
-                            //   ),
-                            // ),
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text("Events",
-                            //         style: TextStyle(color: Color(0xff42ACFE),fontWeight: FontWeight.bold),),
-                            //       Container(
-                            //         width:180,
-                            //         height: 35,
-                            //         decoration: BoxDecoration(
-                            //           borderRadius: BorderRadius.circular(8),
-                            //           color: AppColors.backgruond,
-                            //         ),
-                            //         child: DropdownButtonHideUnderline(
-                            //           child: DropdownButton(
-                            //             elevation: 0,
-                            //             underline: Container(),
-                            //             isExpanded: true,
-                            //             value: _cityValue,
-                            //             icon: const Icon(Icons.keyboard_arrow_down,size: 40,color: Color(0xff3B3B3B),),
-                            //             hint: const Align(alignment: Alignment.centerLeft,
-                            //               child: Padding(
-                            //                 padding:  EdgeInsets.all(8.0),
-                            //                 child: Text("Mumbai", style: TextStyle(
-                            //                     color:AppColors.whit
-                            //                 ),),
-                            //               ),
-                            //             ),
-                            //             items:item2.map((String items) {
-                            //               return DropdownMenuItem(
-                            //                   value: items,
-                            //                   child: Text(items)
-                            //               );
-                            //             }
-                            //             ).toList(),
-                            //             onChanged: (String? newValue){
-                            //               setState(() {
-                            //                 _cityValue = newValue!;
-                            //               });
-                            //             },
-                            //
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
@@ -2086,7 +2182,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                     const SizedBox(
                         height: 12,
                       ),
                       Container(
@@ -2101,24 +2197,31 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children:  [
                               Text(
                                 "Date",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.whit),
                               ),
-                              Text(
-                                "Time",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.whit),
+                              const SizedBox(width: 40,),
+                              Container(
+                                width: MediaQuery.of(context).size.width/2 - 30,
+                                child: Text(
+                                  "Description",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.whit),
+                                ),
                               ),
-                              Text(
-                                "Amount",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.whit),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 30.0),
+                                child: Text(
+                                  "Amount",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.whit),
+                                ),
                               ),
                             ],
                           ),
@@ -2130,36 +2233,35 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           // physics: const NeverScrollableScrollPhysics(),
                           itemCount: jsData.length,
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Container(
-                                height: 45,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: const Color(0xff8B8B8B),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          // controller.selectDate(
-                                          //     context, index);
-                                          // selectDates = controller
-                                          //     .selectedDates
-                                          //     .join(',');
-                                          // print(
-                                          //     'this is selected dates $selectDates');
-                                        },
-                                        child: Container(
+                            return InkWell(
+                              onTap: () async{
+                               //  setState(() {
+                               //    selectedDates = DateTime.parse(jsData[index]['date']);
+                               //    descriptionController.text = jsData[index]['description'];
+                               //    amountController.text = jsData[index]['amount'];
+                               //  });
+                               // await editUpdateInformationDialog(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Container(
+                                   height: 50,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: const Color(0xff8B8B8B),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 5),
+                                               vertical: 5),
                                           decoration: const BoxDecoration(
                                             // color:AppColors.datecontainer,
                                           ),
@@ -2173,41 +2275,51 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                                 fontSize: 12),
                                           ),
                                         ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          // controller.selectTime(context);
-                                        },
-                                        child: Container(
+                                        Container(
+                                          width: MediaQuery.of(context).size.width/2 - 10,
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8, vertical: 5),
                                           decoration: const BoxDecoration(
                                             // color:AppColors.datecontainer,
                                           ),
                                           child: Text(
-                                            jsData[index]['from_time'] != null
+                                            jsData[index]['description'] != null
                                                 ? ' ${
-                                                jsData[index]['from_time']} to ${jsData[index]['to_time']}'
-                                                : 'Select Time For Bookings',
+                                                jsData[index]['description']}'
+                                                : 'Description',
                                             style: const TextStyle(
                                                 color: AppColors.textclr,
                                                 fontSize: 12),
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        jsData[index]['amount'] != null
-                                            ? '₹ ${jsData[index]['amount']}'
-                                            : 'Amount',
-                                        style: const TextStyle(
-                                            color: AppColors.textclr,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12),
-                                      ),
+                                        Text(
+                                          jsData[index]['amount'] != null
+                                              ? '₹ ${jsData[index]['amount']}'
+                                              : 'Amount',
+                                          style: const TextStyle(
+                                              color: AppColors.textclr,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12),
+                                        ),
+                                        // IconButton(onPressed: (){
+                                        //   jsData.removeAt(index);
+                                        //   setState(() {
+                                        //
+                                        //   });
+                                        // }, icon: const
+                                        InkWell(
+                                          onTap: (){
+                                            jsData.removeAt(index);
+                                            setState(() {
+                                            });
+                                          },
+                                            child: Icon(Icons.delete_forever, color: Colors.red,))
+                                        // )
 
-                                      // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                      // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                    ],
+                                        // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                        // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -2236,7 +2348,8 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                 selectedDates = null;
                                 selectedTime = null ;
                                 selectedTime2 = null;
-                                amountt.clear();
+                                amountController.clear();
+                                descriptionController.clear();
 
                                 await showAddInformationDialog(context);
 
@@ -2319,7 +2432,11 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           onTap: () {
                             print("working");
                             if(totalAmount != 0 ) {
-                              addFreelancerJob();
+                              if(eventController != null && photographerType != null) {
+                                addFreelancerJob();
+                              }else{
+                                Fluttertoast.showToast(msg: "Please fill all the details first");
+                              }
                             }else{
                               Fluttertoast.showToast(msg: "Please fill all the details first");
                             }
