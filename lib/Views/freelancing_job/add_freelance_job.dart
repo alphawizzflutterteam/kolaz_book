@@ -1179,7 +1179,7 @@ class AddFreelanceJob extends StatefulWidget {
 
 class AddFreelanceJobState extends State<AddFreelanceJob> {
 
-  List jsonData = [];
+  String jsonData = '';
   List jsData = [];
 
   List<Categories> typeofPhotographyEvent = [];
@@ -1298,7 +1298,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
       photographersList = result.data!;
       // photographeridd = photographersList[0].id;
     });
-    print("this is photographersList ${photographersList[0].firstName}");
+    // print("this is photographersList ${photographersList[0].firstName}");
   }
 
   getEventTypes() async {
@@ -1397,7 +1397,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width /2,
-                          height: 40,
+                          height: 45,
                           padding: const EdgeInsets.only(
                               left: 8, top: 10),
                           decoration: BoxDecoration(
@@ -1416,9 +1416,9 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         padding: const EdgeInsets.only(top: 15.0, bottom: 15),
                         child: Container(
                           width: MediaQuery.of(context).size.width /2,
-                          height: 40,
+                          height: 45,
                           padding: const EdgeInsets.only(
-                              left: 8, top: 6),
+                              left: 8),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: AppColors.containerclr2),
@@ -1481,9 +1481,10 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         alignment: Alignment.center,
                         child: InkWell(
                           onTap: () {
-                            jsonData.add(jsonEncode({
-                              "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
-                            }));
+
+                            // jsonData.add(jsonEncode({
+                            //   "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
+                            // }));
                             jsData.add({
                               "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
                             });
@@ -1508,228 +1509,145 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                           color: AppColors.textclr)))),
                         ),
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Text("Choice Box"),
-                      //     Checkbox(
-                      //         value: isChecked,
-                      //         onChanged: (checked) {
-                      //           setState(() {
-                      //             isChecked = checked;
-                      //           });
-                      //         })
-                      //   ],
-                      // ) ̰ e
                     ],
                   )),
-              // title: Text(''),
-              // actions: <Widget>[
-              //   InkWell(
-              //     child: Text('ADD'),
-              //     onTap: () {
-              //       if (_formKey.currentState!.validate()) {
-              //         // Do something like updating SharedPreferences or User Settings etc.
-              //         Navigator.of(context).pop();
-              //       }
-              //     },
-              //   ),
-              // ],
             );
           });
         });
   }
 
-  // Future<void> editUpdateInformationDialog(BuildContext context) async {
-  //   return await showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         bool isChecked = false;
-  //         return StatefulBuilder(builder: (context, setState) {
-  //           return AlertDialog(
-  //             backgroundColor: AppColors.back,
-  //             content: Form(
-  //                 key: _formKey,
-  //                 child: Column(
-  //                   // crossAxisAlignment: CrossAxisAlignment.start,
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   children: [
-  //                     // Padding(
-  //                     //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-  //                     //   child: Text(
-  //                     //     "Date",
-  //                     //     style: TextStyle(color: AppColors.pdfbtn),
-  //                     //   ),
-  //                     // ),
-  //                     InkWell(
-  //                       onTap: () async {
-  //
-  //                         await selectDate(context,setState);
-  //                         // final DateTime? pickedDate = await showDatePicker(
-  //                         //   context: context,
-  //                         //   initialDate: DateTime.now(),
-  //                         //   firstDate: DateTime(2000),
-  //                         //   lastDate: DateTime(2100),
-  //                         // );
-  //                         // setState(() {
-  //                         //
-  //                         // });
-  //                         // if (pickedDate != null && pickedDate != selectedDates) {
-  //                         //   setState(() {
-  //                         //     selectedDates = pickedDate;
-  //                         //   });
-  //                         //   // update();
-  //                         // }
-  //                         // await  selectDate(
-  //                         //      context);
-  //                         //  setState(() {
-  //                         //
-  //                         //  });
-  //                       },
-  //                       child: Container(
-  //                         width: MediaQuery.of(context).size.width /2,
-  //                         height: 40,
-  //                         padding: const EdgeInsets.only(
-  //                             left: 8, top: 10),
-  //                         decoration: BoxDecoration(
-  //                             borderRadius: BorderRadius.circular(10),
-  //                             color: AppColors.containerclr2),
-  //                         child: Text(selectedDates != null
-  //                             ? ' ${DateFormat('MM-dd-yyyy').format(selectedDates!)}'
-  //                             : 'Select Date ',
-  //                           style: const TextStyle(
-  //                               color: AppColors.textclr,
-  //                               fontSize: 12),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Padding(
-  //                       padding: const EdgeInsets.only(top: 15.0, bottom: 15),
-  //                       child: Container(
-  //                         width: MediaQuery.of(context).size.width /2,
-  //                         height: 40,
-  //                         padding: const EdgeInsets.only(
-  //                             left: 8, top: 6),
-  //                         decoration: BoxDecoration(
-  //                             borderRadius: BorderRadius.circular(10),
-  //                             color: AppColors.containerclr2),
-  //                         child: TextFormField(
-  //                           style: const TextStyle(
-  //                               color: AppColors.textclr),
-  //                           // controller: controller.outputController,
-  //                           keyboardType: TextInputType.number,
-  //                           controller: amountController,
-  //                           validator: (value) => value!.isEmpty
-  //                               ? 'Amount cannot be blank'
-  //                               : null,
-  //                           decoration: const InputDecoration(
-  //                             // contentPadding: EdgeInsets.only(bottom: 5),
-  //                             hintText: 'Enter Amount',
-  //                             hintStyle: TextStyle(
-  //                                 color: AppColors.textclr,
-  //                                 fontSize: 14),
-  //                             border: InputBorder.none,
-  //                             // contentPadding: EdgeInsets.only(
-  //                             //     left: 8)
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Padding(
-  //                       padding: const EdgeInsets.only(top: 5.0, bottom: 15),
-  //                       child: Container(
-  //                         width: MediaQuery.of(context).size.width /2,
-  //                         height: 60,
-  //                         padding: const EdgeInsets.only(
-  //                             left: 8, top: 5),
-  //                         decoration: BoxDecoration(
-  //                             borderRadius: BorderRadius.circular(10),
-  //                             color: AppColors.containerclr2),
-  //                         child: TextFormField(
-  //                           style: const TextStyle(
-  //                               color: AppColors.textclr),
-  //                           // controller: controller.outputController,
-  //                           keyboardType: TextInputType.text,
-  //                           maxLines: 4,
-  //                           controller: descriptionController,
-  //                           validator: (value) => value!.isEmpty
-  //                               ? 'Description cannot be blank'
-  //                               : null,
-  //                           decoration: const InputDecoration(
-  //                             hintText: 'Enter Description',
-  //                             hintStyle: TextStyle(
-  //                                 color: AppColors.textclr,
-  //                                 fontSize: 14),
-  //                             border: InputBorder.none,
-  //                             // contentPadding: EdgeInsets.only(
-  //                             //     left: 8)
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //
-  //                     Align(
-  //                       alignment: Alignment.center,
-  //                       child: InkWell(
-  //                         onTap: () {
-  //                           jsonData.add(jsonEncode({
-  //                             "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
-  //                           }));
-  //                           jsData.add({
-  //                             "date": DateFormat('yyyy-MM-dd').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
-  //                           });
-  //                           setState(() {
-  //                             totalAmount += double.parse(amountController.text.toString());
-  //                           });
-  //                           print("this is my new json data $jsonData");
-  //                           Navigator.pop(context);
-  //                           // addFreelancer();
-  //                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
-  //                         },
-  //                         child: Container(
-  //                             height: 40,
-  //                             decoration: BoxDecoration(
-  //                                 borderRadius: BorderRadius.circular(50),
-  //                                 color: AppColors.pdfbtn),
-  //                             width: MediaQuery.of(context).size.width / 2,
-  //                             child: const Center(
-  //                                 child: Text("Add",
-  //                                     style: TextStyle(
-  //                                         fontSize: 18,
-  //                                         color: AppColors.textclr)))),
-  //                       ),
-  //                     ),
-  //                     // Row(
-  //                     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                     //   children: [
-  //                     //     Text("Choice Box"),
-  //                     //     Checkbox(
-  //                     //         value: isChecked,
-  //                     //         onChanged: (checked) {
-  //                     //           setState(() {
-  //                     //             isChecked = checked;
-  //                     //           });
-  //                     //         })
-  //                     //   ],
-  //                     // ) ̰ e
-  //                   ],
-  //                 )),
-  //             // title: Text(''),
-  //             // actions: <Widget>[
-  //             //   InkWell(
-  //             //     child: Text('ADD'),
-  //             //     onTap: () {
-  //             //       if (_formKey.currentState!.validate()) {
-  //             //         // Do something like updating SharedPreferences or User Settings etc.
-  //             //         Navigator.of(context).pop();
-  //             //       }
-  //             //     },
-  //             //   ),
-  //             // ],
-  //           );
-  //         });
-  //       });
-  // }
+  Future<void> editUpdateInformationDialog(BuildContext context, int index) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          bool isChecked = false;
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: AppColors.back,
+              content: Form(
+                  key: _formKey,
+                  child: Column(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          await selectDate(context,setState);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 45,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: Text(selectedDates != null
+                              ? ' ${DateFormat('dd-MM-yyyy').format(selectedDates!)}'
+                              : 'Select Date ',
+                            style: const TextStyle(
+                                color: AppColors.textclr,
+                                fontSize: 12),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 45,
+                          padding: const EdgeInsets.only(
+                              left: 8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: TextFormField(
+                            style: const TextStyle(
+                                color: AppColors.textclr),
+                            // controller: controller.outputController,
+                            keyboardType: TextInputType.number,
+                            controller: amountController,
+                            validator: (value) => value!.isEmpty
+                                ? 'Amount cannot be blank'
+                                : null,
+                            decoration: const InputDecoration(
+                              // contentPadding: EdgeInsets.only(bottom: 5),
+                              hintText: 'Enter Amount',
+                              hintStyle: TextStyle(
+                                  color: AppColors.textclr,
+                                  fontSize: 14),
+                              border: InputBorder.none,
+                              // contentPadding: EdgeInsets.only(
+                              //     left: 8)
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, bottom: 15),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 60,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: TextFormField(
+                            style: const TextStyle(
+                                color: AppColors.textclr),
+                            // controller: controller.outputController,
+                            keyboardType: TextInputType.text,
+                            maxLines: 4,
+                            controller: descriptionController,
+                            validator: (value) => value!.isEmpty
+                                ? 'Description cannot be blank'
+                                : null,
+                            decoration: const InputDecoration(
+                              hintText: 'Enter Description',
+                              hintStyle: TextStyle(
+                                  color: AppColors.textclr,
+                                  fontSize: 14),
+                              border: InputBorder.none,
+                              // contentPadding: EdgeInsets.only(
+                              //     left: 8)
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                             jsData[index]['date'] = DateFormat('dd-MM-yyyy').format(selectedDates!).toString();
+                             jsData[index]['description'] = descriptionController.text.toString();
+                             jsData[index]['amount'] = amountController.text.toString();
+
+                            print("this is my new json data $jsonData");
+                            Navigator.pop(context);
+                            // addFreelancer();
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
+                          },
+                          child: Container(
+                              height: 40,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: AppColors.pdfbtn),
+                              child: const Center(
+                                  child: Text("Edit",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColors.textclr)))),
+                        ),
+                      ),
+                    ],
+                  )),
+            );
+          });
+        });
+  }
 
   @override
   void initState() {
@@ -1752,15 +1670,8 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
     http.MultipartRequest('POST', Uri.parse(addFreelancerJobApi.toString()));
     request.fields.addAll({
       'json_data': jsonData.toString(),
-      // 'client_name': photographer.toString(),
       'city_name': cityNameController.text.toString(),
-      //clientNameController.text.toString(),
-      // 'city': cityController.toString(),
       'event_id': eventController.toString(),
-      // 'amount[]': amountt.text.toString(),
-      // 'date[]': selectDates.toString(),
-      // 'time[]': selectTimes.toString(),
-      // 'total': totall.toString(),
       'type_of_photography': photographerType.toString(),
       'user_id': userId.toString(),
       'photographer_id': photographerid.toString(),
@@ -2235,12 +2146,15 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () async{
-                               //  setState(() {
-                               //    selectedDates = DateTime.parse(jsData[index]['date']);
-                               //    descriptionController.text = jsData[index]['description'];
-                               //    amountController.text = jsData[index]['amount'];
-                               //  });
-                               // await editUpdateInformationDialog(context);
+                                print("this is my date $selectedDates");
+                                setState(() {
+                                   selectedDates = DateFormat('dd-MM-yyyy').parse(jsData[index]['date']);
+                                  descriptionController.text = jsData[index]['description'];
+                                  amountController.text = jsData[index]['amount'];
+                                });
+                                print("this is my date ${selectedDates}");
+
+                               await editUpdateInformationDialog(context, index);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
@@ -2272,7 +2186,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                             // : 'Select Date ',
                                             style: const TextStyle(
                                                 color: AppColors.textclr,
-                                                fontSize: 12),
+                                                fontSize: 14),
                                           ),
                                         ),
                                         Container(
@@ -2431,6 +2345,11 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         child: InkWell(
                           onTap: () {
                             print("working");
+                             jsonData = jsonEncode(jsData);
+                            print('this is my final json data ==>>>>> ${jsonData}');
+                            // jsData.add(jsonEncode({
+                            //   "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
+                            // }));
                             if(totalAmount != 0 ) {
                               if(eventController != null && photographerType != null) {
                                 addFreelancerJob();

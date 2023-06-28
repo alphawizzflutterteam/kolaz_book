@@ -49,6 +49,92 @@ class _EditClientJobState extends State<EditClientJob> {
   var cityController;
   int dateIndex = 0 ;
 
+
+  deleteConfirmation(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppColors.primary,
+      title: const Text(
+        'Delete Client Job!',
+        style: TextStyle(color: AppColors.textclr),
+      ),
+      content: const Text(
+        'Are you sure you want to delete this clients job?',
+        style: TextStyle(color: AppColors.textclr),
+      ),
+      actions: [
+        TextButton(
+          child: Container(
+              height: 25,
+              width: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: AppColors.AppbtnColor),
+              child: const Center(
+                  child: Text(
+                    'No',
+                    style: TextStyle(color: AppColors.textclr),
+                  ))),
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+        TextButton(
+          child: Container(
+              height: 25,
+              width: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: AppColors.AppbtnColor),
+              child: const Center(
+                  child: Text(
+                    'Yes',
+                    style: TextStyle(color: AppColors.textclr),
+                  ))),
+          onPressed: () {
+            deleteQuotation(context);
+            Navigator.of(context).pop(true);
+
+          },
+        ),
+      ],
+    );
+  }
+
+  deleteQuotation( BuildContext context) async {
+    // SharedPreferences preferences = await SharedPreferences.getInstance();ff
+    // String? userId = preferences.getString('id');
+    var headers = {
+      'Cookie': 'ci_session=b222ee2ce87968a446feacdb861ad51c821bdf6d'
+    };
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(deleteQuotationApi.toString()));
+    request.fields.addAll({
+      'id': widget.type == true ?
+        widget.allJobs!.id.toString()
+    : widget.upcomingJobs!.id.toString()
+    });
+    print("this is delete quotation request ${request.fields.toString()} and $deleteQuotationApi");
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String responseData =
+      await response.stream.transform(utf8.decoder).join();
+      var userData = json.decode(responseData);
+      if (userData['error'] == false) {
+        Fluttertoast.showToast(msg: userData['message']);
+        Navigator.pop(context, false);
+
+      } else {
+        Fluttertoast.showToast(msg: userData['message']);
+        // Fluttertoast.showToast(msg: userData['msg']);
+      }
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+
   Widget photographerDropdownCard(int j){
     var photographerName;
     var pId;
@@ -527,7 +613,9 @@ class _EditClientJobState extends State<EditClientJob> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    widget.allJobs!.qid.toString(),
+                                    widget.type == true?
+                                    widget.allJobs!.qid.toString()
+                                    : widget.upcomingJobs!.qid.toString(),
                                     // quotationData![0].qid.toString(),
                                     style: TextStyle(color: AppColors.whit),
                                   ),
@@ -1093,71 +1181,66 @@ class _EditClientJobState extends State<EditClientJob> {
                 height: 20,
               ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      newList.add(
-                          jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
-                              :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
-                            , "data": pType}));
-                      updateClientJob();
-                      print("this is new list $newList");
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          color: AppColors.AppbtnColor,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Center(
-                          child: Text(
-                            "Update",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textclr,
-                                fontSize: 18),
-                          )),
-                    ),
-                  ),
-                  Image.asset(
-                    "assets/images/pdf.png",
-                    scale: 1.6,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      newList.add(
-                          jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
-                              :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
-                            , "data": pType}));
-
-                      print("this is new list $newList");
-                      // await showDialog(
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return
-                      //         deleteConfirmation();}
-                      // );
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          color: AppColors.contaccontainerred,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Center(
-                          child: Text(
-                            "Delete",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textclr,
-                                fontSize: 18),
-                          )),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     InkWell(
+              //       onTap: (){
+              //         newList.add(
+              //             jsonEncode({"date": widget.type == true? widget.allJobs!.photographersDetails![dateIndex].date.toString()
+              //                 :  widget.upcomingJobs!.photographersDetails![dateIndex].date.toString()
+              //               , "data": pType}));
+              //         updateClientJob();
+              //         print("this is new list $newList");
+              //       },
+              //       child: Container(
+              //         height: 50,
+              //         width: 150,
+              //         decoration: BoxDecoration(
+              //             color: AppColors.AppbtnColor,
+              //             borderRadius: BorderRadius.circular(5)),
+              //         child: Center(
+              //             child: Text(
+              //               "Update",
+              //               style: TextStyle(
+              //                   fontWeight: FontWeight.bold,
+              //                   color: AppColors.textclr,
+              //                   fontSize: 18),
+              //             )),
+              //       ),
+              //     ),
+              //     Image.asset(
+              //       "assets/images/pdf.png",
+              //       scale: 1.6,
+              //     ),
+              //     InkWell(
+              //       onTap: () async {
+              //         await showDialog(
+              //             context: context,
+              //             builder: (context) {
+              //               return
+              //                 deleteConfirmation(context);
+              //               }
+              //         );
+              //       },
+              //       child: Container(
+              //         height: 50,
+              //         width: 100,
+              //         decoration: BoxDecoration(
+              //             color: AppColors.contaccontainerred,
+              //             borderRadius: BorderRadius.circular(5)),
+              //         child: const Center(
+              //             child: Text(
+              //               "Delete",
+              //               style: TextStyle(
+              //                   fontWeight: FontWeight.bold,
+              //                   color: AppColors.textclr,
+              //                   fontSize: 18),
+              //             )),
+              //       ),
+              //     ),
+              //   ],
+              // ),
 
 
               const  SizedBox(
@@ -2007,12 +2090,12 @@ class _EditClientJobState extends State<EditClientJob> {
                       InkWell(
                         onTap: () async {
 
-                          // await showDialog(
-                          //     context: context,
-                          //     builder: (context) {
-                          //       return
-                          //         deleteConfirmation();}
-                          // );
+                          await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return
+                                  deleteConfirmation(context);}
+                          );
                         },
                         child: Container(
                           height: 50,

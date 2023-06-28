@@ -24,29 +24,11 @@ class EditFreelanceJob extends StatefulWidget {
 }
 
 class _EditFreelanceJobState extends State<EditFreelanceJob> {
-  String? _chosenValue;
-  var item = [
-    'Kaushik Prajapati',
-    ' Prajapati',
-    'Kaushik Prajapati',
-  ];
-  String? _cityValue;
-  var item2 = [
-    'Mumbai',
-    ' indore',
-    'delhi ',
-  ];
-  String? _photography;
-  var item3 = [
-    'Mumbai',
-    ' indore',
-    'delhi ',
-  ];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getPhotographerType();
     getPhotographerList();
     getEventTypes();
@@ -79,7 +61,9 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
   List<Data> photographersList = [];
   List<EventType> eventList = [];
   List<CityList> citiesList = [];
-  TextEditingController amountt = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   var photographerName;
 
   var eventController;
@@ -99,7 +83,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
   TimeOfDay? selectedTime2;
   TextEditingController cityNameController = TextEditingController();
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> selectDate(BuildContext context, setState) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -236,14 +220,14 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _textEditingController = TextEditingController();
 
-  Future<void> showAddInformationDialog(BuildContext context) async {
+
+  Future<void> editUpdateInformationDialog(BuildContext context, int index, var data) async {
     return await showDialog(
         context: context,
         builder: (context) {
           bool isChecked = false;
-          return StatefulBuilder(builder: (context, dialogState) {
+          return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               backgroundColor: AppColors.back,
               content: Form(
@@ -252,124 +236,52 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-                      //   child: Text(
-                      //     "Date",
-                      //     style: TextStyle(color: AppColors.pdfbtn),
-                      //   ),
-                      // ),
                       InkWell(
                         onTap: () async {
-                          await selectDate(context);
-                          setState(() {});
+                          await selectDate(context,setState);
                         },
                         child: Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 35,
-                          padding: const EdgeInsets.only(left: 8, top: 10),
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 45,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: AppColors.containerclr2),
-                          child: Text(
-                            selectedDates != null
-                                ? ' ${DateFormat('MM-dd-yyyy').format(selectedDates!)}'
-                                : 'Select Date ',
+                          child: Text(selectedDates != null
+                              ? ' ${DateFormat('dd-MM-yyyy').format(selectedDates!)}'
+                              : 'Select Date ',
                             style: const TextStyle(
-                                color: AppColors.textclr, fontSize: 12),
+                                color: AppColors.textclr,
+                                fontSize: 12),
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-                      //   child: Text(
-                      //     "Start Time",
-                      //     style: TextStyle(color: AppColors.pdfbtn),
-                      //   ),
-                      // ),
-
                       Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 5),
-                        child: InkWell(
-                          onTap: () async {
-                            await selectTime(context);
-                            dialogState(() {});
-                            setState(() {});
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: 35,
-                            padding: const EdgeInsets.only(left: 8, top: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.containerclr2),
-                            child: Text(
-                              selectedTime != null
-                                  ? ' ${selectedTime!.format(context)}'
-                                  : 'Start Time For Bookings',
-                              style: const TextStyle(
-                                  color: AppColors.textclr, fontSize: 12),
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-                      //   child: Text(
-                      //     "End Time",
-                      //     style: TextStyle(color: AppColors.pdfbtn),
-                      //   ),
-                      // ),
-                      InkWell(
-                        onTap: () async {
-                          await selectTime2(context);
-                          dialogState(() {});
-                          setState(() {});
-                        },
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15),
                         child: Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 35,
-                          padding: const EdgeInsets.only(left: 8, top: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: AppColors.containerclr2),
-                          child: Text(
-                            selectedTime2 != null
-                                ? ' ${selectedTime2!.format(context)}'
-                                : 'End Time For Bookings',
-                            style: const TextStyle(
-                                color: AppColors.textclr, fontSize: 12),
-                          ),
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-                      //   child: Text(
-                      //     "Amount",
-                      //     style: TextStyle(color: AppColors.pdfbtn),
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 15),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 35,
-                          padding: const EdgeInsets.only(left: 8, top: 10),
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 45,
+                          padding: const EdgeInsets.only(
+                              left: 8),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: AppColors.containerclr2),
                           child: TextFormField(
-                            style: const TextStyle(color: AppColors.textclr),
+                            style: const TextStyle(
+                                color: AppColors.textclr),
                             // controller: controller.outputController,
                             keyboardType: TextInputType.number,
-                            controller: amountt,
+                            controller: amountController,
                             validator: (value) => value!.isEmpty
                                 ? 'Amount cannot be blank'
                                 : null,
                             decoration: const InputDecoration(
+                              // contentPadding: EdgeInsets.only(bottom: 5),
                               hintText: 'Enter Amount',
                               hintStyle: TextStyle(
-                                  color: AppColors.textclr, fontSize: 14),
+                                  color: AppColors.textclr,
+                                  fontSize: 14),
                               border: InputBorder.none,
                               // contentPadding: EdgeInsets.only(
                               //     left: 8)
@@ -377,67 +289,68 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, bottom: 15),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width /2,
+                          height: 60,
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.containerclr2),
+                          child: TextFormField(
+                            style: const TextStyle(
+                                color: AppColors.textclr),
+                            // controller: controller.outputController,
+                            keyboardType: TextInputType.text,
+                            maxLines: 4,
+                            controller: descriptionController,
+                            validator: (value) => value!.isEmpty
+                                ? 'Description cannot be blank'
+                                : null,
+                            decoration: const InputDecoration(
+                              hintText: 'Enter Description',
+                              hintStyle: TextStyle(
+                                  color: AppColors.textclr,
+                                  fontSize: 14),
+                              border: InputBorder.none,
+                              // contentPadding: EdgeInsets.only(
+                              //     left: 8)
+                            ),
+                          ),
+                        ),
+                      ),
+
                       Align(
                         alignment: Alignment.center,
                         child: InkWell(
                           onTap: () {
-                            jsonData.add({
-                              "date": DateFormat('yyyy-MM-dd')
-                                  .format(selectedDates!)
-                                  .toString(),
-                              "from_time": selectedTime!.format(context),
-                              "to_time": selectedTime2!.format(context),
-                              "amount": amountt.text.toString()
+                            setState((){
+                              // descriptionController  = TextEditingController(
+                              //     text: widget.allJobs?.jsonData?[index].description
+                              // );
+                              data.amount = amountController.text.toString();
+                              data.description = descriptionController.text.toString();
                             });
-                            setState(() {
-                              totalAmount +=
-                                  double.parse(amountt.text.toString());
-                            });
-                            print("this is my new json data $jsonData");
                             Navigator.pop(context);
-                            // addFreelancer();
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
                           },
                           child: Container(
                               height: 40,
+                              width: 100,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
                                   color: AppColors.pdfbtn),
-                              width: MediaQuery.of(context).size.width / 2,
                               child: const Center(
-                                  child: Text("Add",
+                                  child: Text("Edit",
                                       style: TextStyle(
                                           fontSize: 18,
                                           color: AppColors.textclr)))),
                         ),
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Text("Choice Box"),
-                      //     Checkbox(
-                      //         value: isChecked,
-                      //         onChanged: (checked) {
-                      //           setState(() {
-                      //             isChecked = checked;
-                      //           });
-                      //         })
-                      //   ],
-                      // ) ̰ e
+
                     ],
                   )),
-              // title: Text(''),
-              // actions: <Widget>[
-              //   InkWell(
-              //     child: Text('ADD'),
-              //     onTap: () {
-              //       if (_formKey.currentState!.validate()) {
-              //         // Do something like updating SharedPreferences or User Settings etc.
-              //         Navigator.of(context).pop();
-              //       }
-              //     },
-              //   ),
-              // ],
             );
           });
         });
@@ -462,10 +375,10 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
           leading: const BackButton(
             color: Color(0xff1E90FF), // <-- SEE HERE
           ),
-          actions: [
-            Center(
+          actions: const [
+             Center(
               child: Padding(
-                padding: const EdgeInsets.only(right: 14),
+                padding:  EdgeInsets.only(right: 14),
                 child: Text("Edit Freelancing Job",
                     style: TextStyle(
                         fontSize: 14,
@@ -1046,12 +959,12 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                             var data = widget.allJobs!.jsonData![index];
                             return InkWell(
                               onTap: () async{
-                                //  setState(() {
-                                //    selectedDates = DateTime.parse(jsData[index]['date']);
-                                //    descriptionController.text = jsData[index]['description'];
-                                //    amountController.text = jsData[index]['amount'];
-                                //  });
-                                // await editUpdateInformationDialog(context);
+                                 setState(() {
+                                   selectedDates = DateFormat('dd-MM-yyyy').parse(data.date.toString());
+                                   descriptionController.text = data.description.toString();
+                                   amountController.text = data.amount.toString();
+                                 });
+                                await editUpdateInformationDialog(context, index, data);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 5.0, bottom: 5),
@@ -1120,10 +1033,17 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                         // }, icon: const
                                         InkWell(
                                             onTap: (){
-                                              widget.allJobs!.jsonData!.removeAt(index);
-                                               // data.removeAt(index);
-                                              setState(() {
-                                              });
+                                              if(widget.type == true) {
+                                                widget.allJobs!.jsonData!
+                                                    .removeAt(index);
+                                                // data.removeAt(index);
+                                                setState(() {});
+                                              }else{
+                                                widget.upcomingJobs!.jsonData!
+                                                    .removeAt(index);
+                                                // data.removeAt(index);
+                                                setState(() {});
+                                              }
                                             },
                                             child: Icon(Icons.delete_forever, color: Colors.red,))
                                         // )

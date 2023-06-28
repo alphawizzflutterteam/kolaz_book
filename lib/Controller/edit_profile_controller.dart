@@ -431,10 +431,6 @@ class EditProfileController extends AppBaseController {
 
   }
 
-
-
-
-
   Future getImage(ImgSource source, BuildContext context, int i) async {
 
 

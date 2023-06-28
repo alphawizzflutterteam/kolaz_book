@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/resister_user_response.dart';
@@ -44,6 +45,7 @@ class SignupController extends AppBaseController{
 
            registerData = res.data;
             Otp = registerData?.otp.toString();
+            Fluttertoast.showToast(msg: res.message.toString());
            String? mobile = registerData?.mobile;
            SharedPreferences prefs = await SharedPreferences.getInstance();
            prefs.setString('otp',Otp ?? '');
@@ -53,7 +55,6 @@ class SignupController extends AppBaseController{
            ShowMessage.showSnackBar('Server Res', res.message ?? '');
            setBusy(false);
            Get.toNamed(otpScreen);
-
 
            update();
            //UserData? userData = UserData();

@@ -416,13 +416,13 @@ class _TeamScreenState extends State<TeamScreen> {
                                                   height: 40,
                                                   width: 170,
                                                   child: TextFormField(
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: AppColors.field,
                                                         fontSize:
                                                             12), // controller: nameController,
                                                     keyboardType:
                                                         TextInputType.name,
-                                                    decoration: InputDecoration(
+                                                    decoration: const InputDecoration(
                                                         hintStyle: TextStyle(
                                                             fontSize: 12),
                                                         hintText:
@@ -449,9 +449,9 @@ class _TeamScreenState extends State<TeamScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             color: AppColors.pdfbtn),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text(
-                                            "PDF",
+                                            "Copy & Share",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 18,

@@ -124,7 +124,7 @@ class _HomepageState extends State<Homepage> {
                     borderRadius: BorderRadius.circular(40)),
                 child:   ClipRRect(
                     borderRadius: BorderRadius.circular(40),
-                    child: controller.profilePic == null || controller.profilePic == '' ?
+                    child: controller.profilePic == null || controller.profilePic == '' || controller.profilePic == 'https://developmentalphawizz.com/kolaz_book/uploads/profile_pics/user_image.png' ?
                     ClipRRect(
                         borderRadius: BorderRadius.circular(40),
                         child: controller.imageFile != null
