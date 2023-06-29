@@ -216,7 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             controller.profiledata!.isPlanActive! == true?
                             Text(
                               controller.profiledata != null ?
-                              "${controller.profiledata!.remainingDays} Trial "
+                              "${controller.profiledata!.remainingDays}"
                                   : "15 Days Free Trial ",style: const TextStyle(fontSize: 12),)
                                 : Padding(
                               padding: const EdgeInsets.only(top: 5.0),
@@ -1019,8 +1019,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       child: TextFormField(
                                         controller: controller.termsconditionControlletr,
                                         keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
-                                            hintText: 'Paste here from Notepad/ Text File',hintStyle: TextStyle(color: AppColors.whit),
+                                        decoration: const InputDecoration(
+                                            hintText: 'Paste here from Notepad/Text File',hintStyle: TextStyle(color: AppColors.whit),
                                             border: InputBorder.none,
                                             contentPadding: EdgeInsets.only(left: 10)
                                         ),

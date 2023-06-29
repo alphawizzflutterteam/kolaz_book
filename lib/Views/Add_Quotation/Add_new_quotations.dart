@@ -1585,6 +1585,10 @@ class _AddQuotationState extends State<AddQuotation> {
                           if(eventController != null) {
                             addQuotation();
                           }
+                          else {
+                            Fluttertoast.showToast(
+                                msg: "Please select city or event!");
+                          }
                         } else {
                           Fluttertoast.showToast(
                               msg: "Please select city or event!");

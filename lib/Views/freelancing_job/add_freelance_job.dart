@@ -1516,7 +1516,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
         });
   }
 
-  Future<void> editUpdateInformationDialog(BuildContext context, int index) async {
+   editUpdateInformationDialog(BuildContext context, int index) async {
     return await showDialog(
         context: context,
         builder: (context) {
@@ -1616,31 +1616,54 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         ),
                       ),
 
-                      Align(
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: () {
-                             jsData[index]['date'] = DateFormat('dd-MM-yyyy').format(selectedDates!).toString();
-                             jsData[index]['description'] = descriptionController.text.toString();
-                             jsData[index]['amount'] = amountController.text.toString();
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                               jsData[index]['date'] = DateFormat('dd-MM-yyyy').format(selectedDates!).toString();
+                               jsData[index]['description'] = descriptionController.text.toString();
+                               jsData[index]['amount'] = amountController.text.toString();
 
-                            print("this is my new json data $jsonData");
-                            Navigator.pop(context);
-                            // addFreelancer();
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: AppColors.pdfbtn),
-                              child: const Center(
-                                  child: Text("Edit",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: AppColors.textclr)))),
-                        ),
+                              print("this is my new json data $jsonData");
+                              Navigator.pop(context);
+                              // addFreelancer();
+                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
+                            },
+                            child: Container(
+                                height: 40,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: AppColors.pdfbtn),
+                                child: const Center(
+                                    child: Text(
+                                        "Edit",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: AppColors.textclr)))),
+                          ),
+                          InkWell(
+                            onTap: () async{
+                              // setState(() {
+                              // });
+                              // await jsData.removeAt(index);
+                              Navigator.pop(context,true);
+                              setState((){});
+                            },
+                            child: Container(
+                                height: 40,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: AppColors.contaccontainerred),
+                                child: const Center(
+                                    child: Text("Delete",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: AppColors.textclr)))),
+                          ),
+                        ],
                       ),
                     ],
                   )),
@@ -2126,7 +2149,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(right: 30.0),
+                                padding: const EdgeInsets.only(right: 0.0),
                                 child: Text(
                                   "Amount",
                                   style: TextStyle(
@@ -2138,108 +2161,111 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 200,
-                        child: ListView.builder(
-                          // physics: const NeverScrollableScrollPhysics(),
-                          itemCount: jsData.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () async{
-                                print("this is my date $selectedDates");
-                                setState(() {
-                                   selectedDates = DateFormat('dd-MM-yyyy').parse(jsData[index]['date']);
-                                  descriptionController.text = jsData[index]['description'];
-                                  amountController.text = jsData[index]['amount'];
-                                });
-                                print("this is my date ${selectedDates}");
+                      ListView.builder(
+                        shrinkWrap: true,
+                         physics: const NeverScrollableScrollPhysics(),
+                        itemCount: jsData.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () async{
+                              print("this is my date $selectedDates");
+                              setState(() {
+                                 selectedDates = DateFormat('dd-MM-yyyy').parse(jsData[index]['date']);
+                                descriptionController.text = jsData[index]['description'];
+                                amountController.text = jsData[index]['amount'];
+                              });
+                              print("this is my date ${selectedDates}");
 
-                               await editUpdateInformationDialog(context, index);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Container(
-                                   height: 50,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: const Color(0xff8B8B8B),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                               vertical: 5),
-                                          decoration: const BoxDecoration(
-                                            // color:AppColors.datecontainer,
-                                          ),
-                                          child: Text(
-                                            // jsonData[index]['date'] != null
-                                            //     ?
-                                            ' ${jsData[index]['date']}',
-                                            // : 'Select Date ',
-                                            style: const TextStyle(
-                                                color: AppColors.textclr,
-                                                fontSize: 14),
-                                          ),
+                            var result  = await editUpdateInformationDialog(context, index);
+                            if(result != null){
+                              jsData.removeAt(index);
+                              setState(() {
+                              });
+                            }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Container(
+                                 height: 50,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: const Color(0xff8B8B8B),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                             vertical: 5),
+                                        decoration: const BoxDecoration(
+                                          // color:AppColors.datecontainer,
                                         ),
-                                        Container(
-                                          width: MediaQuery.of(context).size.width/2 - 10,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 5),
-                                          decoration: const BoxDecoration(
-                                            // color:AppColors.datecontainer,
-                                          ),
-                                          child: Text(
-                                            jsData[index]['description'] != null
-                                                ? ' ${
-                                                jsData[index]['description']}'
-                                                : 'Description',
-                                            style: const TextStyle(
-                                                color: AppColors.textclr,
-                                                fontSize: 12),
-                                          ),
-                                        ),
-                                        Text(
-                                          jsData[index]['amount'] != null
-                                              ? '₹ ${jsData[index]['amount']}'
-                                              : 'Amount',
+                                        child: Text(
+                                          // jsonData[index]['date'] != null
+                                          //     ?
+                                          ' ${jsData[index]['date']}',
+                                          // : 'Select Date ',
                                           style: const TextStyle(
                                               color: AppColors.textclr,
-                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width/2 - 10,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 5),
+                                        decoration: const BoxDecoration(
+                                          // color:AppColors.datecontainer,
+                                        ),
+                                        child: Text(
+                                          jsData[index]['description'] != null
+                                              ? ' ${
+                                              jsData[index]['description']}'
+                                              : 'Description',
+                                          style: const TextStyle(
+                                              color: AppColors.textclr,
                                               fontSize: 12),
                                         ),
-                                        // IconButton(onPressed: (){
-                                        //   jsData.removeAt(index);
-                                        //   setState(() {
-                                        //
-                                        //   });
-                                        // }, icon: const
-                                        InkWell(
-                                          onTap: (){
-                                            jsData.removeAt(index);
-                                            setState(() {
-                                            });
-                                          },
-                                            child: Icon(Icons.delete_forever, color: Colors.red,))
-                                        // )
+                                      ),
+                                      Text(
+                                        jsData[index]['amount'] != null
+                                            ? '₹ ${jsData[index]['amount']}'
+                                            : 'Amount',
+                                        style: const TextStyle(
+                                            color: AppColors.textclr,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12),
+                                      ),
+                                      // IconButton(onPressed: (){
+                                      //   jsData.removeAt(index);
+                                      //   setState(() {
+                                      //
+                                      //   });
+                                      // }, icon: const
+                                      // InkWell(
+                                      //   onTap: (){
+                                      //     jsData.removeAt(index);
+                                      //     setState(() {
+                                      //     });
+                                      //   },
+                                      //     child: Icon(Icons.delete_forever, color: Colors.red,))
+                                      // )
 
-                                        // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                        // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
-                                      ],
-                                    ),
+                                      // Text("Enter Time Optional",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                      // Text("Enter Amount",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: AppColors.whit,fontStyle: FontStyle.italic),),
+                                    ],
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
                       InkWell(
                         onTap: () {
@@ -2260,8 +2286,6 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                             child: InkWell(
                               onTap: () async {
                                 selectedDates = null;
-                                selectedTime = null ;
-                                selectedTime2 = null;
                                 amountController.clear();
                                 descriptionController.clear();
 
@@ -2362,7 +2386,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
                           },
                           child: Container(
-                              height: 55,
+                              height: 40,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
                                   color: AppColors.pdfbtn),
@@ -2375,7 +2399,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 40,
                       ),
                     ],
                   ),

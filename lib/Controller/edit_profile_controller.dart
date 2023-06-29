@@ -170,10 +170,11 @@ class EditProfileController extends AppBaseController {
          // stateController = profiledata?.sta
          // companyStateController.text = profiledata?.country ?? '';
 
-        companyEmailController.text= profiledata?.companyLink??'';
-        facebookController.text= profiledata?.facebook??'';
-        instagramController.text= profiledata?.instagram??'';
-        youtubeController.text= profiledata?.youtube??'';
+        companyEmailController.text = profiledata?.companyLink??'';
+        facebookController.text = profiledata?.facebook??'';
+        instagramController.text = profiledata?.instagram??'';
+        youtubeController.text = profiledata?.youtube??'';
+        termsconditionControlletr.text = profiledata?.note??'';
         print("this is my profile image $profilePic");
         // ShowMessage.showSnackBar('Server Res', res.message ?? '');
         setBusy(false);

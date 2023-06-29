@@ -124,13 +124,21 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
     var image = await ImagePickerGC.pickImage(
       context: context,
       source: source,
+      imageQuality: 1,
+      maxHeight: 400,
+      maxWidth: 2400,
       cameraIcon: const Icon(
         Icons.add,
         color: Colors.red,
       ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
     );
-    getCropImage(context, i, image);
-    // back();
+    if (i == 1) {
+      setState(() {
+        coverImage = File(image.path);
+      });
+      Navigator.pop(context);
+    }
+
   }
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
@@ -159,12 +167,17 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
         color: Colors.red,
       ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
     );
-    getCropImage(context, i, image);
-    // back();
+    if (i == 1) {
+      setState(() {
+        coverImage = File(image.path);
+      });
+      Navigator.pop(context);
+    }
+
   }
 
 
-  updatePortfolioData() async {
+  updatePortfolioData(String isFreelancer) async {
     print("working here!!");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     userId = preferences.getString('id');
@@ -178,7 +191,7 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
     body['country_visited'] = countryController.text.trim();
     body['equipments'] = equipmentController.text.trim();
     body['category_id'] = photoGrapherType.toString();
-    body['is_freelancer'] = '1';
+    body['is_freelancer'] = isFreelancer;
 
     var request = http.MultipartRequest(
         'POST', Uri.parse(addPortfolioApi.toString()));
@@ -222,19 +235,20 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
   }
 
   getUserData(){
-    if(widget.data != null){
+    if(widget.data != null) {
       setState(() {
         aboutController.text = widget.data!.about.toString();
         equipmentController.text = widget.data!.equipments.toString();
         countryController.text = widget.data!.countryVisited.toString();
         coverPhoto = widget.data!.coverImage.toString();
+        _isChecked = true;
       });
+      if (widget.data!.categoryId != null || widget.data!.categoryId != '') {
+        setState(() {
+          photoGrapherType = widget.data!.categoryId.toString();
+        });
+      }
     }
-    // if(widget.data!.categoryId != null || widget.data!.categoryId != ''){
-    //   setState(() {
-    //     photoGrapherType = widget.data!.categoryId.toString();
-    //   });
-    // }
   }
 
   @override
@@ -628,7 +642,17 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
               Center(
                 child: InkWell(
                   onTap: () {
-                    updatePortfolioData ();
+                   if(_isChecked){
+                     if(aboutController.text.isEmpty || equipmentController.text.isEmpty || countryController.text.isEmpty ||  photoGrapherType == null
+                     ) {
+                       Fluttertoast.showToast(msg: "Please select all required field!");
+                     }else{
+                       updatePortfolioData('1');
+                     }
+                   }else{
+                     updatePortfolioData('0');
+                   }
+
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(

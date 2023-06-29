@@ -1,9 +1,7 @@
 
 import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:kolazz_book/Views/home_screen/New_home1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Route_managements/routes.dart';
@@ -23,7 +21,8 @@ class SplashController extends AppBaseController {
         if(id == null || id == ''){
           Get.offNamed(loginScreen);
         }else{
-          Get.offNamed(dashbord);
+          Get.offNamed(introScreen);
+         // Get.offNamed(dashbord);
         }
       });
       super.onInit();

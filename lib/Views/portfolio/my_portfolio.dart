@@ -207,7 +207,7 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 50, left: 25,  bottom: 10),
+                        padding: const EdgeInsets.only(top: 50, left: 15,  bottom: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -242,14 +242,35 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                               ],
                             ),
                             Padding(
-                              padding:
-                              const EdgeInsets.only(right: 40),
-                              child: Text(
-                                widget.data.type.toString(),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14),
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    widget.data.categoryId.toString(),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  InkWell(
+                                    onTap : (){
+
+                                    },
+                                    child: Container(
+                                      height: 30,
+                                      width: 30 ,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.AppbtnColor
+                                      ),
+                                      child: Icon(Icons.call, color: AppColors.whit,),
+                                    ),
+                                  ),
+
+                                ],
                               ),
                             ),
                           ],

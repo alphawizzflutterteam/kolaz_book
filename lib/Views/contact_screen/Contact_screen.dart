@@ -1874,7 +1874,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                 .size
                                                                 .width /
                                                             1.5,
-                                                        child: Center(
+                                                        child: const Center(
                                                             child: Text("Add",
                                                                 style: TextStyle(
                                                                     fontSize:
@@ -1937,7 +1937,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                           .size
                                                           .width /
                                                       2.5,
-                                                  child: Center(
+                                                  child: const Center(
                                                       child: Text("Client",
                                                           style: TextStyle(
                                                               fontSize: 18,
@@ -1963,7 +1963,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                               2.2,
                                                       // height: 34,
                                                       padding:
-                                                          EdgeInsets.symmetric(
+                                                         const  EdgeInsets.symmetric(
                                                               vertical: 0),
                                                       decoration: BoxDecoration(
                                                           borderRadius:
@@ -1972,7 +1972,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                           color: AppColors
                                                               .cardclr),
                                                       child: TextFormField(
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color: AppColors
                                                                 .textclr),
                                                         controller: controller

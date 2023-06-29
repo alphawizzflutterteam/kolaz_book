@@ -6,16 +6,10 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:kolazz_book/Controller/addQuatation_controller.dart';
-import 'package:kolazz_book/Controller/jobs_controller.dart';
 import 'package:kolazz_book/Models/get_client_jobs_model.dart';
 import 'package:kolazz_book/Models/get_freelancer_jobs_model.dart';
-import 'package:kolazz_book/Models/get_quotation_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
-import 'package:kolazz_book/Views/Add_Quotation/editequotation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -508,11 +502,17 @@ class _JobsScreenState extends State<JobsScreen> {
             itemBuilder: (BuildContext context, int index) {
               var data = freelancerJobs[0].allJobs![index];
               return InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFreelanceJob(
+              onTap: () async {
+                var result  = await Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFreelanceJob(
                     type: true,
                     allJobs: freelancerJobs[0].allJobs![index]
                 )));
+                if(result != null){
+                  await getClientJobs();
+                  setState(() {
+
+                  });
+                }
               },
               child: Padding(
                 padding: EdgeInsets.all(5),
@@ -582,11 +582,17 @@ class _JobsScreenState extends State<JobsScreen> {
             itemBuilder: (BuildContext context, int index) {
               var data = freelancerJobs[0].upcomingJobs![index];
               return InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFreelanceJob(
+                onTap: () async{
+                 var result = await  Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFreelanceJob(
                       type: true,
                       allJobs: freelancerJobs[0].allJobs![index]
                   )));
+                  if(result != null){
+                    await getClientJobs();
+                    setState(() {
+
+                    });
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.all(5),

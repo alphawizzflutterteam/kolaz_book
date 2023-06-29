@@ -5,6 +5,7 @@ import 'package:kolazz_book/Views/Subscription/Subscription_screen.dart';
 import 'package:kolazz_book/Views/authView/forgot_password/forgot_password_view.dart';
 import 'package:kolazz_book/Views/authView/otp/otp_view.dart';
 import 'package:kolazz_book/Views/dashboard/Dashboard.dart';
+import 'package:kolazz_book/Views/intro_sliders.dart';
 import 'package:kolazz_book/Views/tnc&privacy/faq_screen.dart';
 import 'package:kolazz_book/Views/tnc&privacy/tnc.dart';
 
@@ -44,6 +45,11 @@ class AllPages {
           name:dashbord,
           page: ()=>DashBoard(),
           binding: ScreenBindings()),
+      GetPage(
+          name:introScreen,
+          page: ()=>IntroSlider(),
+          binding: ScreenBindings()),
+
       GetPage(
           name:privacypolicyScreen,
           page: ()=>PrivacyPolicy()),
