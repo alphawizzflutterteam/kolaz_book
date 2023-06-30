@@ -29,6 +29,7 @@ class RequestKeys {
   static String country = 'country';
   static String perdaycharge = 'per_day_charges';
   static String type = 'type';
+  static String filter = 'filter';
   static String userType = 'user_type';
   static String searchText = 'search_text';
   static String companyImage = 'company_image';

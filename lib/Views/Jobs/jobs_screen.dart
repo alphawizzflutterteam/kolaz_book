@@ -6,10 +6,13 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kolazz_book/Models/get_client_jobs_model.dart';
 import 'package:kolazz_book/Models/get_freelancer_jobs_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +23,7 @@ import '../freelancing_job/add_freelance_job.dart';
 import '../freelancing_job/edit_freelance_job.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 
 class JobsScreen extends StatefulWidget {
   const JobsScreen({Key? key}) : super(key: key);
@@ -98,6 +102,7 @@ class _JobsScreenState extends State<JobsScreen> {
 
   List<FreelancerJobs> freelancerJobs = [];
   List<JobData> getJobs = [];
+  String htmlContent = '';
 
   getClientJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -121,6 +126,92 @@ class _JobsScreenState extends State<JobsScreen> {
     setState(() {
       getJobs = GetClientJobsModel.fromJson(userData).data!;
     });
+  }
+
+  downloadPdf() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri =
+    Uri.parse(downloadPdfApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+     request.fields[RequestKeys.type] = 'jobs';
+    request.fields[RequestKeys.filter] = currentindex == 0 ? 'all' : 'upcomings';
+    var response = await request.send();
+    print("this is pdf download requests ${request.fields}");
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      htmlContent = userData['data'];
+    });
+    print("this is our html content $htmlContent");
+    downloadPdfs();
+  }
+
+  downloadPdfs() async {
+    print("creating pdf");
+    final status = await Permission.storage.request();
+
+    if (status == PermissionStatus.granted) {
+      if (mounted) {
+        // setState(() {
+        //   _isProgress = true;
+        // });
+      }
+      var targetPath;
+
+      if (Platform.isIOS) {
+        var target = await getApplicationDocumentsDirectory();
+        targetPath = target.path.toString();
+      } else {
+        var downloadsDirectory =
+        await DownloadsPathProvider.downloadsDirectory;
+        targetPath = downloadsDirectory!.path.toString();
+      }
+
+      var targetFileName = "Kolazbook Pdf";
+      var generatedPdfFile, filePath;
+      try {
+        generatedPdfFile =
+        await FlutterHtmlToPdf.convertFromHtmlContent(
+            htmlContent, targetPath, targetFileName);
+        filePath = generatedPdfFile.path;
+      } on Exception {
+        //  filePath = targetPath + "/" + targetFileName + ".html";
+        generatedPdfFile =
+        await FlutterHtmlToPdf.convertFromHtmlContent(
+            htmlContent, targetPath, targetFileName);
+        filePath = generatedPdfFile.path;
+      }
+
+      if (mounted) {
+
+      }
+      Fluttertoast.showToast(msg: 'msg');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Invoice Path $targetFileName",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.black),
+        ),
+        action: SnackBarAction(
+            label: "View",
+            textColor: AppColors.backgruond,
+            onPressed: () async {
+              final result = await OpenFilex.open(filePath);
+            }),
+        backgroundColor: AppColors.whit,
+        elevation: 1.0,
+      ));
+    }
   }
 
   getFreelancingJobs() async {
@@ -508,7 +599,7 @@ class _JobsScreenState extends State<JobsScreen> {
                     allJobs: freelancerJobs[0].allJobs![index]
                 )));
                 if(result != null){
-                  await getClientJobs();
+                  await getFreelancingJobs();
                   setState(() {
 
                   });
@@ -588,7 +679,7 @@ class _JobsScreenState extends State<JobsScreen> {
                       allJobs: freelancerJobs[0].allJobs![index]
                   )));
                   if(result != null){
-                    await getClientJobs();
+                    await getFreelancingJobs();
                     setState(() {
 
                     });
@@ -729,8 +820,64 @@ class _JobsScreenState extends State<JobsScreen> {
               ),
             ),
             InkWell(
-              onTap: (){
-                takeScreenShot();
+              onTap: () async{
+                downloadPdf();
+                // final status = await Permission.storage.request();
+                //
+                // if (status == PermissionStatus.granted) {
+                //   if (mounted) {
+                //     // setState(() {
+                //     //   _isProgress = true;
+                //     // });
+                //   }
+                //   var targetPath;
+                //
+                //   if (Platform.isIOS) {
+                //     var target = await getApplicationDocumentsDirectory();
+                //     targetPath = target.path.toString();
+                //   } else {
+                //     var downloadsDirectory =
+                //         await DownloadsPathProvider.downloadsDirectory;
+                //     targetPath = downloadsDirectory!.path.toString();
+                //   }
+                //
+                //   var targetFileName = "Invoice_${widget.model!.id}";
+                //   var generatedPdfFile, filePath;
+                //   try {
+                //     generatedPdfFile =
+                //         await FlutterHtmlToPdf.convertFromHtmlContent(
+                //         widget.model!.invoice!, targetPath, targetFileName);
+                //     filePath = generatedPdfFile.path;
+                //   } on Exception {
+                //     //  filePath = targetPath + "/" + targetFileName + ".html";
+                //     generatedPdfFile =
+                //         await FlutterHtmlToPdf.convertFromHtmlContent(
+                //         widget.model!.invoice!, targetPath, targetFileName);
+                //     filePath = generatedPdfFile.path;
+                //   }
+                //
+                //   if (mounted) {
+                //     // setState(() {
+                //     //   _isProgress = false;
+                //     // });
+                //   }
+                //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //     content: Text(
+                //       "${getTranslated(context, 'INVOICE_PATH')} $targetFileName",
+                //       textAlign: TextAlign.center,
+                //       style: TextStyle(color: Theme.of(context).colorScheme.black),
+                //     ),
+                //     action: SnackBarAction(
+                //         label: getTranslated(context, 'VIEW')!,
+                //         textColor: Theme.of(context).colorScheme.fontColor,
+                //         onPressed: () async {
+                //           final result = await OpenFilex.open(filePath);
+                //         }),
+                //     backgroundColor: Theme.of(context).colorScheme.white,
+                //     elevation: 1.0,
+                //   ));
+                // }
+                // takeScreenShot();
               },
                 child: Image.asset("assets/images/pdf.png", scale: 1.6,)),
           ],
@@ -761,7 +908,8 @@ class _JobsScreenState extends State<JobsScreen> {
             ),
             InkWell(
               onTap: (){
-                takeScreenShot();
+                downloadPdf();
+                // takeScreenShot();
               },
                 child: Image.asset("assets/images/pdf.png", scale: 1.6,)),
           ],

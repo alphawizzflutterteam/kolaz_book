@@ -1481,18 +1481,25 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         alignment: Alignment.center,
                         child: InkWell(
                           onTap: () {
+                            if(selectedDates != null) {
+                              jsData.add({
+                                "date": DateFormat('dd-MM-yyyy').format(
+                                    selectedDates!).toString(),
+                                "description": descriptionController.text
+                                    .toString(),
+                                "amount": amountController.text.toString()
+                              });
+                              setState(() {
+                                totalAmount += double.parse(
+                                    amountController.text.toString());
+                              });
+                              print("this is my new json data $jsonData");
+                              Navigator.pop(context);
+                            }else{
+                              Fluttertoast.showToast(msg: "Please select required fields!!");
 
-                            // jsonData.add(jsonEncode({
-                            //   "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
-                            // }));
-                            jsData.add({
-                              "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
-                            });
-                            setState(() {
-                              totalAmount += double.parse(amountController.text.toString());
-                            });
-                            print("this is my new json data $jsonData");
-                            Navigator.pop(context);
+
+                            }
                             // addFreelancer();
                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
                           },
@@ -1723,6 +1730,86 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
       init: AddJobController(),
       builder: (controller) {
         return Scaffold(
+          bottomSheet:  Padding(
+            padding: const EdgeInsets.only(bottom: 35.0),
+            child: Container(
+              height: 100,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Total",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.whit),
+                            )),
+                        Container(
+                          padding: EdgeInsets.only(right: 8),
+                          height: 30,
+                          width: 230,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xffbfbfbf),
+                          ),
+                          child: Align(
+                              alignment: Alignment.centerRight,
+                              child:  Text(
+                                "₹ ${totalAmount.toStringAsFixed(2)}",
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    fontStyle: FontStyle.italic),
+                              )),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12,),
+                  Align(
+                    alignment: Alignment.center,
+                    child: InkWell(
+                      onTap: () {
+                        print("working");
+                        jsonData = jsonEncode(jsData);
+                        print('this is my final json data ==>>>>> ${jsonData}');
+                        // jsData.add(jsonEncode({
+                        //   "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
+                        // }));
+                        if(totalAmount != 0 ) {
+                          if(eventController != null && photographerType != null) {
+                            addFreelancerJob();
+                          }else{
+                            Fluttertoast.showToast(msg: "Please fill all the details first");
+                          }
+                        }else{
+                          Fluttertoast.showToast(msg: "Please fill all the details first");
+                        }
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
+                      },
+                      child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: AppColors.pdfbtn),
+                          width: MediaQuery.of(context).size.width / 1.5,
+                          child: Center(
+                              child: Text("Add",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: AppColors.textclr)))),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
             backgroundColor: AppColors.backgruond,
             appBar: AppBar(
               backgroundColor: Color(0xff303030),
@@ -2328,79 +2415,11 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                       const SizedBox(
                         height: 18,
                       ),
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Total",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.whit),
-                                  )),
-                              Container(
-                                padding: EdgeInsets.only(right: 8),
-                                height: 30,
-                                width: 230,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color(0xffbfbfbf),
-                                ),
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child:  Text(
-                                      "₹ ${totalAmount.toStringAsFixed(2)}",
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                          fontStyle: FontStyle.italic),
-                                    )),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+
                       SizedBox(
                         height: 20,
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: () {
-                            print("working");
-                             jsonData = jsonEncode(jsData);
-                            print('this is my final json data ==>>>>> ${jsonData}');
-                            // jsData.add(jsonEncode({
-                            //   "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
-                            // }));
-                            if(totalAmount != 0 ) {
-                              if(eventController != null && photographerType != null) {
-                                addFreelancerJob();
-                              }else{
-                                Fluttertoast.showToast(msg: "Please fill all the details first");
-                              }
-                            }else{
-                              Fluttertoast.showToast(msg: "Please fill all the details first");
-                            }
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
-                          },
-                          child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: AppColors.pdfbtn),
-                              width: MediaQuery.of(context).size.width / 1.5,
-                              child: Center(
-                                  child: Text("Add",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: AppColors.textclr)))),
-                        ),
-                      ),
+
                       SizedBox(
                         height: 40,
                       ),

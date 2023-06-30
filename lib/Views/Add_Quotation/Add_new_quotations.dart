@@ -469,6 +469,7 @@ class _AddQuotationState extends State<AddQuotation> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 0.0, vertical: 5),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               height: 30,
@@ -515,7 +516,8 @@ class _AddQuotationState extends State<AddQuotation> {
                                 ),
                               ),
                             ),
-                            InkWell(onTap: (){
+                            InkWell(
+                                onTap: (){
                               up.removeAt(index);
                               setState(() {
 

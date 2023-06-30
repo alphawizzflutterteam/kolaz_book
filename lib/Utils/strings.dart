@@ -6,6 +6,8 @@ final Uri getQuotationApi = Uri.parse('${baseUrl}get_quatation');
 final Uri updateClientJobApi = Uri.parse('${baseUrl}update_job');
 
 final Uri getClientJobsApi = Uri.parse('${baseUrl}get_job_list');
+
+final Uri downloadPdfApi = Uri.parse('${baseUrl}download_pdf');
 final Uri getAccountsDataApi = Uri.parse('${baseUrl}accounts');
 final Uri ledgerDataApi = Uri.parse('${baseUrl}ledger_entries');
 final Uri addPayoutApi = Uri.parse('${baseUrl}add_amount');
