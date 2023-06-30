@@ -27,6 +27,8 @@ class EditFreelanceJob extends StatefulWidget {
 }
 
 class _EditFreelanceJobState extends State<EditFreelanceJob> {
+
+  bool isAdded = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -42,6 +44,8 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
         eventController = widget.allJobs!.eventId.toString();
         photographerid = widget.allJobs!.photographerId.toString();
         photographerType = widget.allJobs!.typeOfPhotography;
+         dummyData = widget.allJobs!.jsonData!;
+        // jsData = widget.allJobs!.jsonData!;
         // amountController.text = widget.allJobs!.amount.toString();
         // outputController.text = widget.allJobs!.output.toString();
       });
@@ -51,6 +55,8 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
         eventController = widget.upcomingJobs!.eventId.toString();
         photographerid = widget.upcomingJobs!.photographerId.toString();
         photographerType = widget.upcomingJobs!.typeOfPhotography;
+         dummyData = widget.upcomingJobs!.jsonData!;
+        // jsData = widget.upcomingJobs!.jsonData!;
         // amountController.text = widget.upcomingJobs!.amount.toString();
         // outputController.text = widget.upcomingJobs!.output.toString();
       });
@@ -84,6 +90,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
   TimeOfDay? selectedTime2;
   TextEditingController cityNameController = TextEditingController();
   List jsData = [];
+  List<dynamic> dummyData = [];
   String jsonData = '';
 
   Future<void> selectDate(BuildContext context, setState) async {
@@ -323,15 +330,22 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                           children: [
                             InkWell(
                               onTap: () {
-                                setState(() {
-                                  // descriptionController  = TextEditingController(
-                                  //     text: widget.allJobs?.jsonData?[index].description
-                                  // );
-                                  data.amount = amountController.text.toString();
-                                  data.description =
-                                      descriptionController.text.toString();
+
+                                // setState(() {
+                                //   // widget.allJobs!.jsonData!.se = amountController.text.toString();
+                                //   // descriptionController  = TextEditingController(
+                                //   //     text: widget.allJobs?.jsonData?[index].description
+                                //   // );
+                                //   // data.se= amountController.text.toString();
+                                //   // data.description =
+                                //   //     descriptionController.text.toString();
+                                // });
+
+                                Navigator.pop(context, {
+                                  'date' : selectedDates,
+                                  'amount': amountController.text.toString(),
+                                  'description': descriptionController.text.toString()
                                 });
-                                Navigator.pop(context);
                               },
                               child: Container(
                                   height: 40,
@@ -512,16 +526,35 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                             // jsonData.add(jsonEncode({
                             //   "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
                             // }));
+                            print("new data here now ${selectedDates} and ${descriptionController.text} and ${amountController.text} and ");
                             jsData.add({
                               "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
                             });
+                            // dummyData.add({
+                            //   "date": DateFormat('dd-MM-yyyy').format(selectedDates!).toString(), "description": descriptionController.text.toString(), "amount": amountController.text.toString()
+                            // });
+                             dummyData = jsData.map((e) => (e)).toList();
+                            if(widget.type == true) {
+                             setState((){
+                               dummyData = widget.allJobs!.jsonData!;
+                             });
+                            }else{
+                              for (var i = 0 ; i <widget.upcomingJobs!.jsonData!.length; i ++) {
+                                dummyData.add(widget.upcomingJobs!.jsonData![i]);
+                                dummyData.add(jsData);
+                                // setState(() {
+                                //   dummyData = widget.upcomingJobs!.jsonData!;
+                                // });
+                              }
+
+                            }
                             setState(() {
                               totalAmount += double.parse(amountController.text.toString());
                             });
-                            print("this is my new json data $jsonData");
+                            print("this is my new json data ${jsonData} check here ${jsonEncode(dummyData)}");
                             Navigator.pop(context);
                             // addFreelancer();
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApip()));
                           },
                           child: Container(
                               height: 40,
@@ -561,7 +594,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
       'photographer_id': photographerid.toString(),
       'id': widget.type == true ? '${widget.allJobs?.id.toString()}' : '${widget.upcomingJobs?.id}'
     });
-    print("this is add freelancer job request ${request.fields.toString()} and $addFreelancerJobApi");
+    print("this is update freelancer job request ${request.fields.toString()} and $addFreelancerJobApi");
 
     request.headers.addAll(headers);
 
@@ -642,7 +675,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
     'user_id': userId.toString()
 
     });
-    print("this is delete quotation request ${request.fields.toString()} and $deleteQuotationApi");
+    print("this is delete quotation request ${request.fields.toString()} and $deleteFreelanceJobApi");
 
     request.headers.addAll(headers);
 
@@ -694,7 +727,8 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        jsonData = jsonEncode(jsData);
+                        jsonData = jsonEncode(dummyData);
+                        // dummyData =
                         editFreelancerJob();
                       },
                       style: ElevatedButton.styleFrom(
@@ -1329,6 +1363,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                             itemBuilder: (context, index) {
                               if (widget.type == true) {
                                 var data = widget.allJobs!.jsonData![index];
+                                print("checking data value here now ${data}");
                                 // jsData = widget.allJobs!.jsonData!;
                                 return InkWell(
                                   onTap: () async {
@@ -1340,12 +1375,19 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                       amountController.text =
                                           data.amount.toString();
                                     });
+
                                  var isResult = await editUpdateInformationDialog(
                                         context, index, data);
-                                  if(isResult != null){
+                                    print("this is edit data ${isResult}");
+                                  if(isResult == true){
                                     widget.allJobs?.jsonData?.removeAt(index);
                                     setState(() {
                                     });
+                                  }else{
+                                    setState((){
+                                                                         // widget.allJobs?.jsonData!.setAmount(isResult['amount']) ;
+                                    });
+                                    print("this is edit data ${isResult}");
                                   }
                                   },
                                   child: Padding(
@@ -1465,8 +1507,13 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                     amountController.text =
                                         data.amount.toString();
                                   });
-                                  await editUpdateInformationDialog(
+                                  var isResult = await editUpdateInformationDialog(
                                       context, index, data);
+                                  if(isResult != null){
+                                    widget.upcomingJobs?.jsonData?.removeAt(index);
+                                    setState(() {
+                                    });
+                                  }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -1562,6 +1609,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                 ),
                               );
                             }),
+                        isAdded ?
                         jsData.isNotEmpty ?
                         ListView.builder(
                           shrinkWrap: true,
@@ -1670,6 +1718,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                             );
                           },
                         )
+                        : SizedBox.shrink()
                         : SizedBox.shrink(),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
@@ -1694,7 +1743,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                     selectedDates = null;
                                     amountController.clear();
                                     descriptionController.clear();
-
+                                    isAdded = true;
                                     await showAddInformationDialog(context);
 
                                     // if (controller.formKey.currentState!

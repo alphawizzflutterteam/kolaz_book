@@ -216,7 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             controller.profiledata!.isPlanActive! == true?
                             Text(
                               controller.profiledata != null ?
-                              "${controller.profiledata!.remainingDays}"
+                              "${controller.profiledata!.remainingDays} left"
                                   : "15 Days Free Trial ",style: const TextStyle(fontSize: 12),)
                                 : Padding(
                               padding: const EdgeInsets.only(top: 5.0),

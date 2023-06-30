@@ -260,6 +260,16 @@ JsonData copyWith({  String? date,
   String? get description => _description;
   String? get amount => _amount;
 
+  set setDate(var value) {
+    _date = value;
+  }
+  set setAmount(var value) {
+    _amount = value;
+  }
+  set setDescription(var value) {
+    _description = value;
+  }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['date'] = _date;

@@ -257,7 +257,6 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                                   const SizedBox(height: 5,),
                                   InkWell(
                                     onTap : (){
-
                                     },
                                     child: Container(
                                       height: 30,

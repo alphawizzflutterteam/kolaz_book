@@ -2267,56 +2267,59 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                           );
                         },
                       ),
-                      InkWell(
-                        onTap: () {
-                          if (controller.formKey.currentState!.validate() &&
-                              controller.selectedDates.isNotEmpty) {
-                            controller.increment();
-                          }
-                        },
-                        child: Container(
-                          height: 45,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: const Color(0xff8B8B8B),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () async {
-                                selectedDates = null;
-                                amountController.clear();
-                                descriptionController.clear();
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: InkWell(
+                          onTap: () {
+                            if (controller.formKey.currentState!.validate() &&
+                                controller.selectedDates.isNotEmpty) {
+                              controller.increment();
+                            }
+                          },
+                          child: Container(
+                            height: 45,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: const Color(0xff8B8B8B),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  selectedDates = null;
+                                  amountController.clear();
+                                  descriptionController.clear();
 
-                                await showAddInformationDialog(context);
+                                  await showAddInformationDialog(context);
 
-                                // if (controller.formKey.currentState!
-                                //     .validate()) {
-                                //   controller.increment();
-                                //
-                                //   var a = int.parse(amountt.text);
-                                //   totall = (totall + a);
-                                //
-                                //   //amountt.clear();
-                                //   a = 0;
-                                // }
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.add_circle_outline,
-                                    color: Color(0xff42ACFE),
-                                    size: 30,
-                                  ),
-                                  Text(
-                                    "Add More",
-                                    style: TextStyle(
-                                        color: Color(0xff42ACFE),
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                                  // if (controller.formKey.currentState!
+                                  //     .validate()) {
+                                  //   controller.increment();
+                                  //
+                                  //   var a = int.parse(amountt.text);
+                                  //   totall = (totall + a);
+                                  //
+                                  //   //amountt.clear();
+                                  //   a = 0;
+                                  // }
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.add_circle_outline,
+                                      color: Color(0xff42ACFE),
+                                      size: 30,
+                                    ),
+                                    Text(
+                                      " Add More",
+                                      style: TextStyle(
+                                          color: Color(0xff42ACFE),
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),

@@ -288,6 +288,10 @@ Data copyWith({  String? photographerType,
 );
   String? get photographerType => _photographerType;
 
+  set setPhotographer(var value) {
+    _photographerType = value;
+  }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['photographer_type'] = _photographerType;

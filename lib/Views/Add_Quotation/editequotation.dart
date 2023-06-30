@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:kolazz_book/Models/Type_of_photography_model.dart';
+import 'package:kolazz_book/Models/client_model.dart';
 import 'package:kolazz_book/Models/event_type_model.dart';
 import 'package:kolazz_book/Models/get_cities_model.dart';
 import 'package:kolazz_book/Models/get_quotation_model.dart';
@@ -23,29 +26,57 @@ class EditQuotation extends StatefulWidget {
 }
 
 class _AddQuotationState extends State<EditQuotation> {
+  List<Widget> customWidgets = [];
+  int cardCount = 0;
+  int value1 = 0;
+  List<String> selectedvlaue = [];
 
-  String? _chosenValue;
-  var item = [
-    'Kaushik Prajapati',
-    ' Prajapati',
-    'Kaushik Prajapati',
-  ];
-  String? _cityValue;
-  var item2 = [
-    'Wedding ',
-    ' Party',
-    '  ',
-  ];
-  String? _photography;
-  var item3 = [
-    'Mumbai',
-    ' indore',
-    'delhi ',
-  ];
-  var items = [
-    'Drone',
-    'Candid Photography',
-  ];
+  List<List<String>> stringList = [];
+  List<Categories> typeofPhotographyEvent = [];
+  List<EventType> eventList = [];
+  List<CityList> citiesList = [];
+
+  String photographer = "photographer";
+
+  // Future<TypeofPhotography> getEventstypeApi(Map<String, String> body) async {
+  //   if (await connectivity.checkConnectivity() == ConnectivityResult.wifi ||
+  //       await connectivity.checkConnectivity() == ConnectivityResult.mobile) {
+  //     String res =
+  //     await _apiClient.postMethod(method: _apiMethods.getRventstype, body: body);
+  //     if (res.isNotEmpty) {
+  //       try {
+  //         return typeofPhotographyFromJson(res);
+  //
+  //       } catch (e) {
+  //         if (kDebugMode) {
+  //           print(e);
+  //           print('____fdgfd______${e}___________');
+  //         }
+  //         return TypeofPhotography(status: 1, msg: e.toString());
+  //       }
+  //     } else {
+  //       return TypeofPhotography(status: 0, msg: 'Something went wrong');
+  //     }
+  //   } else {
+  //     return TypeofPhotography(status: 1, msg: 'No Internet');
+  //   }
+  // }
+
+  // Categories? categoryValue;
+
+  List selectedDates = [];
+
+  DateTime? adquatationDate;
+  List showSelectedDate = [];
+  List showPhotographer = [];
+  int currentIndex = 0;
+  List pType = [];
+  List pData = [];
+  List newList = [];
+
+  List<int> up = [0];
+  final formKey = GlobalKey<FormState>();
+
   TextEditingController clientNameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController outputController = TextEditingController();
@@ -53,16 +84,79 @@ class _AddQuotationState extends State<EditQuotation> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController cityNameController = TextEditingController();
 
+  String? selectedEvents;
+  var eventController;
+  var cityController;
+  var clientName;
+  String? userId;
+  List<ClientList> clientList = [];
+  List<Setting> quotationData = [];
 
   String? SelectedGender;
   String? dropdownValue;
   String? qid;
-  List<Setting> quotationData = [];
-  List<EventType> eventList = [];
-  List<CityList> citiesList = [];
-  var eventController;
-  var cityController;
+
   int dateIndex = 0 ;
+  var photographerType;
+
+  void increment(int ind) {
+    if (up[ind] >= 0 && up[ind] < 10) {
+      up[ind]++;
+    }
+    setState(() {});
+  }
+
+  selectValue(Categories newValue, int index) {
+    typeofPhotographyEvent[index].selectedValue = newValue;
+    pType.add({
+      "photographer_type":
+      typeofPhotographyEvent[index].selectedValue!.resName.toString()
+    });
+    print("this is selected json $pType");
+    // if(up[index] >1) {
+    //
+    // }
+    print("____this is new Valueeeeeeeeeeee${newValue.resName}");
+    selectedvlaue
+        .add(typeofPhotographyEvent[index].selectedValue!.resName.toString());
+    selectedEvents = selectedvlaue.join(',');
+
+    print("__________________${selectedvlaue}");
+
+    print('________this____is__________stringlist${selectedEvents}');
+  }
+
+  String? selectedDate;
+
+  Future<void> selectDate(BuildContext context, int index) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != adquatationDate) {
+      setState(() {
+        adquatationDate = picked;
+        String date = DateFormat('dd-MM-yyyy').format(picked);
+        print("this is selected date $date");
+        showSelectedDate.add(date);
+        selectedDate = showSelectedDate.join(',');
+        // showPhotographer.add(adquatationDate);
+        selectedDates.add(date);
+        stringList.add(selectedvlaue);
+      });
+      print(
+          "this is selected date data $adquatationDate fggd ${showSelectedDate.length} and $selectedDate and $selectedDates");
+      increment(index);
+      // update();
+      // selectedValue.add(categoryValue!);
+    }
+    newList.add(
+        jsonEncode({"date": showSelectedDate[currentIndex], "data": pType}));
+    print("this is list data $newList and $pType");
+    pType.clear();
+  }
 
   getEventTypes() async {
     var uri = Uri.parse(getEventsApis.toString());
@@ -83,6 +177,29 @@ class _AddQuotationState extends State<EditQuotation> {
     setState(() {
       eventList = EventTypeModel.fromJson(userData).categories!;
     });
+  }
+
+  getPhotographerType() async {
+    var uri = Uri.parse(getPhotographerApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("GET", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    // request.fields['type_id'] = "1";
+    // request.fields['vendor_id'] = userID;
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    // collectionModal = AllCateModel.fromJson(userData);
+    typeofPhotographyEvent = TypeofPhotography.fromJson(userData).categories!;
+    // print(
+    //     "ooooo ${collectionModal!.status} and ${collectionModal!.categories!.length} and ${userID}");
+    print("this is photographer $typeofPhotographyEvent");
   }
 
   getCitiesList() async {
@@ -167,6 +284,36 @@ class _AddQuotationState extends State<EditQuotation> {
   //   }
 
 
+
+  // Future<void> selectDate(BuildContext context, int index) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime(2100),
+  //   );
+  //   if (picked != null && picked != adquatationDate) {
+  //     setState(() {
+  //       adquatationDate = picked;
+  //       String date = DateFormat('dd-MM-yyyy').format(picked);
+  //       print("this is selected date $date");
+  //       showSelectedDate.add(date);
+  //       selectedDate = showSelectedDate.join(',');
+  //       // showPhotographer.add(adquatationDate);
+  //       selectedDates.add(date);
+  //       stringList.add(selectedvlaue);
+  //     });
+  //     print(
+  //         "this is selected date data $adquatationDate fggd ${showSelectedDate.length} and $selectedDate and $selectedDates");
+  //     increment(index);
+  //     // update();
+  //     // selectedValue.add(categoryValue!);
+  //   }
+  //   newList.add(
+  //       jsonEncode({"date": showSelectedDate[currentIndex], "data": pType}));
+  //   print("this is list data $newList and $pType");
+  //   pType.clear();
+  // }
   deleteConfirmation(BuildContext context) {
     return AlertDialog(
       backgroundColor: AppColors.primary,
@@ -251,6 +398,7 @@ class _AddQuotationState extends State<EditQuotation> {
   void initState() {
     super.initState();
     getQuotationDetails();
+    getPhotographerType();
     getCitiesList();
     getEventTypes();
   }
@@ -736,46 +884,86 @@ class _AddQuotationState extends State<EditQuotation> {
               ),
 
               quotationData.isNotEmpty ?
-              Container(
-                height: 45,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: quotationData[0].photographersDetails!.length,
-                    itemBuilder: (context, j) {
-                      return InkWell(
-                        onTap: (){
-                          dateIndex = j ;
-                          setState(() {
-                          });
-                        },
-                        child: Container(
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(8),
-                                topLeft: Radius.circular(8)),
-                            color: AppColors.teamcard2,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 8),
+              Row(
+                children: [
+                  Container(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width/1.5,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: quotationData[0].photographersDetails!.length,
+                        itemBuilder: (context, j) {
+                          return InkWell(
+                            onTap: (){
+                              dateIndex = j;
+                              setState(() {
+                              });
+                            },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 5),
+                              width: 110,
                               decoration: const BoxDecoration(
-                                color: AppColors.datecontainer,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    topLeft: Radius.circular(8)),
+                                color: AppColors.teamcard2,
                               ),
-                              child: Text(
-                                quotationData[0].photographersDetails![j].date.toString(),
-                                overflow: TextOverflow.fade,
-                                style: const TextStyle(color: AppColors.textclr),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 5),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.datecontainer,
+                                  ),
+                                  child: Text(
+                                    quotationData[0].photographersDetails![j].date.toString(),
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(color: AppColors.textclr),
+                                  ),
+                                ),
                               ),
                             ),
+                          );
+                        }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: InkWell(
+                      onTap: () {
+                        // if(showSelectedDate.isNotEmpty) {
+
+                        // setState(() {
+                        //   customWidgets.add(photographerCard());
+                        // });
+                        // if(cardCount>=0&&cardCount<10) { v
+                        //   cardCount++;
+                        // }
+                         selectDate(context, 1);
+                        // }else{
+                        //   selectDate(context, 1);
+                        // }
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.add_circle_outline,
+                            color: AppColors.temtextclr,
+                            size: 28,
                           ),
-                        ),
-                      );
-                    }),
+                          Text(
+                            "Add Date",
+                            style: TextStyle(
+                                color: AppColors.temtextclr,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               )
               : SizedBox.shrink(),
               // Row(
@@ -849,60 +1037,172 @@ class _AddQuotationState extends State<EditQuotation> {
                           quotationData.isNotEmpty ?
                           ListView.builder(
                               shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               // scrollDirection: Axis.horizontal,
                               itemCount: quotationData[0].photographersDetails![dateIndex].data!.length,
                               itemBuilder: (context, j) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Container(
-                                      height: 30,
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 5),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(0),
-                                          color: AppColors.datecontainer),
-                                      width:
-                                          MediaQuery.of(context).size.width /
-                                              1.0,
-                                      child: Text(quotationData[0].photographersDetails![dateIndex].data![j].photographerType.toString(),
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                            color: AppColors.AppbtnColor,
-                                            fontWeight: FontWeight.w400),)
-                                      // DropdownButtonHideUnderline(
-                                      //   child: DropdownButton<String>(
-                                      //     value: dropdownValue,
-                                      //     hint: Text("Candid Photography",style: TextStyle(color: AppColors.textclr,fontWeight: FontWeight.w400),),
-                                      //     icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                                      //       color: Colors.white,),
-                                      //     elevation: 16,
-                                      //     style:  TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),
-                                      //     underline: Container(
-                                      //       // height: 2,
-                                      //       color: Colors.black54,
-                                      //     ),
-                                      //     onChanged: (String? value) {
-                                      //       // This is called when the user selects an item.
-                                      //       setState(() {
-                                      //         dropdownValue = value!;
-                                      //       });
-                                      //     },
-                                      //     items: items
-                                      //         .map<DropdownMenuItem<String>>((String value) {
-                                      //       return DropdownMenuItem<String>(
-                                      //         value: value,
-                                      //         child: Text(value),
-                                      //       );
-                                      //     }).toList(),
-                                      //   ),
-                                      // ),
+                                photographerType = quotationData[0].photographersDetails![dateIndex].data![j].photographerType;
+                                    return  Padding(
+                                padding: const EdgeInsets.symmetric(
+                                      horizontal: 0.0, vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 0),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(0),
+                                            color: AppColors.datecontainer),
+                                        width: MediaQuery.of(context).size.width / 1.4,
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton(
+                                            dropdownColor: AppColors.cardclr,
+                                            // Initial Value
+                                            value: photographerType,
+                                            // typeofPhotographyEvent[index].selectedValue,
+                                            isExpanded: true,
+                                            hint: const Text(
+                                              "Type Of Photography",
+                                              style: TextStyle(color: AppColors.textclr),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.keyboard_arrow_down,
+                                              color: AppColors.textclr,
+                                            ),
+                                            // Array list of items
+                                            items: typeofPhotographyEvent
+                                                .map(( items) {
+                                              return DropdownMenuItem(
+                                                value: items.resName,
+                                                child: Text(
+                                                  items.resName.toString(),
+                                                  style: const TextStyle(
+                                                      color: AppColors.textclr),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            // After selecting the desired option,it will
+                                            // change button value to selected value
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                quotationData[0].photographersDetails![dateIndex].data![j].setPhotographer = newValue;
+                                              });
+
+                                              // selectValue(newValue ?? Categories(), index);
+
+
+                                            },
+                                          ),
+                                        ),
                                       ),
+                                      InkWell(onTap: (){
+                                        quotationData[0].photographersDetails![dateIndex].data!.removeAt(j);
+                                        // up.removeAt(index);
+                                        setState(() {
+
+                                        });
+                                      }, child: Icon(Icons.delete_forever, color: Colors.red,))
+                                    ],
+                                  ),
                                 );
                               })
                           : const SizedBox.shrink(),
+                          // SizedBox(
+                          //   height: 165,
+                          //   child: ListView.builder(
+                          //     physics: NeverScrollableScrollPhysics(),
+                          //     itemCount: up[dateIndex],
+                          //     itemBuilder: (context, index) {
+                          //       return Padding(
+                          //         padding: const EdgeInsets.symmetric(
+                          //             horizontal: 0.0, vertical: 5),
+                          //         child: Row(
+                          //           children: [
+                          //             Container(
+                          //               height: 30,
+                          //               padding: const EdgeInsets.symmetric(
+                          //                   horizontal: 8, vertical: 0),
+                          //               decoration: BoxDecoration(
+                          //                   borderRadius: BorderRadius.circular(0),
+                          //                   color: AppColors.datecontainer),
+                          //               width: MediaQuery.of(context).size.width / 1.4,
+                          //               child: DropdownButtonHideUnderline(
+                          //                 child: DropdownButton(
+                          //                   dropdownColor: AppColors.cardclr,
+                          //                   // Initial Value
+                          //                   value:
+                          //                   typeofPhotographyEvent[index].selectedValue,
+                          //                   isExpanded: true,
+                          //                   hint: const Text(
+                          //                     "Type Of Photography",
+                          //                     style: TextStyle(color: AppColors.textclr),
+                          //                   ),
+                          //                   icon: const Icon(
+                          //                     Icons.keyboard_arrow_down,
+                          //                     color: AppColors.textclr,
+                          //                   ),
+                          //                   // Array list of items
+                          //                   items: typeofPhotographyEvent
+                          //                       .map((Categories items) {
+                          //                     return DropdownMenuItem<Categories>(
+                          //                       value: items,
+                          //                       child: Text(
+                          //                         items.resName.toString(),
+                          //                         style: const TextStyle(
+                          //                             color: AppColors.textclr),
+                          //                       ),
+                          //                     );
+                          //                   }).toList(),
+                          //                   // After selecting the desired option,it will
+                          //                   // change button value to selected value
+                          //                   onChanged: (newValue) {
+                          //                     selectValue(newValue ?? Categories(), index);
+                          //
+                          //                     setState(() {});
+                          //                   },
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             InkWell(onTap: (){
+                          //               up.removeAt(index);
+                          //               setState(() {
+                          //
+                          //               });
+                          //             }, child: Icon(Icons.delete_forever, color: Colors.red,))
+                          //           ],
+                          //         ),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
                           const SizedBox(
                             height: 10,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              increment(dateIndex);
+                            },
+                            child: Column(
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Icon(
+                                    Icons.add_circle_outline,
+                                    color: AppColors.temtextclr,
+                                    size: 30,
+                                  ),
+                                ),
+                                Text(
+                                  "Add Type Of Photographer",
+                                  style: TextStyle(
+                                      color: AppColors.temtextclr,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

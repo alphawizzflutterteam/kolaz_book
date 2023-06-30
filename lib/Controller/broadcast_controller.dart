@@ -13,7 +13,7 @@ import 'package:kolazz_book/Models/get_cities_model.dart';
 import 'package:kolazz_book/Models/get_country_model.dart';
 import 'package:kolazz_book/Models/get_states_model.dart';
 import 'package:kolazz_book/Utils/strings.dart';
-import 'package:kolazz_book/Views/home_screen/New_home1.dart';
+import 'package:kolazz_book/Views/home_screen/homescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Models/get_profile_model.dart';

@@ -55,6 +55,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     getPhotographerType();
   }
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
   getCitiesList(String stateId) async {
     var uri = Uri.parse(getCitiesApi.toString());
     // '${Apipath.getCitiesUrl}');
@@ -173,9 +175,38 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     print("this is portfolio data ${getPortfolioData.length}");
   }
 
+  Future<Null> _refresh() {
+
+    return callApi();
+  }
+  callApi(){
+    statesList.clear();
+    citiesList.clear();
+    typeofPhotographyEvent.clear();
+
+    setState(() {
+      stateController = null;
+      stateName = null;
+      cityName = null ;
+      cityController = null ;
+      typeController = null;
+      typeName = null;
+    });
+    getPortfolios();
+    getUserPortfolioData();
+    getStateList('');
+    getPhotographerType();
+
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return RefreshIndicator(
+        color: AppColors.AppbtnColor,
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child:
+      Scaffold(
       backgroundColor: AppColors.backgruond,
       // appBar: AppBar(
       //   // automaticallyImplyLeading: false,
@@ -526,6 +557,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8),
                       child: CustomSearchableDropDown(
+
                         dropdownHintText: "Type of Photography",
                         suffixIcon: const Icon(
                           Icons.keyboard_arrow_down_sharp,
@@ -569,16 +601,20 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   ),
                  ElevatedButton(
                      onPressed: (){
+
                        setState(() {
-                         stateController = null;
-                         stateName = null;
-                         cityController = null;
-                         cityName = null;
-                         typeController = null ;
-                         typeName = null;
+                         // stateName = null;
+                         // stateController = null;
+                         _refresh();
+                         // stateController = null;
+                         // stateName = null;
+                         // cityController = null;
+                         // cityName = null;
+                         // typeController = null ;
+                         // typeName = null;
                        });
-                       setState(() {
-                       });
+                       // setState(() {
+                       // });
                      },
                      child: Text('Clear', style: TextStyle(color: AppColors.whit),),
                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.contaccontainerred),
@@ -809,6 +845,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           ],
         ),
       ),
+    )
     );
   }
 }

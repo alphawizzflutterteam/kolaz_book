@@ -16,18 +16,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Controller/addQuatation_controller.dart';
 import '../../Controller/contact_screen_controller.dart';
 import '../../Models/Type_of_photography_model.dart';
+import '../../Models/get_quotation_model.dart';
 import '../../Utils/colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-class AddQuotation extends StatefulWidget {
-  const AddQuotation({Key? key}) : super(key: key);
+class EditQuotationTest extends StatefulWidget {
+  final String? qid, id;
+  const EditQuotationTest({Key? key, this.qid, this.id}) : super(key: key);
 
   @override
-  State<AddQuotation> createState() => _AddQuotationState();
+  State<EditQuotationTest> createState() => _EditQuotationTestState();
 }
 
-class _AddQuotationState extends State<AddQuotation> {
+class _EditQuotationTestState extends State<EditQuotationTest> {
   List<Widget> customWidgets = [];
   int cardCount = 0;
   int value1 = 0;
@@ -89,6 +91,7 @@ class _AddQuotationState extends State<AddQuotation> {
   var clientName;
   String? userId;
   List<ClientList> clientList = [];
+  List<Setting> quotationData = [];
 
   getPhotographerType() async {
     var uri = Uri.parse(getPhotographerApi.toString());
@@ -111,6 +114,39 @@ class _AddQuotationState extends State<AddQuotation> {
     // print(
     //     "ooooo ${collectionModal!.status} and ${collectionModal!.categories!.length} and ${userID}");
     print("this is photographer $typeofPhotographyEvent");
+  }
+
+  getQuotationDetails() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userId = preferences.getString('id');
+    var uri = Uri.parse(getQuotationApi.toString());
+
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+    request.fields.addAll({
+      'user_id': userId.toString(),
+      'type': 'client',
+      'id': widget.id.toString(),
+    });
+    request.headers.addAll(headers);
+    // request.fields['user_id'] = userId.toString();
+    // request.fields['type'] = 'photographer';
+    print("this is my quotation Details  ${request.fields.toString()}");
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+    final result = GetQuotationModel.fromJson(userData);
+    quotationData = result.setting!;
+    clientNameController.text = quotationData[0].clientName.toString();
+    cityController = quotationData[0].city.toString();
+    cityNameController.text = quotationData[0].cityName.toString();
+    eventController = quotationData[0].typeEvent.toString();
+    amountController.text = quotationData[0].amount.toString();
+    outputController.text = quotationData[0].output.toString();
+    // clientNameController.text = quotationData![0].clientName.toString();
   }
 
   getEventTypes() async {
@@ -199,7 +235,7 @@ class _AddQuotationState extends State<AddQuotation> {
     typeofPhotographyEvent[index].selectedValue = newValue;
     pType.add({
       "photographer_type":
-          typeofPhotographyEvent[index].selectedValue!.resName.toString()
+      typeofPhotographyEvent[index].selectedValue!.resName.toString()
     });
     print("this is selected json $pType");
     // if(up[index] >1) {
@@ -418,6 +454,7 @@ class _AddQuotationState extends State<AddQuotation> {
     for (ind = 0; ind < showSelectedDate.length; ind++) {
       up.add(ind);
     }
+    // for(var k = 0; k < quotationData[0].photographersDetails![dateIndex].data!.length )
     return Container(
       decoration: const BoxDecoration(
           color: AppColors.teamcard2,
@@ -483,7 +520,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                   dropdownColor: AppColors.cardclr,
                                   // Initial Value
                                   value:
-                                      typeofPhotographyEvent[index].selectedValue,
+                                  typeofPhotographyEvent[index].selectedValue,
                                   isExpanded: true,
                                   hint: const Text(
                                     "Type Of Photography",
@@ -607,7 +644,7 @@ class _AddQuotationState extends State<AddQuotation> {
                       ? ' ${showSelectedDate[index]}'
                       : 'Select Start Date',
                   style:
-                      const TextStyle(color: AppColors.textclr, fontSize: 12),
+                  const TextStyle(color: AppColors.textclr, fontSize: 12),
                 ),
               ),
             ),
@@ -637,6 +674,7 @@ class _AddQuotationState extends State<AddQuotation> {
   void initState() {
     super.initState();
     getPhotographerType();
+    getQuotationDetails();
     getEventTypes();
     getCitiesList();
     getClients();
@@ -654,7 +692,7 @@ class _AddQuotationState extends State<AddQuotation> {
     };
 
     var request =
-        http.MultipartRequest('POST', Uri.parse(addQuotationApi.toString()));
+    http.MultipartRequest('POST', Uri.parse(addQuotationApi.toString()));
 
     request.fields.addAll({
       'client_name': clientName.toString(),
@@ -677,7 +715,7 @@ class _AddQuotationState extends State<AddQuotation> {
 
     if (response.statusCode == 200) {
       String responseData =
-          await response.stream.transform(utf8.decoder).join();
+      await response.stream.transform(utf8.decoder).join();
       var userData = json.decode(responseData);
       Navigator.pop(context, true);
       Fluttertoast.showToast(msg: userData['message']);
@@ -825,7 +863,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         color: AppColors.containerclr2),
                                     // padding: EdgeInsets.symmetric(vertical: 1),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child: CustomSearchableDropDown(
                                       dropdownHintText: "Client Name",
                                       suffixIcon: const Icon(
@@ -834,7 +872,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                       ),
                                       backgroundColor: AppColors.containerclr2,
                                       dropdownBackgroundColor:
-                                          AppColors.containerclr2,
+                                      AppColors.containerclr2,
                                       dropdownItemStyle: const TextStyle(
                                           color: AppColors.whit),
                                       // dropdownHintText: TextStyle(
@@ -843,18 +881,18 @@ class _AddQuotationState extends State<AddQuotation> {
                                       items: clientList,
                                       label: 'Client Name',
                                       labelStyle: const TextStyle(
-                                        color: AppColors.whit
+                                          color: AppColors.whit
                                       ),
                                       multiSelectTag: 'Names',
                                       decoration: BoxDecoration(
-                                        color: AppColors.containerclr2,
+                                          color: AppColors.containerclr2,
                                           borderRadius:
-                                              BorderRadius.circular(15)
-                                          // color: Colors.white
-                                          // border: Border.all(
-                                          //   color: CustomColors.lightgray.withOpacity(0.5),
-                                          // )
-                                          ),
+                                          BorderRadius.circular(15)
+                                        // color: Colors.white
+                                        // border: Border.all(
+                                        //   color: CustomColors.lightgray.withOpacity(0.5),
+                                        // )
+                                      ),
                                       multiSelect: false,
                                       // prefixIcon: Padding(
                                       //   padding: const EdgeInsets.all(2.0),
@@ -866,8 +904,8 @@ class _AddQuotationState extends State<AddQuotation> {
                                       //   ),
                                       // ),
                                       dropDownMenuItems: clientList.map((item) {
-                                            return "${item.firstName} ${item.lastName}";
-                                          }).toList() ??
+                                        return "${item.firstName} ${item.lastName}";
+                                      }).toList() ??
                                           [],
                                       onChanged: (value) {
                                         if (value != null) {
@@ -907,45 +945,45 @@ class _AddQuotationState extends State<AddQuotation> {
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child:
-                                        // DropdownButtonHideUnderline(
-                                        //   child: DropdownButton(
-                                        //     dropdownColor: AppColors.cardclr,
-                                        //     // Initial Value
-                                        //     value: cityController,
-                                        //     isExpanded: true,
-                                        //     hint: const Text(
-                                        //       "City",
-                                        //       style: TextStyle(
-                                        //           color: AppColors.textclr),
-                                        //     ),
-                                        //     icon: const Icon(
-                                        //       Icons.keyboard_arrow_down,
-                                        //       color: AppColors.textclr,
-                                        //     ),
-                                        //     // Array list of items
-                                        //
-                                        //     items: citiesList.map((items) {
-                                        //       return DropdownMenuItem(
-                                        //         value: items.id.toString(),
-                                        //         child: Text(
-                                        //           items.name.toString(),
-                                        //           style: const TextStyle(
-                                        //               color: AppColors.textclr),
-                                        //         ),
-                                        //       );
-                                        //     }).toList(),
-                                        //     // After selecting the desired option,it will
-                                        //     // change button value to selected value
-                                        //     onChanged: (newValue) {
-                                        //       setState(() {
-                                        //         cityController = newValue;
-                                        //       });
-                                        //     },
-                                        //   ),
-                                        // ),
-                                        TextFormField(
+                                    // DropdownButtonHideUnderline(
+                                    //   child: DropdownButton(
+                                    //     dropdownColor: AppColors.cardclr,
+                                    //     // Initial Value
+                                    //     value: cityController,
+                                    //     isExpanded: true,
+                                    //     hint: const Text(
+                                    //       "City",
+                                    //       style: TextStyle(
+                                    //           color: AppColors.textclr),
+                                    //     ),
+                                    //     icon: const Icon(
+                                    //       Icons.keyboard_arrow_down,
+                                    //       color: AppColors.textclr,
+                                    //     ),
+                                    //     // Array list of items
+                                    //
+                                    //     items: citiesList.map((items) {
+                                    //       return DropdownMenuItem(
+                                    //         value: items.id.toString(),
+                                    //         child: Text(
+                                    //           items.name.toString(),
+                                    //           style: const TextStyle(
+                                    //               color: AppColors.textclr),
+                                    //         ),
+                                    //       );
+                                    //     }).toList(),
+                                    //     // After selecting the desired option,it will
+                                    //     // change button value to selected value
+                                    //     onChanged: (newValue) {
+                                    //       setState(() {
+                                    //         cityController = newValue;
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // ),
+                                    TextFormField(
                                       style: const TextStyle(
                                           color: AppColors.textclr),
                                       controller: cityNameController,
@@ -982,7 +1020,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton(
                                         dropdownColor: AppColors.cardclr,
@@ -1055,7 +1093,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child: TextFormField(
                                       style: const TextStyle(
                                           color: AppColors.textclr),
@@ -1086,6 +1124,282 @@ class _AddQuotationState extends State<AddQuotation> {
                     const SizedBox(
                       height: 20,
                     ),
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   child: SingleChildScrollView(
+                    //       scrollDirection: Axis.horizontal,
+                    //       child: Row(
+                    //         children: [
+                    //           InkWell(
+                    //             onTap: (){
+                    //               if(controller.adquatationDate == null ){
+                    //                 controller.selectDate(context);
+                    //
+                    //               }
+                    //             },
+                    //             child: Container(
+                    //               width: MediaQuery.of(context).size.width * 2/3,
+                    //          child:  controller.adquatationDate != null
+                    //                 ? Wrap(
+                    //                     runAlignment: WrapAlignment.end,
+                    //                     children: controller.selectedDates
+                    //                         .map(
+                    //                           (e) => Container(
+                    //                             // width: 100,
+                    //                             decoration: const BoxDecoration(
+                    //                               borderRadius: BorderRadius.only(
+                    //                                   topRight:
+                    //                                       Radius.circular(8),
+                    //                                   topLeft:
+                    //                                       Radius.circular(8)),
+                    //                               color: AppColors.teamcard2,
+                    //                             ),
+                    //                             child: Padding(
+                    //                               padding:
+                    //                                   const EdgeInsets.symmetric(
+                    //                                       horizontal: 8.0,
+                    //                                       vertical: 8),
+                    //                               child: Container(
+                    //                                 padding: const EdgeInsets.symmetric(
+                    //                                     horizontal: 8,
+                    //                                     vertical: 5),
+                    //                                 decoration:
+                    //                                     const BoxDecoration(
+                    //                                   color:
+                    //                                       AppColors.datecontainer,
+                    //                                 ),
+                    //                                 child: Text(
+                    //                                   controller.adquatationDate !=
+                    //                                           null
+                    //                                       ? ' ${DateFormat('yyyy-MM-dd').format(controller.adquatationDate!)}'
+                    //                                       : 'Select Start Date',
+                    //                                   style: const TextStyle(
+                    //                                       color:
+                    //                                           AppColors.textclr,
+                    //                                       fontSize: 12),
+                    //                                 ),
+                    //                               ),
+                    //                             ),
+                    //                           ),
+                    //                         )
+                    //                         .toList(),
+                    //                   )
+                    //                 : Container(
+                    //                     decoration: const BoxDecoration(
+                    //                       borderRadius: BorderRadius.only(
+                    //                           topRight: Radius.circular(8),
+                    //                           topLeft: Radius.circular(8)),
+                    //                       color: AppColors.teamcard2,
+                    //                     ),
+                    //                     child: Padding(
+                    //                       padding: const EdgeInsets.symmetric(
+                    //                           horizontal: 8.0, vertical: 8),
+                    //                       child: Container(
+                    //                         padding: const EdgeInsets.symmetric(
+                    //                             horizontal: 8, vertical: 5),
+                    //                         decoration: const BoxDecoration(
+                    //                           color: AppColors.datecontainer,
+                    //                         ),
+                    //                         child: Text(
+                    //                           controller.adquatationDate != null
+                    //                               ? ' ${DateFormat('yyyy-MM-dd').format(controller.adquatationDate!)}'
+                    //                               : 'Select Date For Bookings',
+                    //                           style: const TextStyle(
+                    //                               color: AppColors.textclr,
+                    //                               fontSize: 12),
+                    //                         ),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //             ),
+                    //           ),
+                    //           Padding(
+                    //             padding: const EdgeInsets.all(5.0),
+                    //             child: InkWell(
+                    //               onTap: () {
+                    //
+                    //                 setState(() {
+                    //                   customWidgets.add(photographerCard());
+                    //                 });
+                    //                 // if(cardCount>=0&&cardCount<10) { v
+                    //                 //   cardCount++;
+                    //                 // }
+                    //                    controller.selectDate(context);
+                    //               },
+                    //               child: Row(
+                    //                 children: const [
+                    //                   Icon(
+                    //                     Icons.add_circle_outline,
+                    //                     color: AppColors.temtextclr,
+                    //                     size: 28,
+                    //                   ),
+                    //                   Text(
+                    //                     "Add Date",
+                    //                     style: TextStyle(
+                    //                         color: AppColors.temtextclr,
+                    //                         fontSize: 13,
+                    //                         fontWeight: FontWeight.bold),
+                    //                   )
+                    //                 ],
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       )),
+                    // ),
+                    // Container(
+                    //   decoration: const BoxDecoration(
+                    //       color: AppColors.teamcard2,
+                    //       borderRadius: BorderRadius.only(
+                    //           topRight: Radius.circular(10),
+                    //           bottomRight: Radius.circular(10),
+                    //           bottomLeft: Radius.circular(10))),
+                    //   child: Column(
+                    //     children: [
+                    //       const Align(
+                    //         alignment: Alignment.topRight,
+                    //         child: Text(
+                    //           "(For Developer User Can Hold/Or To Delete This Row)",
+                    //           style: TextStyle(
+                    //               fontStyle: FontStyle.italic,
+                    //               color: AppColors.textclr,
+                    //               fontSize: 12),
+                    //         ),
+                    //       ),
+                    //      const  SizedBox(
+                    //         height: 10,
+                    //       ),
+                    //       Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             horizontal: 8.0, vertical: 5),
+                    //         child: Column(
+                    //           children: [
+                    //             const Padding(
+                    //               padding: EdgeInsets.only(bottom: 8.0),
+                    //               child: Align(
+                    //                 alignment: Alignment.topLeft,
+                    //                 child: Text(
+                    //                   "Type Of Photographer",
+                    //                   style: TextStyle(
+                    //                       fontWeight: FontWeight.w500,
+                    //                       color: AppColors.textclr,
+                    //                       fontSize: 18),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             SizedBox(
+                    //               height: 165,
+                    //               child: ListView.builder(
+                    //                 itemCount: controller.up,
+                    //                 itemBuilder: (context, index) {
+                    //                   return Padding(
+                    //                     padding: const EdgeInsets.symmetric(
+                    //                         horizontal: 0.0, vertical: 5),
+                    //                     child: Container(
+                    //                       height: 30,
+                    //                       padding: const EdgeInsets.symmetric(
+                    //                           horizontal: 8, vertical: 0),
+                    //                       decoration: BoxDecoration(
+                    //                           borderRadius:
+                    //                               BorderRadius.circular(0),
+                    //                           color: AppColors.datecontainer),
+                    //                       width: MediaQuery.of(context)
+                    //                               .size
+                    //                               .width /
+                    //                           1.0,
+                    //                       child: DropdownButtonHideUnderline(
+                    //                         child: DropdownButton(
+                    //                           dropdownColor: AppColors.cardclr,
+                    //                           // Initial Value
+                    //                           value: controller
+                    //                               .typeofPhotographyEvent[index]
+                    //                               .selectedValue,
+                    //                           isExpanded: true,
+                    //                           hint: const Text(
+                    //                             "Type Of Photography",
+                    //                             style: TextStyle(
+                    //                                 color: AppColors.textclr),
+                    //                           ),
+                    //                           icon: const Icon(
+                    //                             Icons.keyboard_arrow_down,
+                    //                             color: AppColors.textclr,
+                    //                           ),
+                    //                           // Array list of items
+                    //                           items: controller
+                    //                               .typeofPhotographyEvent
+                    //                               .map((Categories items) {
+                    //                             return DropdownMenuItem<
+                    //                                 Categories>(
+                    //                               value: items,
+                    //                               child: Text(
+                    //                                 items.resName.toString(),
+                    //                                 style: const TextStyle(
+                    //                                     color:
+                    //                                         AppColors.textclr),
+                    //                               ),
+                    //                             );
+                    //                           }).toList(),
+                    //                           // After selecting the desired option,it will
+                    //                           // change button value to selected value
+                    //                           onChanged: (newValue) {
+                    //                             controller.selectValue(
+                    //                                 newValue ?? Categories(),
+                    //                                 index);
+                    //                             controller.update();
+                    //                           },
+                    //                         ),
+                    //                       ),
+                    //                     ),
+                    //                   );
+                    //                 },
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const Align(
+                    //         alignment: Alignment.center,
+                    //         child: Text(
+                    //           "(For Developer User Can Hold/Or To Delete This Row)",
+                    //           style: TextStyle(
+                    //               fontStyle: FontStyle.italic,
+                    //               color: AppColors.textclr,
+                    //               fontSize: 13),
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         height: 10,
+                    //       ),
+                    //       InkWell(
+                    //         onTap: () {
+                    //           controller.increment();
+                    //         },
+                    //         child: Column(
+                    //           children: const [
+                    //             Padding(
+                    //               padding: EdgeInsets.all(5.0),
+                    //               child: Icon(
+                    //                 Icons.add_circle_outline,
+                    //                 color: AppColors.temtextclr,
+                    //                 size: 30,
+                    //               ),
+                    //             ),
+                    //             Text(
+                    //               "Add Type Of Photographer",
+                    //               style: TextStyle(
+                    //                   color: AppColors.temtextclr,
+                    //                   fontSize: 16,
+                    //                   fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       SizedBox(
+                    //         height: 20,
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -1096,50 +1410,50 @@ class _AddQuotationState extends State<AddQuotation> {
                               : MediaQuery.of(context).size.width - 125,
                           child: showSelectedDate.isEmpty
                               ? InkWell(
-                                  onTap: () {
-                                    // if(currentIndex == index){
-                                    //   setState(() {
-                                    //     show = true;
-                                    //   });
-                                    // }
-                                  },
-                                  child: Container(
-                                    width: 125,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(8),
-                                          topLeft: Radius.circular(8)),
-                                      color: AppColors.teamcard2,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 8),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 5),
-                                        decoration: const BoxDecoration(
-                                          color: AppColors.datecontainer,
-                                        ),
-                                        child: const Text(
-                                          // showSelectedDate[index] != null
-                                          //     ? ' ${DateFormat('yyyy-MM-dd').format(showSelectedDate[index])}'
-                                          'Select Start Date',
-                                          style: TextStyle(
-                                              color: AppColors.textclr,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                    ),
+                            onTap: () {
+                              // if(currentIndex == index){
+                              //   setState(() {
+                              //     show = true;
+                              //   });
+                              // }
+                            },
+                            child: Container(
+                              width: 125,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    topLeft: Radius.circular(8)),
+                                color: AppColors.teamcard2,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 5),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.datecontainer,
                                   ),
-                                )
+                                  child: const Text(
+                                    // showSelectedDate[index] != null
+                                    //     ? ' ${DateFormat('yyyy-MM-dd').format(showSelectedDate[index])}'
+                                    'Select Start Date',
+                                    style: TextStyle(
+                                        color: AppColors.textclr,
+                                        fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                               : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: showSelectedDate.length,
-                                  itemBuilder: (context, index) {
-                                    currentIndex = index;
-                                    return dateCard(index);
-                                  }),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: showSelectedDate.length,
+                              itemBuilder: (context, index) {
+                                currentIndex = index;
+                                return dateCard(index);
+                              }),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -1243,7 +1557,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         color: AppColors.textclr, fontSize: 14),
                                     border: InputBorder.none,
                                     contentPadding:
-                                        EdgeInsets.only(left: 10, bottom: 10)),
+                                    EdgeInsets.only(left: 10, bottom: 10)),
                               ),
                             ),
                           )
@@ -1289,7 +1603,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                       color: AppColors.textclr, fontSize: 14),
                                   border: InputBorder.none,
                                   contentPadding:
-                                      EdgeInsets.only(left: 10, bottom: 10)),
+                                  EdgeInsets.only(left: 10, bottom: 10)),
                             ),
                           )
                         ],
