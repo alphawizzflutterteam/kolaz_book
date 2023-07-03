@@ -22,10 +22,10 @@ class EditQuotation extends StatefulWidget {
   const EditQuotation({Key? key, this.qid, this.id}) : super(key: key);
 
   @override
-  State<EditQuotation> createState() => _AddQuotationState();
+  State<EditQuotation> createState() => _EditQuotationState();
 }
 
-class _AddQuotationState extends State<EditQuotation> {
+class _EditQuotationState extends State<EditQuotation> {
   List<Widget> customWidgets = [];
   int cardCount = 0;
   int value1 = 0;
@@ -397,58 +397,58 @@ class _AddQuotationState extends State<EditQuotation> {
     }
   }
 
-  Widget dateCard(int index) {
-    return InkWell(
-      onTap: () {
-        if (currentIndex == index) {
-        }
-      },
-      child: Stack(
-        children: [
-          Container(
-            // width: 100,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(8), topLeft: Radius.circular(8)),
-              color: AppColors.teamcard2,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                decoration: const BoxDecoration(
-                  color: AppColors.datecontainer,
-                ),
-                child: Text(
-                  showSelectedDate[index] != null
-                      ? ' ${showSelectedDate[index]}'
-                      : 'Select Start Date',
-                  style:
-                  const TextStyle(color: AppColors.textclr, fontSize: 12),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-              right: -12,
-              top: -17,
-              child: IconButton(
-                  onPressed: () {
-                    setState(() {
-
-                    });
-                    showSelectedDate.removeAt(index);
-                    // removeDate(index);
-                  },
-                  icon: const Icon(
-                    Icons.remove_circle_outline,
-                    size: 18,
-                    color: AppColors.temtextclr,
-                  )))
-        ],
-      ),
-    );
-  }
+  // Widget dateCard(int index) {
+  //   return InkWell(
+  //     onTap: () {
+  //       if (currentIndex == index) {
+  //       }
+  //     },
+  //     child: Stack(
+  //       children: [
+  //         Container(
+  //           // width: 100,
+  //           decoration: const BoxDecoration(
+  //             borderRadius: BorderRadius.only(
+  //                 topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+  //             color: AppColors.teamcard2,
+  //           ),
+  //           child: Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+  //             child: Container(
+  //               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+  //               decoration: const BoxDecoration(
+  //                 color: AppColors.datecontainer,
+  //               ),
+  //               child: Text(
+  //                 showSelectedDate[index] != null
+  //                     ? ' ${showSelectedDate[index]}'
+  //                     : 'Select Start Date',
+  //                 style:
+  //                 const TextStyle(color: AppColors.textclr, fontSize: 12),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //         Positioned(
+  //             right: -12,
+  //             top: -17,
+  //             child: IconButton(
+  //                 onPressed: () {
+  //                   setState(() {
+  //
+  //                   });
+  //                   showSelectedDate.removeAt(index);
+  //                   // removeDate(index);
+  //                 },
+  //                 icon: const Icon(
+  //                   Icons.remove_circle_outline,
+  //                   size: 18,
+  //                   color: AppColors.temtextclr,
+  //                 )))
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   void initState() {
@@ -489,8 +489,6 @@ class _AddQuotationState extends State<EditQuotation> {
     eventController = quotationData[0].typeEvent.toString();
     amountController.text = quotationData[0].amount.toString();
     outputController.text = quotationData[0].output.toString();
-
-
     // clientNameController.text = quotationData![0].clientName.toString();
   }
 
@@ -544,7 +542,7 @@ class _AddQuotationState extends State<EditQuotation> {
   //   });
   // }
 
-  editQuotation() async {
+  updateQuotation() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('id');
     var headers = {
@@ -1051,7 +1049,8 @@ class _AddQuotationState extends State<EditQuotation> {
                                                     setState(() {
 
                                                     });
-                                                    showSelectedDate.removeAt(j);
+                                                    quotationData[0]
+                                                        .photographersDetails!.removeAt(j);
                                                     // removeDate(index);
                                                   },
                                                   icon: const Icon(
@@ -1194,7 +1193,6 @@ class _AddQuotationState extends State<EditQuotation> {
                                             .data!
                                             .length,
                                         itemBuilder: (context, j) {
-
                                           photographerType = quotationData[0]
                                               .photographersDetails![dateIndex]
                                               .data![j]
@@ -1286,7 +1284,7 @@ class _AddQuotationState extends State<EditQuotation> {
                                                       // up.removeAt(index);
                                                       setState(() {});
                                                     },
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.delete_forever,
                                                       color: Colors.red,
                                                     ))
@@ -1295,80 +1293,79 @@ class _AddQuotationState extends State<EditQuotation> {
                                           );
                                         })
                                     : const SizedBox.shrink(),
-                                SizedBox(
-                                  height: 165,
-                                  child: ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: up[0],
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 0.0, vertical: 5),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              height: 30,
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8, vertical: 0),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(0),
-                                                  color: AppColors.datecontainer),
-                                              width: MediaQuery.of(context).size.width / 1.4,
-                                              child: DropdownButtonHideUnderline(
-                                                child: DropdownButton(
-                                                  dropdownColor: AppColors.cardclr,
-                                                  // Initial Value
-                                                  value:
-                                                  typeofPhotographyEvent[index].selectedValue,
-                                                  isExpanded: true,
-                                                  hint: const Text(
-                                                    "Type Of Photography",
-                                                    style: TextStyle(color: AppColors.textclr),
-                                                  ),
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_down,
-                                                    color: AppColors.textclr,
-                                                  ),
-                                                  // Array list of items
-                                                  items: typeofPhotographyEvent
-                                                      .map((Categories items) {
-                                                    return DropdownMenuItem<Categories>(
-                                                      value: items,
-                                                      child: Text(
-                                                        items.resName.toString(),
-                                                        style: const TextStyle(
-                                                            color: AppColors.textclr),
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                                  // After selecting the desired option,it will
-                                                  // change button value to selected value
-                                                  onChanged: (newValue) {
-                                                    selectValue(newValue ?? Categories(), index);
-
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            InkWell(onTap: (){
-                                              up.removeAt(index);
-                                              setState(() {
-
-                                              });
-                                            }, child: Icon(Icons.delete_forever, color: Colors.red,))
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                // SizedBox(
+                                //   height: 165,
+                                //   child: ListView.builder(
+                                //     physics: NeverScrollableScrollPhysics(),
+                                //     itemCount: up[dateIndex],
+                                //     itemBuilder: (context, index) {
+                                //       return Padding(
+                                //         padding: const EdgeInsets.symmetric(
+                                //             horizontal: 0.0, vertical: 5),
+                                //         child: Row(
+                                //           children: [
+                                //             Container(
+                                //               height: 30,
+                                //               padding: const EdgeInsets.symmetric(
+                                //                   horizontal: 8, vertical: 0),
+                                //               decoration: BoxDecoration(
+                                //                   borderRadius: BorderRadius.circular(0),
+                                //                   color: AppColors.datecontainer),
+                                //               width: MediaQuery.of(context).size.width / 1.4,
+                                //               child: DropdownButtonHideUnderline(
+                                //                 child: DropdownButton(
+                                //                   dropdownColor: AppColors.cardclr,
+                                //                   // Initial Value
+                                //                   value: photographerType,
+                                //                   isExpanded: true,
+                                //                   hint: const Text(
+                                //                     "Type Of Photography",
+                                //                     style: TextStyle(color: AppColors.textclr),
+                                //                   ),
+                                //                   icon: const Icon(
+                                //                     Icons.keyboard_arrow_down,
+                                //                     color: AppColors.textclr,
+                                //                   ),
+                                //                   // Array list of items
+                                //                   items: typeofPhotographyEvent
+                                //                       .map((Categories items) {
+                                //                     return DropdownMenuItem<Categories>(
+                                //                       value: items,
+                                //                       child: Text(
+                                //                         items.resName.toString(),
+                                //                         style: const TextStyle(
+                                //                             color: AppColors.textclr),
+                                //                       ),
+                                //                     );
+                                //                   }).toList(),
+                                //                   // After selecting the desired option,it will
+                                //                   // change button value to selected value
+                                //                   onChanged: (newValue) {
+                                //                     // selectValue(newValue ?? Categories(), index);
+                                //
+                                //                     setState(() {});
+                                //                   },
+                                //                 ),
+                                //               ),
+                                //             ),
+                                //             InkWell(onTap: (){
+                                //               up.removeAt(index);
+                                //               setState(() {
+                                //
+                                //               });
+                                //             }, child: Icon(Icons.delete_forever, color: Colors.red,))
+                                //           ],
+                                //         ),
+                                //       );
+                                //     },
+                                //   ),
+                                // ),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    increment(dateIndex);
+                                    increment(currentIndex);
                                   },
                                   child: Column(
                                     children: const [
@@ -1533,11 +1530,12 @@ class _AddQuotationState extends State<EditQuotation> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return deleteConfirmation(context);
-                                });
+                            updateQuotation();
+                            // await showDialog(
+                            //     context: context,
+                            //     builder: (context) {
+                            //       return deleteConfirmation(context);
+                            //     });
                           },
                           child: Container(
                             height: 35,

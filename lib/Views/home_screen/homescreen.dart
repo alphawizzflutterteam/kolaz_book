@@ -57,7 +57,6 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-
   List<JobData> getJobs = [];
 
   getClientJobs() async {

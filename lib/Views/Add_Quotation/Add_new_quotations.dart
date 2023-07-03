@@ -518,10 +518,10 @@ class _AddQuotationState extends State<AddQuotation> {
                             ),
                             InkWell(
                                 onTap: (){
-                                  up.removeAt(index);
                                   setState(() {
-
+                                    up.removeAt(index);
                                   });
+
                                 }, child: Icon(Icons.delete_forever, color: Colors.red,))
                           ],
                         ),
