@@ -269,80 +269,87 @@ class _TeamScreenState extends State<TeamScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.7,
-                                              padding: EdgeInsets.all(3.0),
-                                              child: const Text(
-                                                "Photographer Name  ",
-                                                style: TextStyle(
-                                                    color: AppColors.whit,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14),
-                                              ),
-                                            ),
-                                            Container(
+                                        Container(
+                                          // width:
+                                          // MediaQuery.of(context).size.width /
+                                          //     2,
+                                          height: 100,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width /
-                                                    2.9,
-                                                child: ListView.builder(
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount: result
-                                                        .photographers!.length,
-                                                    itemBuilder: (context, j) {
-                                                      if (result.photographers![0]
-                                                              .name
-                                                              .toString() !=
-                                                          "") {
-                                                        return Padding(
-                                                          padding:
-                                                              EdgeInsets.all(3.0),
-                                                          child: Text(
-                                                            result
-                                                                .photographers![j]
+                                                    2.7,
+                                                padding: EdgeInsets.all(3.0),
+                                                child: const Text(
+                                                  "Photographer Name  ",
+                                                  style: TextStyle(
+                                                      color: AppColors.whit,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                              Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.9,
+                                                  child: ListView.builder(
+                                                      physics:
+                                                          NeverScrollableScrollPhysics(),
+                                                      shrinkWrap: true,
+                                                      itemCount: result
+                                                          .photographers!.length,
+                                                      itemBuilder: (context, j) {
+                                                        if (result.photographers![j]
                                                                 .name
-                                                                .toString(),
-                                                            style: const TextStyle(
+                                                                .toString() !=
+                                                            "") {
+                                                          return Padding(
+                                                            padding:
+                                                                EdgeInsets.all(3.0),
+                                                            child: Text(
+                                                              result
+                                                                  .photographers![j]
+                                                                  .name
+                                                                  .toString(),
+                                                              style: const TextStyle(
+                                                                  color: AppColors
+                                                                      .teamcard2,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          );
+                                                        }
+                                                        return const Padding(
+                                                          padding:  EdgeInsets.only(left: 5.0),
+                                                          child:  Text(
+                                                            "Not Allotted yet!",
+                                                            style:  TextStyle(
                                                                 color: AppColors
                                                                     .teamcard2,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                                FontWeight
+                                                                    .bold),
                                                           ),
                                                         );
-                                                      }
-                                                      return const Padding(
-                                                        padding:  EdgeInsets.only(left: 5.0, top: 5),
-                                                        child:  Text(
-                                                          "Not Allotted yet!",
-                                                          style:  TextStyle(
-                                                              color: AppColors
-                                                                  .teamcard2,
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold),
-                                                        ),
-                                                      );
-                                                    })),
-                                          ],
+                                                      })),
+                                            ],
+                                          ),
                                         ),
                                         Container(
                                           width:
                                               MediaQuery.of(context).size.width /
                                                   2,
+                                          height: 100,
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,

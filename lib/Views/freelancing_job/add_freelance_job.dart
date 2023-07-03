@@ -1431,6 +1431,12 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                             validator: (value) => value!.isEmpty
                                 ? 'Amount cannot be blank'
                                 : null,
+                            // onChanged: (String? value){
+                            //   setState((){
+                            //     totalAmount += double.parse(
+                            //         value.toString());
+                            //   });
+                            // },
                             decoration: const InputDecoration(
                               // contentPadding: EdgeInsets.only(bottom: 5),
                               hintText: 'Enter Amount',
@@ -1631,6 +1637,11 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                jsData[index]['date'] = DateFormat('dd-MM-yyyy').format(selectedDates!).toString();
                                jsData[index]['description'] = descriptionController.text.toString();
                                jsData[index]['amount'] = amountController.text.toString();
+
+                               setState((){
+                                 totalAmount += double.parse(
+                                     jsData[index]['amount'].toString());
+                               });
 
                               print("this is my new json data $jsonData");
                               Navigator.pop(context);

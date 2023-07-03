@@ -100,29 +100,31 @@ class _DashBoardState extends State<DashBoard>
   @override
   Widget build(BuildContext context) {
     if (_connectivityResult == ConnectivityResult.none) {
-      return Scaffold(
-          backgroundColor: AppColors.secondary,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Center(
-                child: Text("NO INTERNET!", style: TextStyle(
-                    color: AppColors.AppbtnColor,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600
-                ),),
-              ),
-              Center(
-                child: Text("Internet connection required!"
-                  , style: TextStyle(
+      return SafeArea(
+        child: Scaffold(
+            backgroundColor: AppColors.secondary,
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Center(
+                  child: Text("NO INTERNET!", style: TextStyle(
                       color: AppColors.AppbtnColor,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600
                   ),),
-              )
-            ],
-          )
+                ),
+                Center(
+                  child: Text("Internet connection required!"
+                    , style: TextStyle(
+                        color: AppColors.AppbtnColor,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500
+                    ),),
+                )
+              ],
+            )
+        ),
       );
     } else {
       return

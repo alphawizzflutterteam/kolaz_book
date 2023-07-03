@@ -13,9 +13,9 @@ import 'package:http/http.dart' as http;
 import '../../Utils/colors.dart';
 
 class AccountDetailsScreen extends StatefulWidget {
-  final String? photographerName, pid, type;
+  final String? photographerName, pid, type, totalOutstanding;
 
-  const AccountDetailsScreen({Key? key, this.photographerName, this.pid, this.type}) : super(key: key);
+  const AccountDetailsScreen({Key? key, this.photographerName, this.pid, this.type, this.totalOutstanding}) : super(key: key);
 
   @override
   State<AccountDetailsScreen> createState() => _AccountDetailsScreenState();
@@ -26,6 +26,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
   bool isClickable = true;
   bool isSelected = true;
   List<LedgerData> ledgerData = [];
+  String? totalOutstanding;
   TextEditingController amountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -94,7 +95,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
 
         InkWell(
           onTap: (){
-              addAmount('debit');
+              addAmount('credit');
 
           },
           child: Container(
@@ -287,7 +288,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
     };
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
-    request.fields[RequestKeys.userType] = isSelected ? 'client' : 'photographer';
+    request.fields[RequestKeys.userType] =  widget.type == 'client'  ? 'client' : 'photographer';
     request.fields[RequestKeys.photographerId] = widget.pid.toString();
 
     print("this is ledger request ${request.fields.toString()} and $ledgerDataApi");
@@ -298,6 +299,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
 
     setState(() {
       ledgerData = LedgerEntriesModel.fromJson(userData).data!;
+      totalOutstanding = LedgerEntriesModel.fromJson(userData).totalOutstanding!;
     });
     print("this is =====>>>>> ${ledgerData.length}");
   }
@@ -314,7 +316,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
     };
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
-    request.fields[RequestKeys.userType] = isSelected ? 'client' : 'photographer';
+    request.fields[RequestKeys.userType] = widget.type == 'client' ? 'client' : 'photographer';
     request.fields['amount'] = amountController.text.toString();
     request.fields['description'] = descriptionController.text.toString();
     request.fields['transaction_type'] = transactionType.toString();
@@ -324,10 +326,10 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
 
     print("this is add ledger request ${request.fields.toString()} and $addPayoutApi");
     var response = await request.send();
-    print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
-    Navigator.pop(context);
+    getAccountsData();
+     Navigator.pop(context);
     Fluttertoast.showToast(msg: "${userData['message']}");
   }
 
@@ -343,160 +345,186 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Padding(
-        padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              onTap: (){
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return StatefulBuilder(
-                      builder: (BuildContext context,
-                          Function(Function()) setState) {
-                        return Container(
-                          child: SingleChildScrollView(
-                            child: Column(
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 60),
+        child: Container(
+          height: 100,
+          child: Column(
+            children: [
+              Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width/1.1,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.lightwhite),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Total Outstanding Amount", style: TextStyle(color: AppColors.textclr),),
 
-                              children: [
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: AppColors.containerclr,
-                                          borderRadius: BorderRadius.circular(10)),
+                      Text(totalOutstanding!= null ||  totalOutstanding != '' ?
+                      '₹ $totalOutstanding' : '₹ 0', style: TextStyle(color: AppColors.textclr)),
 
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                isSelected = true;
-                                              });
-                                            },
-                                            child: Container(
-                                                height: 50,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 14, left: 10, right: 10),
-                                                  child: Text(
-                                                    'Payment Received',
-                                                    style: TextStyle(
-                                                      color: isSelected
-                                                          ? Color(0xffffffff)
-                                                          : Colors.white,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: isSelected
-                                                      ? AppColors.greenbtn
-                                                      : AppColors.containerclr,
-                                                  // border: Border.all(color: AppColors.AppbtnColor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                )),
-                                          ),
-                                          widget.type == 'client' ?
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                // Navigator.of(context).push(MaterialPageRoute(
-                                                //   builder: (context) => NextPage(),
-                                                // ));
-                                                isSelected = false;
-                                              });
-                                            },
-                                            child: Container(
-                                                height: 50,
-                                                width: 130,
-                                                child: Center(
-                                                  child: Text(
-                                                    'Add Extra Charges',
-                                                    style: TextStyle(
-                                                      color: isSelected
-                                                          ? AppColors.whit
-                                                          : Colors.white,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                    color: isSelected
-                                                        ? AppColors.containerclr
-                                                        : AppColors.AppbtnColor,
-                                                    borderRadius: BorderRadius.circular(10))),
-                                          )
-                                          : InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                // Navigator.of(context).push(MaterialPageRoute(
-                                                //   builder: (context) => NextPage(),
-                                                // ));
-                                                isSelected = false;
-                                              });
-                                            },
-                                            child: Container(
-                                                height: 50,
-                                                width: 130,
-                                                child: Center(
-                                                  child: Text(
-                                                    'Payout',
-                                                    style: TextStyle(
-                                                      color: isSelected
-                                                          ? AppColors.whit
-                                                          : Colors.white,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                    color: isSelected
-                                                        ? AppColors.containerclr
-                                                        : AppColors.contaccontainerred,
-                                                    borderRadius: BorderRadius.circular(10))),
-                                          ),
-                                        ],
-                                      ),)
-
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                widget.type == 'client' ?
-                                isSelected ? _paymentReceived() :
-                                extraCharge()
-                                : isSelected ? _paymentReceived() :
-                                _payout(),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => AddAmountScreen()));
-              },
-              child: Container(
-                height: 40,
-                width: 160,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color:AppColors.pdfbtn
-                ),
-                child: Center(
-                  child: Text("Add Amount",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.whit)),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Image.asset("assets/images/pdf.png", scale: 2.1,),
-          ],
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder: (BuildContext context,
+                                Function(Function()) setState) {
+                              return Container(
+                                child: SingleChildScrollView(
+                                  child: Column(
+
+                                    children: [
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                color: AppColors.containerclr,
+                                                borderRadius: BorderRadius.circular(10)),
+
+                                            child: Row(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      isSelected = true;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                      height: 50,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(
+                                                            top: 14, left: 10, right: 10),
+                                                        child: Text(
+                                                          'Payment Received',
+                                                          style: TextStyle(
+                                                            color: isSelected
+                                                                ? Color(0xffffffff)
+                                                                : Colors.white,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: isSelected
+                                                            ? AppColors.greenbtn
+                                                            : AppColors.containerclr,
+                                                        // border: Border.all(color: AppColors.AppbtnColor),
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      )),
+                                                ),
+                                                widget.type == 'client' ?
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      // Navigator.of(context).push(MaterialPageRoute(
+                                                      //   builder: (context) => NextPage(),
+                                                      // ));
+                                                      isSelected = false;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                      height: 50,
+                                                      width: 130,
+                                                      child: Center(
+                                                        child: Text(
+                                                          'Add Extra Charges',
+                                                          style: TextStyle(
+                                                            color: isSelected
+                                                                ? AppColors.whit
+                                                                : Colors.white,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                          color: isSelected
+                                                              ? AppColors.containerclr
+                                                              : AppColors.AppbtnColor,
+                                                          borderRadius: BorderRadius.circular(10))),
+                                                )
+                                                : InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      // Navigator.of(context).push(MaterialPageRoute(
+                                                      //   builder: (context) => NextPage(),
+                                                      // ));
+                                                      isSelected = false;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                      height: 50,
+                                                      width: 130,
+                                                      child: Center(
+                                                        child: Text(
+                                                          'Payout',
+                                                          style: TextStyle(
+                                                            color: isSelected
+                                                                ? AppColors.whit
+                                                                : Colors.white,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                          color: isSelected
+                                                              ? AppColors.containerclr
+                                                              : AppColors.contaccontainerred,
+                                                          borderRadius: BorderRadius.circular(10))),
+                                                ),
+                                              ],
+                                            ),)
+
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      widget.type == 'client' ?
+                                      isSelected ? _paymentReceived() :
+                                      extraCharge()
+                                      : isSelected ? _paymentReceived() :
+                                      _payout(),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => AddAmountScreen()));
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 160,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color:AppColors.pdfbtn
+                      ),
+                      child: Center(
+                        child: Text("Add Amount",
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.whit)),
+                      ),
+                    ),
+                  ),
+                  Image.asset("assets/images/pdf.png", scale: 2.1,),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       backgroundColor: AppColors.backgruond,
@@ -522,80 +550,6 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
           children: [
 
             SizedBox(height: 20,),
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.center,
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Container(
-            //       decoration: BoxDecoration(
-            //           color: AppColors.containerclr,
-            //           borderRadius: BorderRadius.circular(10)),
-            //       child: Row(
-            //         children: [
-            //           InkWell(
-            //             onTap: () {
-            //               setState(() {
-            //                 isSelected = true;
-            //               });
-            //               getAccountsData();
-            //             },
-            //             child: Container(
-            //                 height: 50,
-            //                 width: 120,
-            //                 child: Center(
-            //                   child: Text(
-            //                     'Client',
-            //                     style: TextStyle(
-            //                       color: isSelected
-            //                           ? Color(0xffffffff)
-            //                           : Colors.white,
-            //                       fontSize: 16,
-            //                     ),
-            //                   ),
-            //                 ),
-            //                 decoration: BoxDecoration(
-            //                   color: isSelected
-            //                       ? AppColors.AppbtnColor
-            //                       : AppColors.containerclr,
-            //                   // border: Border.all(color: AppColors.AppbtnColor),
-            //                   borderRadius: BorderRadius.circular(10),
-            //                 )),
-            //           ),
-            //           InkWell(
-            //             onTap: () {
-            //               setState(() {
-            //                 // Navigator.of(context).push(MaterialPageRoute(
-            //                 //   builder: (context) => NextPage(),
-            //                 // ));
-            //                 isSelected = false;
-            //               });
-            //               getAccountsData();
-            //             },
-            //             child: Container(
-            //                 height: 50,
-            //                 width: 130,
-            //                 child: Center(
-            //                   child: Text(
-            //                     'Photographer',
-            //                     style: TextStyle(
-            //                       color: isSelected
-            //                           ? AppColors.whit
-            //                           : Colors.white,
-            //                       fontSize: 16,
-            //                     ),
-            //                   ),
-            //                 ),
-            //                 decoration: BoxDecoration(
-            //                     color: isSelected
-            //                         ? AppColors.containerclr
-            //                         : AppColors.AppbtnColor,
-            //                     borderRadius: BorderRadius.circular(10))),
-            //           ),
-            //         ],
-            //       ),
-            //     )
-            //   ],
-            // ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8, top: 10, bottom: 10),
               child: Container(
@@ -622,7 +576,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                 itemCount: ledgerData.length,
                 itemBuilder: (context, k){
               return Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                padding: const EdgeInsets.only(left: 8.0, right: 8, top: 8),
                 child: Container(
                   height: 45,
                   width: MediaQuery.of(context).size.width/1.0,
@@ -632,10 +586,12 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(ledgerData[k].date.toString(), style: TextStyle(color: AppColors.textclr),),
-                        Text(ledgerData[k].description.toString(), style: TextStyle(color: AppColors.textclr)),
-                        Text(ledgerData[k].credit.toString(), style: TextStyle(color: AppColors.textclr)),
-                        Text(ledgerData[k].debit.toString(), style: TextStyle(color: AppColors.textclr)),
+                        Text(ledgerData[k].date.toString(), style: const TextStyle(color: AppColors.textclr),),
+                        Container(
+                          width: 120,
+                            child: Text(ledgerData[k].description.toString(), style: const TextStyle(color: AppColors.textclr))),
+                        Text(ledgerData[k].credit.toString(), style: const TextStyle(color: AppColors.textclr)),
+                        Text(ledgerData[k].debit.toString(), style: const TextStyle(color: AppColors.textclr)),
 
                       ],
                     ),
@@ -648,23 +604,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                 height: MediaQuery.of(context).size.width,
                 child: Center(child: const Text("No data found!", style: TextStyle(color: AppColors.textclr),))),
 
-            Container(
-              height: 45,
-              width: MediaQuery.of(context).size.width/1.1,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.lightwhite),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Total Outstanding Amount", style: TextStyle(color: AppColors.textclr),),
 
-                    Text("25000  Rs.", style: TextStyle(color: AppColors.textclr)),
-
-                  ],
-                ),
-              ),
-            ),
 
 
 

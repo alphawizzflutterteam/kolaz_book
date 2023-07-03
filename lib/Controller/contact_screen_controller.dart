@@ -203,7 +203,7 @@ class addPhotographerController extends AppBaseController {
   String client = 'client';
   String photographers = 'photographers';
 
-  Future<void>getClientPhotographer() async {
+  Future<void> getClientPhotographer() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     id = preferences.getString('id');
     setBusy(true);

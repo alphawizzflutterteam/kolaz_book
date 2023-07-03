@@ -1,12 +1,13 @@
 /// error : false
 /// message : "Broacast List"
-/// data : [{"type_of_photograpym":"Candid Cinematography","county_name":"India","statename":"Maharastra","city_name":"Jaipur","id":"5","user_id":"11","type":"249","date":"11,2","country":"3","state":"1","city":"1","user_name":"Parth Lakshman Verma"}]
+/// left_message : "You have 2 left."
+/// data : [{"type_of_photograpym":"Album Printing","county_name":"Australia","statename":"New South Wales","city_name":"Sydney","id":"38","user_id":"3","type":"254","date":"03/07/2023","country":"Australia","state":"New South Wales","city":"Sydney","created_at":"2023-07-03 06:38:50","updated_at":"2023-07-03 06:38:50","user_name":"Karan S Tomar","profile_pic":"https://developmentalphawizz.com/kolaz_book/uploads/profile_pics/6492a88dc32b0.jpg"},{"type_of_photograpym":"Album Printing","county_name":"","statename":"Kerala","city_name":"Cochin","id":"39","user_id":"26","type":"254","date":"03/07/2023","country":"","state":"Kerala","city":"Cochin","created_at":"2023-07-03 07:01:15","updated_at":"2023-07-03 07:01:15","user_name":"Sparsh Bhawsaw","profile_pic":"https://developmentalphawizz.com/kolaz_book/uploads/profile_pics/"}]
 
 class BroadcastListModel {
   BroadcastListModel({
       bool? error, 
-      String? message,
-    String?  leftMessage,
+      String? message, 
+      String? leftMessage, 
       List<BroadcastList>? data,}){
     _error = error;
     _message = message;
@@ -33,8 +34,7 @@ BroadcastListModel copyWith({  bool? error,
   String? message,
   String? leftMessage,
   List<BroadcastList>? data,
-}) => BroadcastListModel(
-  error: error ?? _error,
+}) => BroadcastListModel(  error: error ?? _error,
   message: message ?? _message,
   leftMessage: leftMessage ?? _leftMessage,
   data: data ?? _data,
@@ -57,18 +57,21 @@ BroadcastListModel copyWith({  bool? error,
 
 }
 
-/// type_of_photograpym : "Candid Cinematography"
-/// county_name : "India"
-/// statename : "Maharastra"
-/// city_name : "Jaipur"
-/// id : "5"
-/// user_id : "11"
-/// type : "249"
-/// date : "11,2"
-/// country : "3"
-/// state : "1"
-/// city : "1"
-/// user_name : "Parth Lakshman Verma"
+/// type_of_photograpym : "Album Printing"
+/// county_name : "Australia"
+/// statename : "New South Wales"
+/// city_name : "Sydney"
+/// id : "38"
+/// user_id : "3"
+/// type : "254"
+/// date : "03/07/2023"
+/// country : "Australia"
+/// state : "New South Wales"
+/// city : "Sydney"
+/// created_at : "2023-07-03 06:38:50"
+/// updated_at : "2023-07-03 06:38:50"
+/// user_name : "Karan S Tomar"
+/// profile_pic : "https://developmentalphawizz.com/kolaz_book/uploads/profile_pics/6492a88dc32b0.jpg"
 
 class BroadcastList {
   BroadcastList({
@@ -83,7 +86,10 @@ class BroadcastList {
       String? country, 
       String? state, 
       String? city, 
-      String? userName,}){
+      String? createdAt, 
+      String? updatedAt, 
+      String? userName, 
+      String? profilePic,}){
     _typeOfPhotograpym = typeOfPhotograpym;
     _countyName = countyName;
     _statename = statename;
@@ -95,7 +101,10 @@ class BroadcastList {
     _country = country;
     _state = state;
     _city = city;
+    _createdAt = createdAt;
+    _updatedAt = updatedAt;
     _userName = userName;
+    _profilePic = profilePic;
 }
 
   BroadcastList.fromJson(dynamic json) {
@@ -110,7 +119,10 @@ class BroadcastList {
     _country = json['country'];
     _state = json['state'];
     _city = json['city'];
+    _createdAt = json['created_at'];
+    _updatedAt = json['updated_at'];
     _userName = json['user_name'];
+    _profilePic = json['profile_pic'];
   }
   String? _typeOfPhotograpym;
   String? _countyName;
@@ -123,7 +135,10 @@ class BroadcastList {
   String? _country;
   String? _state;
   String? _city;
+  String? _createdAt;
+  String? _updatedAt;
   String? _userName;
+  String? _profilePic;
 BroadcastList copyWith({  String? typeOfPhotograpym,
   String? countyName,
   String? statename,
@@ -135,7 +150,10 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
   String? country,
   String? state,
   String? city,
+  String? createdAt,
+  String? updatedAt,
   String? userName,
+  String? profilePic,
 }) => BroadcastList(  typeOfPhotograpym: typeOfPhotograpym ?? _typeOfPhotograpym,
   countyName: countyName ?? _countyName,
   statename: statename ?? _statename,
@@ -147,7 +165,10 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
   country: country ?? _country,
   state: state ?? _state,
   city: city ?? _city,
+  createdAt: createdAt ?? _createdAt,
+  updatedAt: updatedAt ?? _updatedAt,
   userName: userName ?? _userName,
+  profilePic: profilePic ?? _profilePic,
 );
   String? get typeOfPhotograpym => _typeOfPhotograpym;
   String? get countyName => _countyName;
@@ -160,7 +181,10 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
   String? get country => _country;
   String? get state => _state;
   String? get city => _city;
+  String? get createdAt => _createdAt;
+  String? get updatedAt => _updatedAt;
   String? get userName => _userName;
+  String? get profilePic => _profilePic;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -175,7 +199,10 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
     map['country'] = _country;
     map['state'] = _state;
     map['city'] = _city;
+    map['created_at'] = _createdAt;
+    map['updated_at'] = _updatedAt;
     map['user_name'] = _userName;
+    map['profile_pic'] = _profilePic;
     return map;
   }
 

@@ -39,7 +39,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
   var countryController;
   var stateController;
   var cityName;
-  // var countryName;
+  // var countryName;ƒ
   var stateName;
   var photoGrapherType;
   String? message;
@@ -901,11 +901,14 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                         //         ))),
                                         Row(
                                           children:  [
-                                         const  CircleAvatar(
+                                           CircleAvatar(
+                                             radius: 40,
                                               backgroundImage: NetworkImage(
-                                                  'https://media.istockphoto.com/id/877022826/photo/portrait-of-a-happy-young-asian-business-man.jpg?b=1&s=170667a&w=0&k=20&c=zBdoktuoe8bFhuBsdvtQgL_nJPnrZUn2gSf7OL3X2dM='),
-                                              radius: 40,
+                                    "${broadCastList[index].profilePic}",
+                                                  // 'https://media.istockphoto.com/id/877022826/photo/portrait-of-a-happy-young-asian-business-man.jpg?b=1&s=170667a&w=0&k=20&c=zBdoktuoe8bFhuBsdvtQgL_nJPnrZUn2gSf7OL3X2dM='),
+
                                             ),
+                                           ),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(10.0),
@@ -922,7 +925,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                                         width: 180,
                                                         child: Text(
                                                           "${broadCastList[index].userName}",
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               fontSize: 16,
                                                               color:
                                                                   Color(0xff1E90FF),

@@ -260,6 +260,10 @@ PhotographersDetails copyWith({  String? date,
   String? get date => _date;
   List<Data>? get data => _data;
 
+  set setDate(var value) {
+    _date = value;
+  }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['date'] = _date;

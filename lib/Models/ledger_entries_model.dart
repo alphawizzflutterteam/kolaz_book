@@ -6,15 +6,19 @@ class LedgerEntriesModel {
   LedgerEntriesModel({
       bool? error, 
       String? message, 
-      List<LedgerData>? data,}){
+      List<LedgerData>? data,
+    String? totalOutstanding
+  }){
     _error = error;
     _message = message;
     _data = data;
+    _totalOutstanding = totalOutstanding;
 }
 
   LedgerEntriesModel.fromJson(dynamic json) {
     _error = json['error'];
     _message = json['message'];
+    _totalOutstanding = json['total_outstanding'];
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
@@ -25,21 +29,26 @@ class LedgerEntriesModel {
   bool? _error;
   String? _message;
   List<LedgerData>? _data;
+  String? _totalOutstanding;
 LedgerEntriesModel copyWith({  bool? error,
   String? message,
   List<LedgerData>? data,
+  String? totalOutstanding
 }) => LedgerEntriesModel(  error: error ?? _error,
   message: message ?? _message,
   data: data ?? _data,
+  totalOutstanding: totalOutstanding ?? _totalOutstanding
 );
   bool? get error => _error;
   String? get message => _message;
   List<LedgerData>? get data => _data;
+  String? get totalOutstanding => _totalOutstanding;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['error'] = _error;
     map['message'] = _message;
+    map['total_outstanding'] = _totalOutstanding;
     if (_data != null) {
       map['data'] = _data?.map((v) => v.toJson()).toList();
     }

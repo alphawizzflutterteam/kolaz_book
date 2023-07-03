@@ -96,10 +96,11 @@ class _AddQuotationState extends State<EditQuotation> {
   String? dropdownValue;
   String? qid;
 
-  int dateIndex = 0 ;
+  int dateIndex = 0;
   var photographerType;
 
   void increment(int ind) {
+    print(ind);
     if (up[ind] >= 0 && up[ind] < 10) {
       up[ind]++;
     }
@@ -110,7 +111,7 @@ class _AddQuotationState extends State<EditQuotation> {
     typeofPhotographyEvent[index].selectedValue = newValue;
     pType.add({
       "photographer_type":
-      typeofPhotographyEvent[index].selectedValue!.resName.toString()
+          typeofPhotographyEvent[index].selectedValue!.resName.toString()
     });
     print("this is selected json $pType");
     // if(up[index] >1) {
@@ -139,16 +140,19 @@ class _AddQuotationState extends State<EditQuotation> {
       setState(() {
         adquatationDate = picked;
         String date = DateFormat('dd-MM-yyyy').format(picked);
-        print("this is selected date $date");
+        // var newIndex = quotationData[0].photographersDetails!.length;
+        // quotationData[0].photographersDetails![newIndex].setDate = date;
         showSelectedDate.add(date);
-        selectedDate = showSelectedDate.join(',');
+
+        // quotationData[0].photographersDetails![newIndex].setDate = date;
+            selectedDate = showSelectedDate.join(',');
         // showPhotographer.add(adquatationDate);
         selectedDates.add(date);
         stringList.add(selectedvlaue);
       });
       print(
           "this is selected date data $adquatationDate fggd ${showSelectedDate.length} and $selectedDate and $selectedDates");
-      increment(index);
+       increment(index);
       // update();
       // selectedValue.add(categoryValue!);
     }
@@ -157,6 +161,7 @@ class _AddQuotationState extends State<EditQuotation> {
     print("this is list data $newList and $pType");
     pType.clear();
   }
+
 
   getEventTypes() async {
     var uri = Uri.parse(getEventsApis.toString());
@@ -283,8 +288,6 @@ class _AddQuotationState extends State<EditQuotation> {
   //     }
   //   }
 
-
-
   // Future<void> selectDate(BuildContext context, int index) async {
   //   final DateTime? picked = await showDatePicker(
   //     context: context,
@@ -335,9 +338,9 @@ class _AddQuotationState extends State<EditQuotation> {
                   color: AppColors.AppbtnColor),
               child: const Center(
                   child: Text(
-                    'No',
-                    style: TextStyle(color: AppColors.textclr),
-                  ))),
+                'No',
+                style: TextStyle(color: AppColors.textclr),
+              ))),
           onPressed: () => Navigator.of(context).pop(false),
         ),
         TextButton(
@@ -349,13 +352,12 @@ class _AddQuotationState extends State<EditQuotation> {
                   color: AppColors.AppbtnColor),
               child: const Center(
                   child: Text(
-                    'Yes',
-                    style: TextStyle(color: AppColors.textclr),
-                  ))),
+                'Yes',
+                style: TextStyle(color: AppColors.textclr),
+              ))),
           onPressed: () {
             deleteQuotation(quotationData[0].id.toString(), context);
             Navigator.of(context).pop(true);
-
           },
         ),
       ],
@@ -368,10 +370,11 @@ class _AddQuotationState extends State<EditQuotation> {
     var headers = {
       'Cookie': 'ci_session=b222ee2ce87968a446feacdb861ad51c821bdf6d'
     };
-    var request = http.MultipartRequest(
-        'POST', Uri.parse(deleteQuotationApi.toString()));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(deleteQuotationApi.toString()));
     request.fields.addAll({'id': id.toString()});
-    print("this is delete quotation request ${request.fields.toString()} and $deleteQuotationApi");
+    print(
+        "this is delete quotation request ${request.fields.toString()} and $deleteQuotationApi");
 
     request.headers.addAll(headers);
 
@@ -379,11 +382,11 @@ class _AddQuotationState extends State<EditQuotation> {
 
     if (response.statusCode == 200) {
       String responseData =
-      await response.stream.transform(utf8.decoder).join();
+          await response.stream.transform(utf8.decoder).join();
       var userData = json.decode(responseData);
       if (userData['error'] == false) {
-         Fluttertoast.showToast(msg: userData['message']);
-         Navigator.pop(context, false);
+        Navigator.pop(context, false);
+        Fluttertoast.showToast(msg: userData['message']);
 
       } else {
         Fluttertoast.showToast(msg: userData['message']);
@@ -392,6 +395,59 @@ class _AddQuotationState extends State<EditQuotation> {
     } else {
       print(response.reasonPhrase);
     }
+  }
+
+  Widget dateCard(int index) {
+    return InkWell(
+      onTap: () {
+        if (currentIndex == index) {
+        }
+      },
+      child: Stack(
+        children: [
+          Container(
+            // width: 100,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+              color: AppColors.teamcard2,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: const BoxDecoration(
+                  color: AppColors.datecontainer,
+                ),
+                child: Text(
+                  showSelectedDate[index] != null
+                      ? ' ${showSelectedDate[index]}'
+                      : 'Select Start Date',
+                  style:
+                  const TextStyle(color: AppColors.textclr, fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+              right: -12,
+              top: -17,
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+
+                    });
+                    showSelectedDate.removeAt(index);
+                    // removeDate(index);
+                  },
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    size: 18,
+                    color: AppColors.temtextclr,
+                  )))
+        ],
+      ),
+    );
   }
 
   @override
@@ -433,6 +489,8 @@ class _AddQuotationState extends State<EditQuotation> {
     eventController = quotationData[0].typeEvent.toString();
     amountController.text = quotationData[0].amount.toString();
     outputController.text = quotationData[0].output.toString();
+
+
     // clientNameController.text = quotationData![0].clientName.toString();
   }
 
@@ -486,6 +544,47 @@ class _AddQuotationState extends State<EditQuotation> {
   //   });
   // }
 
+  editQuotation() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userId = preferences.getString('id');
+    var headers = {
+      'Cookie': 'ci_session=b222ee2ce87968a446feacdb861ad51c821bdf6d'
+    };
+
+    var request =
+    http.MultipartRequest('POST', Uri.parse(addQuotationApi.toString()));
+
+    request.fields.addAll({
+      'client_name': clientName.toString(),
+      'city': cityNameController.text.toString(),
+      'mobile': mobileController.text.toString(),
+      'type_event': eventController.toString(),
+      'output': outputController.text.toString(),
+      'amount': amountController.text.toString(),
+      // 'event[]': selectedEvents.toString(),
+      'type': 'client',
+      'event_details': newList.toString(),
+      // 'date[]': selectedDate.toString(),
+      'user_id': userId.toString(),
+      'id': widget.id.toString()
+    });
+    print("this is add quotation request ${request.fields.toString()}");
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String responseData =
+      await response.stream.transform(utf8.decoder).join();
+      var userData = json.decode(responseData);
+      Navigator.pop(context, true);
+      Fluttertoast.showToast(msg: userData['message']);
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -516,924 +615,1036 @@ class _AddQuotationState extends State<EditQuotation> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 0),
         child: SingleChildScrollView(
-          child:
-          quotationData.isNotEmpty ?
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              // Container(
-              //   decoration: BoxDecoration(
-              //       color: AppColors.teamcard2,
-              //       borderRadius: BorderRadius.circular(10)),
-              //   child: Padding(
-              //     padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
-              //     child: Column(
-              //       children: [
-              //         Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           children: [
-              //
-              //             const Text("Auto Q ID",style: TextStyle(color: AppColors.pdfbtn),),
-              //             Padding(
-              //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
-              //               child: Container(
-              //
-              //                 decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     color: AppColors.containerclr2),
-              //                 padding: EdgeInsets.symmetric(vertical: 5),
-              //                 width: MediaQuery.of(context).size.width/2.1,
-              //                 child: const Padding(
-              //                   padding: EdgeInsets.all(10.0),
-              //                   child: Text("Q001",style: TextStyle(color: AppColors.textclr),),
-              //                 ),),
-              //             )
-              //           ],
-              //         ),
-              //         Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           children: [
-              //             const Text("Client Name",style: TextStyle(color: AppColors.pdfbtn),),
-              //             Padding(
-              //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
-              //               child: Container(
-              //
-              //                 decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     color: AppColors.containerclr2),
-              //                 padding: EdgeInsets.symmetric(vertical: 5),
-              //                 width: MediaQuery.of(context).size.width/2.1,
-              //                 child: const Padding(
-              //                   padding: EdgeInsets.all(10.0),
-              //                   child: Text("Kinjal Patel",style: TextStyle(color: AppColors.textclr),),
-              //                 ),),
-              //             )
-              //
-              //           ],
-              //         ) ,
-              //         Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           children: [
-              //             Text("City/Venue",style: TextStyle(color: AppColors.pdfbtn),),
-              //             Padding(
-              //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
-              //               child: Container(
-              //
-              //                 decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     color: AppColors.containerclr2),
-              //                 padding: EdgeInsets.symmetric(vertical: 5),
-              //                 width: MediaQuery.of(context).size.width/2.1,
-              //                 child: const Padding(
-              //                   padding: EdgeInsets.all(10.0),
-              //                   child: Text("Kanpur",style: TextStyle(color: AppColors.textclr),),
-              //                 ),),
-              //             )
-              //
-              //           ],
-              //         ),
-              //         Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           children: [
-              //             Text("Event",style: TextStyle(color: AppColors.pdfbtn),),
-              //             Padding(
-              //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
-              //               child: Container(
-              //
-              //                 decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     color: AppColors.containerclr2),
-              //                 padding: EdgeInsets.symmetric(vertical: 5),
-              //                 width: MediaQuery.of(context).size.width/2.1,
-              //                 child: const Padding(
-              //                   padding: EdgeInsets.all(10.0),
-              //                   child: Text("Wedding",style: TextStyle(color: AppColors.textclr),),
-              //                 ),),
-              //             )
-              //
-              //           ],
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xff3B3B3B),
-                ),
-                child: Column(
+          child: quotationData.isNotEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5.0, vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                         const  Text(
-                            "Auto CF ID",
-                            style: TextStyle(
-                                color: Color(0xff42ACFE),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.1,
-                            // width:180,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: AppColors.backgruond,
-                            ),
-
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    widget.qid.toString(),
-                                    // quotationData![0].qid.toString(),
-                                    style: TextStyle(color: AppColors.whit),
-                                  ),
-                                )),
-                          )
-                        ],
-                      ),
+                    const SizedBox(
+                      height: 20,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                         const  Text(
-                            "Client Name",
-                            style: TextStyle(
-                                color: Color(0xff42ACFE),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: AppColors.containerclr2),
-                              // padding: EdgeInsets.symmetric(vertical: 1),
-                              // width:180,
-                              // height: 30,
-                              width: MediaQuery.of(context).size.width / 2.1,
-                              child: TextFormField(
-                                style:
-                                    const TextStyle(color: AppColors.textclr),
-                                controller: clientNameController,
-                                keyboardType: TextInputType.name,
-                                validator: (value) => value!.isEmpty
-                                    ? 'Client Name cannot be blank'
-                                    : null,
-                                decoration: const InputDecoration(
-                                    hintText: 'Enter Client Name',
-                                    hintStyle: TextStyle(
-                                        color: AppColors.textclr, fontSize: 14),
-                                    border: InputBorder.none,
-                                    contentPadding:
-                                        EdgeInsets.only(left: 8, bottom: 12)),
-                              ),
-                            ),
-                          )
-                          // Container(
-                          //   width:180,
-                          //   height: 35,
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(8),
-                          //     color: AppColors.backgruond,
-                          //   ),
-                          //   child: DropdownButtonHideUnderline(
-                          //     child: DropdownButton(
-                          //       elevation: 0,
-                          //       underline: Container(),
-                          //       isExpanded: true,
-                          //       value: _chosenValue,
-                          //       icon: Icon(Icons.keyboard_arrow_down,size: 40,color: Color(0xff3B3B3B),),
-                          //       hint: Align(alignment: Alignment.centerLeft,
-                          //         child: Padding(
-                          //           padding: const EdgeInsets.all(8.0),
-                          //           child: Text("Kaushik Prajapati", style: TextStyle(
-                          //               color:AppColors.whit
-                          //           ),),
-                          //         ),
-                          //       ),
-                          //       items:item.map((String items) {
-                          //         return DropdownMenuItem(
-                          //             value: items,
-                          //             child: Text(items)
-                          //         );
-                          //       }
-                          //       ).toList(),
-                          //       onChanged: (String? newValue){
-                          //         setState(() {
-                          //           _chosenValue = newValue!;
-                          //         });
-                          //       },
-                          //
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "City/Venue",
-                            style: TextStyle(color: AppColors.pdfbtn),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: AppColors.containerclr2),
-                              width: MediaQuery.of(context).size.width / 2.1,
-                              child:  TextFormField(
-                                style:
-                                const TextStyle(color: AppColors.textclr),
-                                controller: cityNameController,
-                                keyboardType: TextInputType.name,
-                                validator: (value) => value!.isEmpty
-                                    ? ' City/Venue cannot be blank'
-                                    : null,
-                                decoration: const InputDecoration(
-                                    hintText: 'City/Venue',
-                                    hintStyle: TextStyle(
-                                        color: AppColors.textclr,
-                                        fontSize: 14),
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 10, bottom: 6)),
-                              ),
-
-                              // TextFormField(
-                              //   style:
-                              //      const TextStyle(color: AppColors.textclr),
-                              //   controller: eventController,
-                              //   keyboardType: TextInputType.name,
-                              //   validator: (value) => value!.isEmpty
-                              //       ? ' Events cannot be blank'
-                              //       : null,
-                              //   decoration: const InputDecoration(
-                              //       hintText: 'Enter Events',
-                              //       hintStyle: TextStyle(
-                              //           color: AppColors.textclr,
-                              //           fontSize: 14),
-                              //       border: InputBorder.none,
-                              //       contentPadding: EdgeInsets.only(
-                              //           left: 10, bottom: 6)),
-                              // ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Event",
-                            style: TextStyle(color: AppColors.pdfbtn),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 0),
-                            child: Container(
-                              padding: EdgeInsets.only(left: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: AppColors.containerclr2),
-                              width: MediaQuery.of(context).size.width / 2.1,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: AppColors.cardclr,
-                                  // Initial Value
-                                  value: eventController,
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    "Event",
-                                    style: TextStyle(color: AppColors.textclr),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: AppColors.textclr,
-                                  ),
-                                  // Array list of items
-                                  items: eventList.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id.toString(),
-                                      child: Text(
-                                        items.cName.toString(),
-                                        style: const TextStyle(
-                                            color: AppColors.textclr),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  // After selecting the desired option,it will
-                                  // change button value to selected value
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      eventController = newValue;
-                                    });
-                                  },
-                                ),
-                              ),
-
-                              // TextFormField(
-                              //   style:
-                              //      const TextStyle(color: AppColors.textclr),
-                              //   controller: eventController,
-                              //   keyboardType: TextInputType.name,
-                              //   validator: (value) => value!.isEmpty
-                              //       ? ' Events cannot be blank'
-                              //       : null,
-                              //   decoration: const InputDecoration(
-                              //       hintText: 'Enter Events',
-                              //       hintStyle: TextStyle(
-                              //           color: AppColors.textclr,
-                              //           fontSize: 14),
-                              //       border: InputBorder.none,
-                              //       contentPadding: EdgeInsets.only(
-                              //           left: 10, bottom: 6)),
-                              // ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-
-              quotationData.isNotEmpty ?
-              Row(
-                children: [
-                  Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width/1.5,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: quotationData[0].photographersDetails!.length,
-                        itemBuilder: (context, j) {
-                          return InkWell(
-                            onTap: (){
-                              dateIndex = j;
-                              setState(() {
-                              });
-                            },
-                            child: Container(
-                              width: 110,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    topLeft: Radius.circular(8)),
-                                color: AppColors.teamcard2,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 8),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 5),
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.datecontainer,
-                                  ),
-                                  child: Text(
-                                    quotationData[0].photographersDetails![j].date.toString(),
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(color: AppColors.textclr),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: InkWell(
-                      onTap: () {
-                        // if(showSelectedDate.isNotEmpty) {
-
-                        // setState(() {
-                        //   customWidgets.add(photographerCard());
-                        // });
-                        // if(cardCount>=0&&cardCount<10) { v
-                        //   cardCount++;
-                        // }
-                         selectDate(context, 1);
-                        // }else{
-                        //   selectDate(context, 1);
-                        // }
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.add_circle_outline,
-                            color: AppColors.temtextclr,
-                            size: 28,
-                          ),
-                          Text(
-                            "Add Date",
-                            style: TextStyle(
-                                color: AppColors.temtextclr,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              )
-              : SizedBox.shrink(),
-              // Row(
-              //   children: [
-              //
-              //   Container(
-              //     margin: EdgeInsets.zero,
-              //     decoration: const BoxDecoration(
-              //       borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
-              //       color: AppColors.teamcard2,
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
-              //       child: Container(
-              //         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-              //         decoration: const BoxDecoration(
-              //           color:AppColors.datecontainer,
-              //
-              //         ),
-              //         child: const Text("22/2/2023",style: TextStyle(color: AppColors.textclr),),
-              //       ),
-              //     ),
-              //   ),
-              //   const Padding(
-              //     padding:  EdgeInsets.all(5.0),
-              //     child: Icon(Icons.add_circle_outline,color: AppColors.temtextclr,size: 30,),
-              //   ),
-              //   Text("Add Date",style: TextStyle(color: AppColors.temtextclr,fontSize: 16,fontWeight: FontWeight.bold),)
-              //
-              // ],),
-              Container(
-                decoration: const BoxDecoration(
-                    color: AppColors.teamcard2,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10))),
-                child: Column(
-                  children: [
-                    // const Align(
-                    //   alignment: Alignment.topRight,
-                    //   child: Text(
-                    //     "(For Developer User Can Hold/Or To Delete This Row)",
-                    //     style: TextStyle(
-                    //         fontStyle: FontStyle.italic,
-                    //         color: AppColors.textclr,
-                    //         fontSize: 12),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       color: AppColors.teamcard2,
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
+                    //     child: Column(
+                    //       children: [
+                    //         Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //
+                    //             const Text("Auto Q ID",style: TextStyle(color: AppColors.pdfbtn),),
+                    //             Padding(
+                    //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
+                    //               child: Container(
+                    //
+                    //                 decoration: BoxDecoration(
+                    //                     borderRadius: BorderRadius.circular(10),
+                    //                     color: AppColors.containerclr2),
+                    //                 padding: EdgeInsets.symmetric(vertical: 5),
+                    //                 width: MediaQuery.of(context).size.width/2.1,
+                    //                 child: const Padding(
+                    //                   padding: EdgeInsets.all(10.0),
+                    //                   child: Text("Q001",style: TextStyle(color: AppColors.textclr),),
+                    //                 ),),
+                    //             )
+                    //           ],
+                    //         ),
+                    //         Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             const Text("Client Name",style: TextStyle(color: AppColors.pdfbtn),),
+                    //             Padding(
+                    //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
+                    //               child: Container(
+                    //
+                    //                 decoration: BoxDecoration(
+                    //                     borderRadius: BorderRadius.circular(10),
+                    //                     color: AppColors.containerclr2),
+                    //                 padding: EdgeInsets.symmetric(vertical: 5),
+                    //                 width: MediaQuery.of(context).size.width/2.1,
+                    //                 child: const Padding(
+                    //                   padding: EdgeInsets.all(10.0),
+                    //                   child: Text("Kinjal Patel",style: TextStyle(color: AppColors.textclr),),
+                    //                 ),),
+                    //             )
+                    //
+                    //           ],
+                    //         ) ,
+                    //         Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             Text("City/Venue",style: TextStyle(color: AppColors.pdfbtn),),
+                    //             Padding(
+                    //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
+                    //               child: Container(
+                    //
+                    //                 decoration: BoxDecoration(
+                    //                     borderRadius: BorderRadius.circular(10),
+                    //                     color: AppColors.containerclr2),
+                    //                 padding: EdgeInsets.symmetric(vertical: 5),
+                    //                 width: MediaQuery.of(context).size.width/2.1,
+                    //                 child: const Padding(
+                    //                   padding: EdgeInsets.all(10.0),
+                    //                   child: Text("Kanpur",style: TextStyle(color: AppColors.textclr),),
+                    //                 ),),
+                    //             )
+                    //
+                    //           ],
+                    //         ),
+                    //         Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             Text("Event",style: TextStyle(color: AppColors.pdfbtn),),
+                    //             Padding(
+                    //               padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal:0 ),
+                    //               child: Container(
+                    //
+                    //                 decoration: BoxDecoration(
+                    //                     borderRadius: BorderRadius.circular(10),
+                    //                     color: AppColors.containerclr2),
+                    //                 padding: EdgeInsets.symmetric(vertical: 5),
+                    //                 width: MediaQuery.of(context).size.width/2.1,
+                    //                 child: const Padding(
+                    //                   padding: EdgeInsets.all(10.0),
+                    //                   child: Text("Wedding",style: TextStyle(color: AppColors.textclr),),
+                    //                 ),),
+                    //             )
+                    //
+                    //           ],
+                    //         )
+                    //       ],
+                    //     ),
                     //   ),
                     // ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 8),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xff3B3B3B),
+                      ),
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Type Of Photographer",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.textclr,
-                                    fontSize: 18),
-                              ),
-                            ),
-                          ),
-                          quotationData.isNotEmpty ?
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              // scrollDirection: Axis.horizontal,
-                              itemCount: quotationData[0].photographersDetails![dateIndex].data!.length,
-                              itemBuilder: (context, j) {
-                                photographerType = quotationData[0].photographersDetails![dateIndex].data![j].photographerType;
-                                    return  Padding(
-                                padding: const EdgeInsets.symmetric(
-                                      horizontal: 0.0, vertical: 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 0),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(0),
-                                            color: AppColors.datecontainer),
-                                        width: MediaQuery.of(context).size.width / 1.4,
-                                        child: DropdownButtonHideUnderline(
-                                          child: DropdownButton(
-                                            dropdownColor: AppColors.cardclr,
-                                            // Initial Value
-                                            value: photographerType,
-                                            // typeofPhotographyEvent[index].selectedValue,
-                                            isExpanded: true,
-                                            hint: const Text(
-                                              "Type Of Photography",
-                                              style: TextStyle(color: AppColors.textclr),
-                                            ),
-                                            icon: const Icon(
-                                              Icons.keyboard_arrow_down,
-                                              color: AppColors.textclr,
-                                            ),
-                                            // Array list of items
-                                            items: typeofPhotographyEvent
-                                                .map(( items) {
-                                              return DropdownMenuItem(
-                                                value: items.resName,
-                                                child: Text(
-                                                  items.resName.toString(),
-                                                  style: const TextStyle(
-                                                      color: AppColors.textclr),
-                                                ),
-                                              );
-                                            }).toList(),
-                                            // After selecting the desired option,it will
-                                            // change button value to selected value
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                quotationData[0].photographersDetails![dateIndex].data![j].setPhotographer = newValue;
-                                              });
-
-                                              // selectValue(newValue ?? Categories(), index);
-
-
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(onTap: (){
-                                        quotationData[0].photographersDetails![dateIndex].data!.removeAt(j);
-                                        // up.removeAt(index);
-                                        setState(() {
-
-                                        });
-                                      }, child: Icon(Icons.delete_forever, color: Colors.red,))
-                                    ],
-                                  ),
-                                );
-                              })
-                          : const SizedBox.shrink(),
-                          // SizedBox(
-                          //   height: 165,
-                          //   child: ListView.builder(
-                          //     physics: NeverScrollableScrollPhysics(),
-                          //     itemCount: up[dateIndex],
-                          //     itemBuilder: (context, index) {
-                          //       return Padding(
-                          //         padding: const EdgeInsets.symmetric(
-                          //             horizontal: 0.0, vertical: 5),
-                          //         child: Row(
-                          //           children: [
-                          //             Container(
-                          //               height: 30,
-                          //               padding: const EdgeInsets.symmetric(
-                          //                   horizontal: 8, vertical: 0),
-                          //               decoration: BoxDecoration(
-                          //                   borderRadius: BorderRadius.circular(0),
-                          //                   color: AppColors.datecontainer),
-                          //               width: MediaQuery.of(context).size.width / 1.4,
-                          //               child: DropdownButtonHideUnderline(
-                          //                 child: DropdownButton(
-                          //                   dropdownColor: AppColors.cardclr,
-                          //                   // Initial Value
-                          //                   value:
-                          //                   typeofPhotographyEvent[index].selectedValue,
-                          //                   isExpanded: true,
-                          //                   hint: const Text(
-                          //                     "Type Of Photography",
-                          //                     style: TextStyle(color: AppColors.textclr),
-                          //                   ),
-                          //                   icon: const Icon(
-                          //                     Icons.keyboard_arrow_down,
-                          //                     color: AppColors.textclr,
-                          //                   ),
-                          //                   // Array list of items
-                          //                   items: typeofPhotographyEvent
-                          //                       .map((Categories items) {
-                          //                     return DropdownMenuItem<Categories>(
-                          //                       value: items,
-                          //                       child: Text(
-                          //                         items.resName.toString(),
-                          //                         style: const TextStyle(
-                          //                             color: AppColors.textclr),
-                          //                       ),
-                          //                     );
-                          //                   }).toList(),
-                          //                   // After selecting the desired option,it will
-                          //                   // change button value to selected value
-                          //                   onChanged: (newValue) {
-                          //                     selectValue(newValue ?? Categories(), index);
-                          //
-                          //                     setState(() {});
-                          //                   },
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //             InkWell(onTap: (){
-                          //               up.removeAt(index);
-                          //               setState(() {
-                          //
-                          //               });
-                          //             }, child: Icon(Icons.delete_forever, color: Colors.red,))
-                          //           ],
-                          //         ),
-                          //       );
-                          //     },
-                          //   ),
-                          // ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              increment(dateIndex);
-                            },
-                            child: Column(
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Icon(
-                                    Icons.add_circle_outline,
-                                    color: AppColors.temtextclr,
-                                    size: 30,
-                                  ),
-                                ),
-                                Text(
-                                  "Add Type Of Photographer",
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5.0, vertical: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Auto CF ID",
                                   style: TextStyle(
-                                      color: AppColors.temtextclr,
-                                      fontSize: 16,
+                                      color: Color(0xff42ACFE),
                                       fontWeight: FontWeight.bold),
                                 ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.1,
+                                  // width:180,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.backgruond,
+                                  ),
+
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          widget.qid.toString(),
+                                          // quotationData![0].qid.toString(),
+                                          style:
+                                              TextStyle(color: AppColors.whit),
+                                        ),
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Client Name",
+                                  style: TextStyle(
+                                      color: Color(0xff42ACFE),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: AppColors.containerclr2),
+                                    // padding: EdgeInsets.symmetric(vertical: 1),
+                                    // width:180,
+                                    // height: 30,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.1,
+                                    child: TextFormField(
+                                      style: const TextStyle(
+                                          color: AppColors.textclr),
+                                      controller: clientNameController,
+                                      keyboardType: TextInputType.name,
+                                      validator: (value) => value!.isEmpty
+                                          ? 'Client Name cannot be blank'
+                                          : null,
+                                      decoration: const InputDecoration(
+                                          hintText: 'Enter Client Name',
+                                          hintStyle: TextStyle(
+                                              color: AppColors.textclr,
+                                              fontSize: 14),
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 8, bottom: 12)),
+                                    ),
+                                  ),
+                                )
+                                // Container(
+                                //   width:180,
+                                //   height: 35,
+                                //   decoration: BoxDecoration(
+                                //     borderRadius: BorderRadius.circular(8),
+                                //     color: AppColors.backgruond,
+                                //   ),
+                                //   child: DropdownButtonHideUnderline(
+                                //     child: DropdownButton(
+                                //       elevation: 0,
+                                //       underline: Container(),
+                                //       isExpanded: true,
+                                //       value: _chosenValue,
+                                //       icon: Icon(Icons.keyboard_arrow_down,size: 40,color: Color(0xff3B3B3B),),
+                                //       hint: Align(alignment: Alignment.centerLeft,
+                                //         child: Padding(
+                                //           padding: const EdgeInsets.all(8.0),
+                                //           child: Text("Kaushik Prajapati", style: TextStyle(
+                                //               color:AppColors.whit
+                                //           ),),
+                                //         ),
+                                //       ),
+                                //       items:item.map((String items) {
+                                //         return DropdownMenuItem(
+                                //             value: items,
+                                //             child: Text(items)
+                                //         );
+                                //       }
+                                //       ).toList(),
+                                //       onChanged: (String? newValue){
+                                //         setState(() {
+                                //           _chosenValue = newValue!;
+                                //         });
+                                //       },
+                                //
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "City/Venue",
+                                  style: TextStyle(color: AppColors.pdfbtn),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: AppColors.containerclr2),
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.1,
+                                    child: TextFormField(
+                                      style: const TextStyle(
+                                          color: AppColors.textclr),
+                                      controller: cityNameController,
+                                      keyboardType: TextInputType.name,
+                                      validator: (value) => value!.isEmpty
+                                          ? ' City/Venue cannot be blank'
+                                          : null,
+                                      decoration: const InputDecoration(
+                                          hintText: 'City/Venue',
+                                          hintStyle: TextStyle(
+                                              color: AppColors.textclr,
+                                              fontSize: 14),
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 10, bottom: 6)),
+                                    ),
+
+                                    // TextFormField(
+                                    //   style:
+                                    //      const TextStyle(color: AppColors.textclr),
+                                    //   controller: eventController,
+                                    //   keyboardType: TextInputType.name,
+                                    //   validator: (value) => value!.isEmpty
+                                    //       ? ' Events cannot be blank'
+                                    //       : null,
+                                    //   decoration: const InputDecoration(
+                                    //       hintText: 'Enter Events',
+                                    //       hintStyle: TextStyle(
+                                    //           color: AppColors.textclr,
+                                    //           fontSize: 14),
+                                    //       border: InputBorder.none,
+                                    //       contentPadding: EdgeInsets.only(
+                                    //           left: 10, bottom: 6)),
+                                    // ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Event",
+                                  style: TextStyle(color: AppColors.pdfbtn),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 0),
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 8),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: AppColors.containerclr2),
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.1,
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        dropdownColor: AppColors.cardclr,
+                                        // Initial Value
+                                        value: eventController,
+                                        isExpanded: true,
+                                        hint: const Text(
+                                          "Event",
+                                          style: TextStyle(
+                                              color: AppColors.textclr),
+                                        ),
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: AppColors.textclr,
+                                        ),
+                                        // Array list of items
+                                        items: eventList.map((items) {
+                                          return DropdownMenuItem(
+                                            value: items.id.toString(),
+                                            child: Text(
+                                              items.cName.toString(),
+                                              style: const TextStyle(
+                                                  color: AppColors.textclr),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        // After selecting the desired option,it will
+                                        // change button value to selected value
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            eventController = newValue;
+                                          });
+                                        },
+                                      ),
+                                    ),
+
+                                    // TextFormField(
+                                    //   style:
+                                    //      const TextStyle(color: AppColors.textclr),
+                                    //   controller: eventController,
+                                    //   keyboardType: TextInputType.name,
+                                    //   validator: (value) => value!.isEmpty
+                                    //       ? ' Events cannot be blank'
+                                    //       : null,
+                                    //   decoration: const InputDecoration(
+                                    //       hintText: 'Enter Events',
+                                    //       hintStyle: TextStyle(
+                                    //           color: AppColors.textclr,
+                                    //           fontSize: 14),
+                                    //       border: InputBorder.none,
+                                    //       contentPadding: EdgeInsets.only(
+                                    //           left: 10, bottom: 6)),
+                                    // ),
+                                  ),
+                                )
                               ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    ///ADD PHOTOGRAPHER TYPE BUTTON
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: Text(
-                    //     "(For Developer User Can Hold/Or To Delete This Row)",
-                    //     style: TextStyle(
-                    //         fontStyle: FontStyle.italic,
-                    //         color: AppColors.textclr,
-                    //         fontSize: 13),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(5.0),
-                    //   child: Icon(
-                    //     Icons.add_circle_outline,
-                    //     color: AppColors.temtextclr,
-                    //     size: 30,
-                    //   ),
-                    // ),
-                    // Text(
-                    //   "Add Type Of Photographer",
-                    //   style: TextStyle(
-                    //       color: AppColors.temtextclr,
-                    //       fontSize: 16,
-                    //       fontWeight: FontWeight.bold),
-                    // ),
-                    // SizedBox(
-                    //   height: 20,
-                    // ),
-                    ///ADD PHOTOGRAPHER TYPE BUTTON
-                  ],
-                ),
-              ),
-             const  SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Output",
-                      style: TextStyle(
-                          color: AppColors.textclr,
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold),
+                    SizedBox(
+                      height: 20,
                     ),
-                    Spacer(),
+
+                    quotationData.isNotEmpty
+                        ? Row(
+                            children: [
+                              Container(
+                                height: 45,
+                                width: MediaQuery.of(context).size.width /1.4,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: quotationData[0]
+                                        .photographersDetails!
+                                        .length,
+                                    itemBuilder: (context, j) {
+                                      return Stack(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              dateIndex = j;
+                                              setState(() {});
+                                            },
+                                            child: Container(
+                                              // width: 110,
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(8),
+                                                    topLeft: Radius.circular(8)),
+                                                color: AppColors.teamcard2,
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 8.0, vertical: 8),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 5),
+                                                  decoration: const BoxDecoration(
+                                                    color: AppColors.datecontainer,
+                                                  ),
+                                                  child: Text(
+                                                    quotationData[0]
+                                                        .photographersDetails![j]
+                                                        .date
+                                                        .toString(),
+                                                    overflow: TextOverflow.fade,
+                                                    style: const TextStyle(
+                                                        color: AppColors.textclr),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                              right: -12,
+                                              top: -17,
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+
+                                                    });
+                                                    showSelectedDate.removeAt(j);
+                                                    // removeDate(index);
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.remove_circle_outline,
+                                                    size: 18,
+                                                    color: AppColors.temtextclr,
+                                                  )))
+                                        ],
+                                      );
+                                    }),
+                              ),
+                              // showSelectedDate.isNotEmpty ?   Container(
+                              //   height: 45,
+                              //   width: MediaQuery.of(context).size.width / 3,
+                              //   child: ListView.builder(
+                              //       scrollDirection: Axis.horizontal,
+                              //       shrinkWrap: true,
+                              //       itemCount: showSelectedDate.length,
+                              //       itemBuilder: (context, index) {
+                              //         currentIndex = index;
+                              //         return dateCard(index);
+                              //       })
+                              // )
+                              // : SizedBox.shrink(),
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    // if(showSelectedDate.isNotEmpty) {
+
+                                    // setState(() {
+                                    //   customWidgets.add(photographerCard());
+                                    // });
+                                    // if(cardCount>=0&&cardCount<10) { v
+                                    //   cardCount++;
+                                    // }
+                                    selectDate(context, 1);
+
+
+                                    // }else{
+                                    //   selectDate(context, 1);
+                                    // }
+                                  },
+                                  child: Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.add_circle_outline,
+                                        color: AppColors.temtextclr,
+                                        size: 28,
+                                      ),
+                                      Text(
+                                        "Add Date",
+                                        style: TextStyle(
+                                            color: AppColors.temtextclr,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                    // Row(
+                    //   children: [
+                    //
+                    //   Container(
+                    //     margin: EdgeInsets.zero,
+                    //     decoration: const BoxDecoration(
+                    //       borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
+                    //       color: AppColors.teamcard2,
+                    //     ),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
+                    //       child: Container(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                    //         decoration: const BoxDecoration(
+                    //           color:AppColors.datecontainer,
+                    //z
+                    //         ),
+                    //         child: const Text("22/2/2023",style: TextStyle(color: AppColors.textclr),),
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   const Padding(
+                    //     padding:  EdgeInsets.all(5.0),
+                    //     child: Icon(Icons.add_circle_outline,color: AppColors.temtextclr,size: 30,),
+                    //   ),
+                    //   Text("Add Date",style: TextStyle(color: AppColors.temtextclr,fontSize: 16,fontWeight: FontWeight.bold),)
+                    //
+                    // ],),
                     Container(
-                      decoration: BoxDecoration(
-                          color: AppColors.teamcard,
-                          borderRadius: BorderRadius.circular(10)),
-                      height: 70,
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          maxLines: 4,
+                      decoration: const BoxDecoration(
+                          color: AppColors.teamcard2,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10))),
+                      child: Column(
+                        children: [
+                          // const Align(
+                          //   alignment: Alignment.topRight,
+                          //   child: Text(
+                          //     "(For Developer User Can Hold/Or To Delete This Row)",
+                          //     style: TextStyle(
+                          //         fontStyle: FontStyle.italic,
+                          //         color: AppColors.textclr,
+                          //         fontSize: 12),
+                          //   ),
+                          // ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 8),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Type Of Photographer",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.textclr,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                                quotationData.isNotEmpty
+                                    ? ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        // scrollDirection: Axis.horizontal,
+                                        itemCount: quotationData[0]
+                                            .photographersDetails![dateIndex]
+                                            .data!
+                                            .length,
+                                        itemBuilder: (context, j) {
 
+                                          photographerType = quotationData[0]
+                                              .photographersDetails![dateIndex]
+                                              .data![j]
+                                              .photographerType;
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 0.0, vertical: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  height: 30,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 0),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              0),
+                                                      color: AppColors
+                                                          .datecontainer),
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      1.4,
+                                                  child:
+                                                      DropdownButtonHideUnderline(
+                                                    child: DropdownButton(
+                                                      dropdownColor:
+                                                          AppColors.cardclr,
+                                                      // Initial Value
+                                                      value: photographerType,
+                                                      // typeofPhotographyEvent[index].selectedValue,
+                                                      isExpanded: true,
+                                                      hint: const Text(
+                                                        "Type Of Photography",
+                                                        style: TextStyle(
+                                                            color: AppColors
+                                                                .textclr),
+                                                      ),
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .keyboard_arrow_down,
+                                                        color:
+                                                            AppColors.textclr,
+                                                      ),
+                                                      // Array list of items
+                                                      items:
+                                                          typeofPhotographyEvent
+                                                              .map((items) {
+                                                        return DropdownMenuItem(
+                                                          value: items.resName,
+                                                          child: Text(
+                                                            items.resName
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                color: AppColors
+                                                                    .textclr),
+                                                          ),
+                                                        );
+                                                      }).toList(),
+                                                      // After selecting the desired option,it will
+                                                      // change button value to selected value
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          quotationData[0]
+                                                                  .photographersDetails![
+                                                                      dateIndex]
+                                                                  .data![j]
+                                                                  .setPhotographer =
+                                                              newValue;
+                                                        });
 
-                          style: const TextStyle(color: AppColors.textclr,fontSize: 14),
-                          controller: outputController,
-                          keyboardType: TextInputType.name,
-                          validator: (value) => value!.isEmpty
-                              ? 'Output cannot be blank'
-                              : null,
-                          decoration: const InputDecoration(
-                              hintText: '',
-                              hintStyle: TextStyle(
-                                  color: AppColors.textclr, fontSize: 14),
-                              border: InputBorder.none,
-                              contentPadding:
-                              EdgeInsets.only(left: 10, bottom: 10)),
+                                                        // selectValue(newValue ?? Categories(), index);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                    onTap: () {
+                                                      quotationData[0]
+                                                          .photographersDetails![
+                                                              dateIndex]
+                                                          .data!
+                                                          .removeAt(j);
+                                                      // up.removeAt(index);
+                                                      setState(() {});
+                                                    },
+                                                    child: Icon(
+                                                      Icons.delete_forever,
+                                                      color: Colors.red,
+                                                    ))
+                                              ],
+                                            ),
+                                          );
+                                        })
+                                    : const SizedBox.shrink(),
+                                SizedBox(
+                                  height: 165,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: up[0],
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 0.0, vertical: 5),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              height: 30,
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 8, vertical: 0),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(0),
+                                                  color: AppColors.datecontainer),
+                                              width: MediaQuery.of(context).size.width / 1.4,
+                                              child: DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                                  dropdownColor: AppColors.cardclr,
+                                                  // Initial Value
+                                                  value:
+                                                  typeofPhotographyEvent[index].selectedValue,
+                                                  isExpanded: true,
+                                                  hint: const Text(
+                                                    "Type Of Photography",
+                                                    style: TextStyle(color: AppColors.textclr),
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    color: AppColors.textclr,
+                                                  ),
+                                                  // Array list of items
+                                                  items: typeofPhotographyEvent
+                                                      .map((Categories items) {
+                                                    return DropdownMenuItem<Categories>(
+                                                      value: items,
+                                                      child: Text(
+                                                        items.resName.toString(),
+                                                        style: const TextStyle(
+                                                            color: AppColors.textclr),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                  // After selecting the desired option,it will
+                                                  // change button value to selected value
+                                                  onChanged: (newValue) {
+                                                    selectValue(newValue ?? Categories(), index);
+
+                                                    setState(() {});
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            InkWell(onTap: (){
+                                              up.removeAt(index);
+                                              setState(() {
+
+                                              });
+                                            }, child: Icon(Icons.delete_forever, color: Colors.red,))
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    increment(dateIndex);
+                                  },
+                                  child: Column(
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Icon(
+                                          Icons.add_circle_outline,
+                                          color: AppColors.temtextclr,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Add Type Of Photographer",
+                                        style: TextStyle(
+                                            color: AppColors.temtextclr,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          ///ADD PHOTOGRAPHER TYPE BUTTON
+                          // Align(
+                          //   alignment: Alignment.center,
+                          //   child: Text(
+                          //     "(For Developer User Can Hold/Or To Delete This Row)",
+                          //     style: TextStyle(
+                          //         fontStyle: FontStyle.italic,
+                          //         color: AppColors.textclr,
+                          //         fontSize: 13),
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 10,
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.all(5.0),
+                          //   child: Icon(
+                          //     Icons.add_circle_outline,
+                          //     color: AppColors.temtextclr,
+                          //     size: 30,
+                          //   ),
+                          // ),
+                          // Text(
+                          //   "Add Type Of Photographer",
+                          //   style: TextStyle(
+                          //       color: AppColors.temtextclr,
+                          //       fontSize: 16,
+                          //       fontWeight: FontWeight.bold),
+                          // ),
+                          // SizedBox(
+                          //   height: 20,
+                          // ),
+                          ///ADD PHOTOGRAPHER TYPE BUTTON
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Output",
+                            style: TextStyle(
+                                color: AppColors.textclr,
+                                fontSize: 19,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: AppColors.teamcard,
+                                borderRadius: BorderRadius.circular(10)),
+                            height: 70,
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                maxLines: 4,
+                                style: const TextStyle(
+                                    color: AppColors.textclr, fontSize: 14),
+                                controller: outputController,
+                                keyboardType: TextInputType.name,
+                                validator: (value) => value!.isEmpty
+                                    ? 'Output cannot be blank'
+                                    : null,
+                                decoration: const InputDecoration(
+                                    hintText: '',
+                                    hintStyle: TextStyle(
+                                        color: AppColors.textclr, fontSize: 14),
+                                    border: InputBorder.none,
+                                    contentPadding:
+                                        EdgeInsets.only(left: 10, bottom: 10)),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
+
+                        children: [
+                          const Text(
+                            "Amount",
+                            style: TextStyle(
+                                color: AppColors.textclr,
+                                fontSize: 19,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          Spacer(),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: AppColors.teamcard,
+                                borderRadius: BorderRadius.circular(10)),
+                            height: 35,
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            child: TextFormField(
+                              style: TextStyle(color: AppColors.textclr),
+                              controller: amountController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Amount cannot be blank'
+                                  : null,
+                              decoration: const InputDecoration(
+                                  hintText: '',
+                                  hintStyle: TextStyle(
+                                      color: AppColors.textclr, fontSize: 14),
+                                  border: InputBorder.none,
+                                  contentPadding:
+                                      EdgeInsets.only(left: 10, bottom: 10)),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return deleteConfirmation(context);
+                                });
+                          },
+                          child: Container(
+                            height: 35,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: AppColors.AppbtnColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: const Center(
+                                child: Text(
+                                  "Update",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textclr,
+                                      fontSize: 18),
+                                )),
+                          ),
+                        ),
+                        // Container(
+                        //   height: 50,
+                        //   width: 150,
+                        //   decoration: BoxDecoration(
+                        //       color: AppColors.AppbtnColor,
+                        //       borderRadius: BorderRadius.circular(5)),
+                        //   child: Center(
+                        //       child: Text(
+                        //     "Update",
+                        //     style: TextStyle(
+                        //         fontWeight: FontWeight.bold,
+                        //         color: AppColors.textclr,
+                        //         fontSize: 18),
+                        //   )),
+                        // ),
+                        Image.asset(
+                          "assets/images/pdf.png",
+                          scale: 1.6,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return deleteConfirmation(context);
+                                });
+                          },
+                          child: Container(
+                            height: 35,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: AppColors.contaccontainerred,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: const Center(
+                                child: Text(
+                              "Delete",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textclr,
+                                  fontSize: 18),
+                            )),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                   const SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        createClientJob(context);
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => MoreQuatations()));
+                      },
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width / 1,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: AppColors.pdfbtn),
+                        child: const Center(
+                          child: Text("Final Booking",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.whit)),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 5,),
-              Padding(
-                padding: const EdgeInsets.all(0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisAlignment: MainAxisAlignment.center,
-
-                  children: [
-                    const  Text(
-                      "Amount",
-                      style: TextStyle(
-                          color: AppColors.textclr,
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis),
                     ),
-                    Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: AppColors.teamcard,
-                          borderRadius: BorderRadius.circular(10)),
-                      height: 35,
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      child: TextFormField(
-                        style: TextStyle(color: AppColors.textclr),
-                        controller: amountController,
-                        keyboardType: TextInputType.number,
-                        validator: (value) => value!.isEmpty
-                            ? 'Amount cannot be blank'
-                            : null,
-                        decoration: const InputDecoration(
-                            hintText: '',
-                            hintStyle: TextStyle(
-                                color: AppColors.textclr, fontSize: 14),
-                            border: InputBorder.none,
-                            contentPadding:
-                            EdgeInsets.only(left: 10, bottom: 10)),
-                      ),
-                    )
+                    const SizedBox(
+                      height: 30,
+                    ),
                   ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Container(
-                  //   height: 50,
-                  //   width: 150,
-                  //   decoration: BoxDecoration(
-                  //       color: AppColors.AppbtnColor,
-                  //       borderRadius: BorderRadius.circular(5)),
-                  //   child: Center(
-                  //       child: Text(
-                  //     "Update",
-                  //     style: TextStyle(
-                  //         fontWeight: FontWeight.bold,
-                  //         color: AppColors.textclr,
-                  //         fontSize: 18),
-                  //   )),
-                  // ),
-                  Image.asset(
-                    "assets/images/pdf.png",
-                    scale: 1.6,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return
-                          deleteConfirmation(context);}
-                      );
-                    },
+                )
+              : Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
                     child: Container(
-                      height: 50,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          color: AppColors.contaccontainerred,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Center(
-                          child: Text(
-                        "Delete",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textclr,
-                            fontSize: 18),
-                      )),
+                      width: 40,
+                      height: 40,
+                      child: const CircularProgressIndicator(
+                        color: AppColors.AppbtnColor,
+                      ),
                     ),
                   ),
-                ],
-              ),
-
-              SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () {
-                  createClientJob(context);
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => MoreQuatations()));
-                },
-                child: Container(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width / 1,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: AppColors.pdfbtn),
-                  child: const Center(
-                    child: Text("Final Booking",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.whit)),
-                  ),
                 ),
-              ),
-             const  SizedBox(
-                height: 30,
-              ),
-            ],
-          )
-          : Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: Container(
-                width: 40,
-                height: 40,
-                child: const CircularProgressIndicator(
-                  color: AppColors.AppbtnColor,
-                ),
-              ),
-            ),
-          ),
         ),
       ),
     );

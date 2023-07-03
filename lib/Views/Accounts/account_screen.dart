@@ -49,8 +49,9 @@ class _AccountsScreenState extends State<AccountsScreen> {
         onTap: (){
           Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetailsScreen(
             photographerName: result.name,
-            pid: result.id,
+            pid: result.photographerId,
             type: isSelected? 'client' : 'photographer',
+            totalOutstanding: data?.totalAmount.toString(),
           )));
         },
         child: Container(

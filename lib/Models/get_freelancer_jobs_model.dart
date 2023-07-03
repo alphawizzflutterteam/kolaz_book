@@ -122,7 +122,9 @@ class UpcomingJobs {
       String? cityName, 
       List<JsonData>? jsonData, 
       String? createdAt, 
-      String? updatedAt,}){
+      String? updatedAt,
+    String? totalAmount
+  }){
     _typeOfPhotography = typeOfPhotography;
     _photographerName = photographerName;
     _eventName = eventName;
@@ -135,6 +137,7 @@ class UpcomingJobs {
     _jsonData = jsonData;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
+    _totalAmount = totalAmount;
 }
 
   UpcomingJobs.fromJson(dynamic json) {
@@ -155,6 +158,7 @@ class UpcomingJobs {
     }
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _totalAmount = json['total_amount'];
   }
   String? _typeOfPhotography;
   String? _photographerName;
@@ -168,6 +172,7 @@ class UpcomingJobs {
   List<JsonData>? _jsonData;
   String? _createdAt;
   String? _updatedAt;
+  String? _totalAmount;
 UpcomingJobs copyWith({  String? typeOfPhotography,
   String? photographerName,
   String? eventName,
@@ -180,6 +185,7 @@ UpcomingJobs copyWith({  String? typeOfPhotography,
   List<JsonData>? jsonData,
   String? createdAt,
   String? updatedAt,
+  String? totalAmount
 }) => UpcomingJobs(  typeOfPhotography: typeOfPhotography ?? _typeOfPhotography,
   photographerName: photographerName ?? _photographerName,
   eventName: eventName ?? _eventName,
@@ -192,6 +198,7 @@ UpcomingJobs copyWith({  String? typeOfPhotography,
   jsonData: jsonData ?? _jsonData,
   createdAt: createdAt ?? _createdAt,
   updatedAt: updatedAt ?? _updatedAt,
+  totalAmount: totalAmount ?? _totalAmount
 );
   String? get typeOfPhotography => _typeOfPhotography;
   String? get photographerName => _photographerName;
@@ -205,6 +212,7 @@ UpcomingJobs copyWith({  String? typeOfPhotography,
   List<JsonData>? get jsonData => _jsonData;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
+  String? get totalAmount => _totalAmount;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -222,6 +230,7 @@ UpcomingJobs copyWith({  String? typeOfPhotography,
     }
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;
+    map['total_amount'] = _totalAmount;
     return map;
   }
 
@@ -306,7 +315,9 @@ class AllJobs {
       String? cityName, 
       List<JsonData>? jsonData, 
       String? createdAt, 
-      String? updatedAt,}){
+      String? updatedAt,
+    String? totalAmount
+  }){
     _typeOfPhotography = typeOfPhotography;
     _photographerName = photographerName;
     _eventName = eventName;
@@ -319,6 +330,7 @@ class AllJobs {
     _jsonData = jsonData;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
+    _totalAmount = totalAmount;
 }
 
   AllJobs.fromJson(dynamic json) {
@@ -339,6 +351,7 @@ class AllJobs {
     }
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _totalAmount = json['total_amount'];
   }
   String? _typeOfPhotography;
   String? _photographerName;
@@ -352,6 +365,7 @@ class AllJobs {
   List<JsonData>? _jsonData;
   String? _createdAt;
   String? _updatedAt;
+  String? _totalAmount;
 AllJobs copyWith({  String? typeOfPhotography,
   String? photographerName,
   String? eventName,
@@ -364,6 +378,7 @@ AllJobs copyWith({  String? typeOfPhotography,
   List<JsonData>? jsonData,
   String? createdAt,
   String? updatedAt,
+  String? totalAmount
 }) => AllJobs(  typeOfPhotography: typeOfPhotography ?? _typeOfPhotography,
   photographerName: photographerName ?? _photographerName,
   eventName: eventName ?? _eventName,
@@ -376,6 +391,7 @@ AllJobs copyWith({  String? typeOfPhotography,
   jsonData: jsonData ?? _jsonData,
   createdAt: createdAt ?? _createdAt,
   updatedAt: updatedAt ?? _updatedAt,
+  totalAmount: totalAmount ?? _totalAmount
 );
   String? get typeOfPhotography => _typeOfPhotography;
   String? get photographerName => _photographerName;
@@ -389,6 +405,8 @@ AllJobs copyWith({  String? typeOfPhotography,
   List<JsonData>? get jsonData => _jsonData;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
+  String? get totalAmount => _totalAmount;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -406,6 +424,7 @@ AllJobs copyWith({  String? typeOfPhotography,
     }
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;
+    map['total_amount'] = _totalAmount;
     return map;
   }
 

@@ -103,10 +103,11 @@ class _JobsScreenState extends State<JobsScreen> {
   List<FreelancerJobs> freelancerJobs = [];
   List<JobData> getJobs = [];
   String htmlContent = '';
+  String? userId;
 
   getClientJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? id = preferences.getString('id');
+    userId = preferences.getString('id');
     var uri =
     Uri.parse(getClientJobsApi.toString());
     // '${Apipath.getCitiesUrl}');
@@ -116,7 +117,7 @@ class _JobsScreenState extends State<JobsScreen> {
     };
 
     request.headers.addAll(headers);
-    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.userId] = userId!;
     // request.fields[RequestKeys.type] = 'client';
     var response = await request.send();
     print(response.statusCode);
@@ -161,23 +162,24 @@ class _JobsScreenState extends State<JobsScreen> {
     final status = await Permission.storage.request();
 
     if (status == PermissionStatus.granted) {
-      if (mounted) {
-        // setState(() {
-        //   _isProgress = true;
-        // });
-      }
+      // if (mounted) {
+      //   // setState(() {
+      //   //   _isProgress = true;
+      //   // });
+      // }
       var targetPath;
 
       if (Platform.isIOS) {
         var target = await getApplicationDocumentsDirectory();
         targetPath = target.path.toString();
       } else {
-        var downloadsDirectory =
-        await DownloadsPathProvider.downloadsDirectory;
+        print("android");
+        var downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
         targetPath = downloadsDirectory!.path.toString();
       }
+      print("this is target path $targetPath");
 
-      var targetFileName = "Kolazbook Pdf";
+      var targetFileName = "Kolazbook_$userId";
       var generatedPdfFile, filePath;
       try {
         generatedPdfFile =
@@ -191,10 +193,10 @@ class _JobsScreenState extends State<JobsScreen> {
             htmlContent, targetPath, targetFileName);
         filePath = generatedPdfFile.path;
       }
-
-      if (mounted) {
-
-      }
+      //
+      // if (mounted) {
+      //
+      // }
       Fluttertoast.showToast(msg: 'msg');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -212,11 +214,14 @@ class _JobsScreenState extends State<JobsScreen> {
         elevation: 1.0,
       ));
     }
+    else{
+      await Permission.storage.request();
+    }
   }
 
   getFreelancingJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? id = preferences.getString('id');
+    userId = preferences.getString('id');
     var uri =
     Uri.parse(getFreelancingJobsApi.toString());
     // '${Apipath.getCitiesUrl}');
@@ -226,7 +231,7 @@ class _JobsScreenState extends State<JobsScreen> {
     };
 
     request.headers.addAll(headers);
-    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.userId] = userId!;
     request.fields[RequestKeys.type] = 'freelancer';
     var response = await request.send();
     print(response.statusCode);

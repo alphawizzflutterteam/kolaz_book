@@ -199,7 +199,7 @@ class _AddQuotationState extends State<AddQuotation> {
     typeofPhotographyEvent[index].selectedValue = newValue;
     pType.add({
       "photographer_type":
-          typeofPhotographyEvent[index].selectedValue!.resName.toString()
+      typeofPhotographyEvent[index].selectedValue!.resName.toString()
     });
     print("this is selected json $pType");
     // if(up[index] >1) {
@@ -484,7 +484,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                   dropdownColor: AppColors.cardclr,
                                   // Initial Value
                                   value:
-                                      typeofPhotographyEvent[index].selectedValue,
+                                  typeofPhotographyEvent[index].selectedValue,
                                   isExpanded: true,
                                   hint: const Text(
                                     "Type Of Photography",
@@ -518,11 +518,11 @@ class _AddQuotationState extends State<AddQuotation> {
                             ),
                             InkWell(
                                 onTap: (){
-                              up.removeAt(index);
-                              setState(() {
+                                  up.removeAt(index);
+                                  setState(() {
 
-                              });
-                            }, child: Icon(Icons.delete_forever, color: Colors.red,))
+                                  });
+                                }, child: Icon(Icons.delete_forever, color: Colors.red,))
                           ],
                         ),
                       );
@@ -609,7 +609,7 @@ class _AddQuotationState extends State<AddQuotation> {
                       ? ' ${showSelectedDate[index]}'
                       : 'Select Start Date',
                   style:
-                      const TextStyle(color: AppColors.textclr, fontSize: 12),
+                  const TextStyle(color: AppColors.textclr, fontSize: 12),
                 ),
               ),
             ),
@@ -656,7 +656,7 @@ class _AddQuotationState extends State<AddQuotation> {
     };
 
     var request =
-        http.MultipartRequest('POST', Uri.parse(addQuotationApi.toString()));
+    http.MultipartRequest('POST', Uri.parse(addQuotationApi.toString()));
 
     request.fields.addAll({
       'client_name': clientName.toString(),
@@ -679,7 +679,7 @@ class _AddQuotationState extends State<AddQuotation> {
 
     if (response.statusCode == 200) {
       String responseData =
-          await response.stream.transform(utf8.decoder).join();
+      await response.stream.transform(utf8.decoder).join();
       var userData = json.decode(responseData);
       Navigator.pop(context, true);
       Fluttertoast.showToast(msg: userData['message']);
@@ -827,7 +827,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         color: AppColors.containerclr2),
                                     // padding: EdgeInsets.symmetric(vertical: 1),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child: CustomSearchableDropDown(
                                       dropdownHintText: "Client Name",
                                       suffixIcon: const Icon(
@@ -836,7 +836,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                       ),
                                       backgroundColor: AppColors.containerclr2,
                                       dropdownBackgroundColor:
-                                          AppColors.containerclr2,
+                                      AppColors.containerclr2,
                                       dropdownItemStyle: const TextStyle(
                                           color: AppColors.whit),
                                       // dropdownHintText: TextStyle(
@@ -845,18 +845,18 @@ class _AddQuotationState extends State<AddQuotation> {
                                       items: clientList,
                                       label: 'Client Name',
                                       labelStyle: const TextStyle(
-                                        color: AppColors.whit
+                                          color: AppColors.whit
                                       ),
                                       multiSelectTag: 'Names',
                                       decoration: BoxDecoration(
-                                        color: AppColors.containerclr2,
+                                          color: AppColors.containerclr2,
                                           borderRadius:
-                                              BorderRadius.circular(15)
-                                          // color: Colors.white
-                                          // border: Border.all(
-                                          //   color: CustomColors.lightgray.withOpacity(0.5),
-                                          // )
-                                          ),
+                                          BorderRadius.circular(15)
+                                        // color: Colors.white
+                                        // border: Border.all(
+                                        //   color: CustomColors.lightgray.withOpacity(0.5),
+                                        // )
+                                      ),
                                       multiSelect: false,
                                       // prefixIcon: Padding(
                                       //   padding: const EdgeInsets.all(2.0),
@@ -868,8 +868,8 @@ class _AddQuotationState extends State<AddQuotation> {
                                       //   ),
                                       // ),
                                       dropDownMenuItems: clientList.map((item) {
-                                            return "${item.firstName} ${item.lastName}";
-                                          }).toList() ??
+                                        return "${item.firstName} ${item.lastName}";
+                                      }).toList() ??
                                           [],
                                       onChanged: (value) {
                                         if (value != null) {
@@ -909,45 +909,45 @@ class _AddQuotationState extends State<AddQuotation> {
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child:
-                                        // DropdownButtonHideUnderline(
-                                        //   child: DropdownButton(
-                                        //     dropdownColor: AppColors.cardclr,
-                                        //     // Initial Value
-                                        //     value: cityController,
-                                        //     isExpanded: true,
-                                        //     hint: const Text(
-                                        //       "City",
-                                        //       style: TextStyle(
-                                        //           color: AppColors.textclr),
-                                        //     ),
-                                        //     icon: const Icon(
-                                        //       Icons.keyboard_arrow_down,
-                                        //       color: AppColors.textclr,
-                                        //     ),
-                                        //     // Array list of items
-                                        //
-                                        //     items: citiesList.map((items) {
-                                        //       return DropdownMenuItem(
-                                        //         value: items.id.toString(),
-                                        //         child: Text(
-                                        //           items.name.toString(),
-                                        //           style: const TextStyle(
-                                        //               color: AppColors.textclr),
-                                        //         ),
-                                        //       );
-                                        //     }).toList(),
-                                        //     // After selecting the desired option,it will
-                                        //     // change button value to selected value
-                                        //     onChanged: (newValue) {
-                                        //       setState(() {
-                                        //         cityController = newValue;
-                                        //       });
-                                        //     },
-                                        //   ),
-                                        // ),
-                                        TextFormField(
+                                    // DropdownButtonHideUnderline(
+                                    //   child: DropdownButton(
+                                    //     dropdownColor: AppColors.cardclr,
+                                    //     // Initial Value
+                                    //     value: cityController,
+                                    //     isExpanded: true,
+                                    //     hint: const Text(
+                                    //       "City",
+                                    //       style: TextStyle(
+                                    //           color: AppColors.textclr),
+                                    //     ),
+                                    //     icon: const Icon(
+                                    //       Icons.keyboard_arrow_down,
+                                    //       color: AppColors.textclr,
+                                    //     ),
+                                    //     // Array list of items
+                                    //
+                                    //     items: citiesList.map((items) {
+                                    //       return DropdownMenuItem(
+                                    //         value: items.id.toString(),
+                                    //         child: Text(
+                                    //           items.name.toString(),
+                                    //           style: const TextStyle(
+                                    //               color: AppColors.textclr),
+                                    //         ),
+                                    //       );
+                                    //     }).toList(),
+                                    //     // After selecting the desired option,it will
+                                    //     // change button value to selected value
+                                    //     onChanged: (newValue) {
+                                    //       setState(() {
+                                    //         cityController = newValue;
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // ),
+                                    TextFormField(
                                       style: const TextStyle(
                                           color: AppColors.textclr),
                                       controller: cityNameController,
@@ -984,7 +984,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton(
                                         dropdownColor: AppColors.cardclr,
@@ -1057,7 +1057,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         borderRadius: BorderRadius.circular(10),
                                         color: AppColors.containerclr2),
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
                                     child: TextFormField(
                                       style: const TextStyle(
                                           color: AppColors.textclr),
@@ -1098,50 +1098,50 @@ class _AddQuotationState extends State<AddQuotation> {
                               : MediaQuery.of(context).size.width - 125,
                           child: showSelectedDate.isEmpty
                               ? InkWell(
-                                  onTap: () {
-                                    // if(currentIndex == index){
-                                    //   setState(() {
-                                    //     show = true;
-                                    //   });
-                                    // }
-                                  },
-                                  child: Container(
-                                    width: 125,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(8),
-                                          topLeft: Radius.circular(8)),
-                                      color: AppColors.teamcard2,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 8),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 5),
-                                        decoration: const BoxDecoration(
-                                          color: AppColors.datecontainer,
-                                        ),
-                                        child: const Text(
-                                          // showSelectedDate[index] != null
-                                          //     ? ' ${DateFormat('yyyy-MM-dd').format(showSelectedDate[index])}'
-                                          'Select Start Date',
-                                          style: TextStyle(
-                                              color: AppColors.textclr,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                    ),
+                            onTap: () {
+                              // if(currentIndex == index){
+                              //   setState(() {
+                              //     show = true;
+                              //   });
+                              // }
+                            },
+                            child: Container(
+                              width: 125,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    topLeft: Radius.circular(8)),
+                                color: AppColors.teamcard2,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 5),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.datecontainer,
                                   ),
-                                )
+                                  child: const Text(
+                                    // showSelectedDate[index] != null
+                                    //     ? ' ${DateFormat('yyyy-MM-dd').format(showSelectedDate[index])}'
+                                    'Select Start Date',
+                                    style: TextStyle(
+                                        color: AppColors.textclr,
+                                        fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                               : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: showSelectedDate.length,
-                                  itemBuilder: (context, index) {
-                                    currentIndex = index;
-                                    return dateCard(index);
-                                  }),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: showSelectedDate.length,
+                              itemBuilder: (context, index) {
+                                currentIndex = index;
+                                return dateCard(index);
+                              }),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -1245,7 +1245,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                         color: AppColors.textclr, fontSize: 14),
                                     border: InputBorder.none,
                                     contentPadding:
-                                        EdgeInsets.only(left: 10, bottom: 10)),
+                                    EdgeInsets.only(left: 10, bottom: 10)),
                               ),
                             ),
                           )
@@ -1291,7 +1291,7 @@ class _AddQuotationState extends State<AddQuotation> {
                                       color: AppColors.textclr, fontSize: 14),
                                   border: InputBorder.none,
                                   contentPadding:
-                                      EdgeInsets.only(left: 10, bottom: 10)),
+                                  EdgeInsets.only(left: 10, bottom: 10)),
                             ),
                           )
                         ],
@@ -1307,9 +1307,13 @@ class _AddQuotationState extends State<AddQuotation> {
                             "date": showSelectedDate[currentIndex],
                             "data": pType
                           }));
-                          print("this final List $newList");
+                          List finalList = [];
+                          for(var i = 0 ; i < newList.length; i++) {
+                            finalList.add(newList[i]);
+                          }
+                          print("this final List $newList and and $finalList");
                           if(eventController != null) {
-                            addQuotation();
+                             addQuotation();
                           }
                           else {
                             Fluttertoast.showToast(

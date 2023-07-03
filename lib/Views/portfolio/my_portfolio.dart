@@ -5,14 +5,13 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:kolazz_book/Controller/edit_profile_controller.dart';
 import 'package:kolazz_book/Models/get_portfolio_model.dart';
-import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/colors.dart';
-import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/edit_profile/edit_profile.dart';
 import 'package:kolazz_book/Views/portfolio/add_portfolio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+
 class MyPortfolioScreen extends StatefulWidget {
   final Portfolio data;
   final bool? isUser ;
@@ -163,21 +162,21 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                                         fontSize: 15),
                                   )
                                       : CircularProgressIndicator(),
-                                  InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AddPortfolioScreen()));
-                                      },
-                                      child: const Text(
-                                        "My Portfolio",
-                                        style: TextStyle(
-                                            color: AppColors.whit,
-                                            decoration:
-                                            TextDecoration.underline),
-                                      ))
+                                  // InkWell(
+                                  //     onTap: () {
+                                  //       Navigator.push(
+                                  //           context,
+                                  //           MaterialPageRoute(
+                                  //               builder: (context) =>
+                                  //                   AddPortfolioScreen()));
+                                  //     },
+                                  //     child: const Text(
+                                  //       "My Portfolio",
+                                  //       style: TextStyle(
+                                  //           color: AppColors.whit,
+                                  //           decoration:
+                                  //           TextDecoration.underline),
+                                  //     ))
                                 ],
                               )
                             ],
