@@ -16,6 +16,7 @@ final Uri getFreelancingJobsApi = Uri.parse('${baseUrl}get_freelance_job');
 final Uri deleteQuotationApi = Uri.parse('${baseUrl}delete_quatation');
 final Uri deleteBroadcastApi = Uri.parse('${baseUrl}delete_broadcast');
 final Uri deleteFreelanceJobApi = Uri.parse('${baseUrl}delete_freelance_job');
+final Uri deleteLedgerEntriesApi = Uri.parse('${baseUrl}delete_ledger');
 final Uri getNotificationsApi = Uri.parse('${baseUrl}get_notifications');
 final Uri clearAllNotificationsApi = Uri.parse('${baseUrl}clear_notifications');
 final Uri updateQuotationApi = Uri.parse('${baseUrl}get_sellers');

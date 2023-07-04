@@ -130,6 +130,8 @@ class Setting {
       json['photographers_details'].forEach((v) {
         _photographersDetails?.add(PhotographersDetails.fromJson(v));
       });
+    }else{
+      _photographersDetails = [];
     }
     _updateDate = json['update_date'];
     _eventName = json['event_name'];
@@ -200,9 +202,16 @@ Setting copyWith({  String? cityName,
   String? get bookingId => _bookingId;
   String? get grapherId => _grapherId;
   String? get status => _status;
-  List<PhotographersDetails>? get photographersDetails => _photographersDetails;
+  List<PhotographersDetails>? get photographersDetails => _photographersDetails ;
   String? get updateDate => _updateDate;
   String? get eventName => _eventName;
+
+  set setNewList(List<PhotographersDetails> newData) {
+    _photographersDetails = newData;
+  }
+  // set setNewList(List value){
+  //   _photographersDetails = value.cast<PhotographersDetails>();
+  // }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -248,6 +257,8 @@ class PhotographersDetails {
       json['data'].forEach((v) {
         _data?.add(Data.fromJson(v));
       });
+    }else{
+      _data = [];
     }
   }
   String? _date;
@@ -259,6 +270,12 @@ PhotographersDetails copyWith({  String? date,
 );
   String? get date => _date;
   List<Data>? get data => _data;
+
+  set setNewData(List newData) {
+    _data = newData.cast<Data>();
+  }
+
+
 
   set setDate(var value) {
     _date = value;

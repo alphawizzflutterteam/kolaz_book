@@ -123,7 +123,7 @@ class _MoreQuatationsState extends State<MoreQuatations> {
                      onTap: ()async {
                        var result = await Navigator.push(context, MaterialPageRoute(builder: (context)=>
                            //EditQuotationTest(
-                            EditQuotation(
+                       TestEditQuotation(
                          qid: getQuotation[index].qid.toString(),
                          id: getQuotation[index].id.toString(),
                        )));

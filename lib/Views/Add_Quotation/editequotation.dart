@@ -156,12 +156,333 @@ class _EditQuotationState extends State<EditQuotation> {
       // update();
       // selectedValue.add(categoryValue!);
     }
-    newList.add(
-        jsonEncode({"date": showSelectedDate[currentIndex], "data": pType}));
+    // newList.add(
+    //     jsonEncode({"date": showSelectedDate[currentIndex], "data": pType}));
     print("this is list data $newList and $pType");
     pType.clear();
   }
 
+  // addDateDialog(
+  //     BuildContext context) async {
+  //   return await showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         bool isChecked = false;
+  //         return StatefulBuilder(builder: (context, setState) {
+  //           return AlertDialog(
+  //             backgroundColor: AppColors.back,
+  //             content: Form(
+  //                 key: _formKey,
+  //                 child: Column(
+  //                   // crossAxisAlignment: CrossAxisAlignment.start,
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     InkWell(
+  //                       onTap: () async {
+  //                         await selectDate(context, setState, 1, false);
+  //                       },
+  //                       child: Container(
+  //                         width: MediaQuery.of(context).size.width / 2,
+  //                         height: 45,
+  //                         padding: const EdgeInsets.only(left: 8, top: 10),
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                             color: AppColors.containerclr2),
+  //                         child: Text(
+  //                           adquatationDate != null
+  //                               ? ' ${DateFormat('dd-MM-yyyy').format(adquatationDate!)}'
+  //                               : 'Select Date',
+  //                           style: const TextStyle(
+  //                               color: AppColors.textclr, fontSize: 12),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     // Padding(
+  //                     //   padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+  //                     //   child: Container(
+  //                     //     width: MediaQuery.of(context).size.width / 2,
+  //                     //     height: 45,
+  //                     //     padding: const EdgeInsets.only(left: 8),
+  //                     //     decoration: BoxDecoration(
+  //                     //         borderRadius: BorderRadius.circular(10),
+  //                     //         color: AppColors.containerclr2),
+  //                     //     child: TextFormField(
+  //                     //       style: const TextStyle(color: AppColors.textclr),
+  //                     //       // controller: controller.outputController,
+  //                     //       keyboardType: TextInputType.number,
+  //                     //       controller: amountController,
+  //                     //       validator: (value) => value!.isEmpty
+  //                     //           ? 'Amount cannot be blank'
+  //                     //           : null,
+  //                     //       // onChanged: (String? val){
+  //                     //       //  //  if(widget.type == true) {
+  //                     //       //  // setState((){
+  //                     //       //  //   totalAmount = double.parse(
+  //                     //       //  //       widget.allJobs!.totalAmount.toString()) + double.parse(val.toString());
+  //                     //       //  // });
+  //                     //       //  //  }else {
+  //                     //       //  //    setState((){
+  //                     //       //  //      totalAmount = double.parse(
+  //                     //       //  //          widget.upcomingJobs!.totalAmount.toString()) + double.parse(val.toString());
+  //                     //       //  //    });
+  //                     //       //
+  //                     //       //
+  //                     //       // }  },
+  //                     //       decoration: const InputDecoration(
+  //                     //         // contentPadding: EdgeInsets.only(bottom: 5),
+  //                     //         hintText: 'Enter Amount',
+  //                     //         hintStyle: TextStyle(
+  //                     //             color: AppColors.textclr, fontSize: 14),
+  //                     //         border: InputBorder.none,
+  //                     //         // contentPadding: EdgeInsets.only(
+  //                     //         //     left: 8)
+  //                     //       ),
+  //                     //     ),
+  //                     //   ),
+  //                     // ),
+  //                     const SizedBox(height: 15,),
+  //                     Align(
+  //                       alignment: Alignment.center,
+  //                       child: Row(
+  //                         mainAxisAlignment: MainAxisAlignment.center,
+  //                         children: [
+  //                           InkWell(
+  //                             onTap: () {
+  //                               newList.add({
+  //                                 "date": DateFormat('dd-MM-yyyy').format(adquatationDate!).toString(), "data": pType
+  //                               });
+  //                               Navigator.pop(context);
+  //                               // if(widget.type == true) {
+  //                               //   setState((){
+  //                               //     totalAmount = double.parse(
+  //                               //         widget.allJobs!.totalAmount.toString()) + double.parse(amountController.text.toString());
+  //                               //   });
+  //                               // }else {
+  //                               //   setState(() {
+  //                               //     totalAmount = double.parse(
+  //                               //         widget.upcomingJobs!.totalAmount.toString()) +
+  //                               //         double.parse(amountController.text.toString());
+  //                               //   });
+  //                               // }
+  //                               // // setState(() {
+  //                               // //   // widget.allJobs!.jsonData!.se = amountController.text.toString();
+  //                               // //   // descriptionController  = TextEditingController(
+  //                               // //   //     text: widget.allJobs?.jsonData?[index].description
+  //                               // //   // );
+  //                               // //   // data.se= amountController.text.toString();
+  //                               // //   // data.description =
+  //                               // //   //     descriptionController.text.toString();
+  //                               // // });
+  //                               //
+  //                               // Navigator.pop(context, {
+  //                               //   'date' : selectedDates,
+  //                               //   'amount': amountController.text.toString(),
+  //                               //   // 'description': descriptionController.text.toString()
+  //                               // });
+  //                             },
+  //                             child: Container(
+  //                                 height: 40,
+  //                                 width: 100,
+  //                                 decoration: BoxDecoration(
+  //                                     borderRadius: BorderRadius.circular(50),
+  //                                     color: AppColors.pdfbtn),
+  //                                 child: const Center(
+  //                                     child: Text("Add",
+  //                                         style: TextStyle(
+  //                                             fontSize: 18,
+  //                                             color: AppColors.textclr)))),
+  //                           ),
+  //                           // InkWell(
+  //                           //   onTap: () async{
+  //                           //     // setState(() {
+  //                           //     // });
+  //                           //     // await jsData.removeAt(index);
+  //                           //     Navigator.pop(context,true);
+  //                           //     setState((){});
+  //                           //   },
+  //                           //   child: Container(
+  //                           //       height: 40,
+  //                           //       width: 100,
+  //                           //       decoration: BoxDecoration(
+  //                           //           borderRadius: BorderRadius.circular(50),
+  //                           //           color: AppColors.contaccontainerred),
+  //                           //       child: const Center(
+  //                           //           child: Text("Delete",
+  //                           //               style: TextStyle(
+  //                           //                   fontSize: 18,
+  //                           //                   color: AppColors.textclr)))),
+  //                           // ),
+  //
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 )),
+  //           );
+  //         });
+  //       });
+  // }
+  //
+  // editUpdateDateDialog(
+  //     BuildContext context, int index) async {
+  //   return await showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         bool isChecked = false;
+  //         return StatefulBuilder(builder: (context, setState) {
+  //           return AlertDialog(
+  //             backgroundColor: AppColors.back,
+  //             content: Form(
+  //                 key: _formKey,
+  //                 child: Column(
+  //                   // crossAxisAlignment: CrossAxisAlignment.start,
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     InkWell(
+  //                       onTap: () async {
+  //                         await selectDate(context, setState, index, true);
+  //                       },
+  //                       child: Container(
+  //                         width: MediaQuery.of(context).size.width / 2,
+  //                         height: 45,
+  //                         padding: const EdgeInsets.only(left: 8, top: 10),
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                             color: AppColors.containerclr2),
+  //                         child: Text(
+  //                           newList.isNotEmpty
+  //                               ? ' ${newList[index]['date']}'
+  //                               : 'Select Date',
+  //                           style: const TextStyle(
+  //                               color: AppColors.textclr, fontSize: 12),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     // Padding(
+  //                     //   padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+  //                     //   child: Container(
+  //                     //     width: MediaQuery.of(context).size.width / 2,
+  //                     //     height: 45,
+  //                     //     padding: const EdgeInsets.only(left: 8),
+  //                     //     decoration: BoxDecoration(
+  //                     //         borderRadius: BorderRadius.circular(10),
+  //                     //         color: AppColors.containerclr2),
+  //                     //     child: TextFormField(
+  //                     //       style: const TextStyle(color: AppColors.textclr),
+  //                     //       // controller: controller.outputController,
+  //                     //       keyboardType: TextInputType.number,
+  //                     //       controller: amountController,
+  //                     //       validator: (value) => value!.isEmpty
+  //                     //           ? 'Amount cannot be blank'
+  //                     //           : null,
+  //                     //       // onChanged: (String? val){
+  //                     //       //  //  if(widget.type == true) {
+  //                     //       //  // setState((){
+  //                     //       //  //   totalAmount = double.parse(
+  //                     //       //  //       widget.allJobs!.totalAmount.toString()) + double.parse(val.toString());
+  //                     //       //  // });
+  //                     //       //  //  }else {
+  //                     //       //  //    setState((){
+  //                     //       //  //      totalAmount = double.parse(
+  //                     //       //  //          widget.upcomingJobs!.totalAmount.toString()) + double.parse(val.toString());
+  //                     //       //  //    });
+  //                     //       //
+  //                     //       //
+  //                     //       // }  },
+  //                     //       decoration: const InputDecoration(
+  //                     //         // contentPadding: EdgeInsets.only(bottom: 5),
+  //                     //         hintText: 'Enter Amount',
+  //                     //         hintStyle: TextStyle(
+  //                     //             color: AppColors.textclr, fontSize: 14),
+  //                     //         border: InputBorder.none,
+  //                     //         // contentPadding: EdgeInsets.only(
+  //                     //         //     left: 8)
+  //                     //       ),
+  //                     //     ),
+  //                     //   ),
+  //                     // ),
+  //
+  //                     const SizedBox(height: 15,),
+  //                     Align(
+  //                       alignment: Alignment.center,
+  //                       child: Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                         children: [
+  //                           InkWell(
+  //                             onTap: () {
+  //                               setState((){});
+  //                               Navigator.pop(context,  DateFormat('dd-MM-yyyy').format(adquatationDate!)
+  //                               );
+  //                               // if(widget.type == true) {
+  //                               //   setState((){
+  //                               //     totalAmount = double.parse(
+  //                               //         widget.allJobs!.totalAmount.toString()) + double.parse(amountController.text.toString());
+  //                               //   });
+  //                               // }else {
+  //                               //   setState(() {
+  //                               //     totalAmount = double.parse(
+  //                               //         widget.upcomingJobs!.totalAmount.toString()) +
+  //                               //         double.parse(amountController.text.toString());
+  //                               //   });
+  //                               // }
+  //                               // // setState(() {
+  //                               // //   // widget.allJobs!.jsonData!.se = amountController.text.toString();
+  //                               // //   // descriptionController  = TextEditingController(
+  //                               // //   //     text: widget.allJobs?.jsonData?[index].description
+  //                               // //   // );
+  //                               // //   // data.se= amountController.text.toString();
+  //                               // //   // data.description =
+  //                               // //   //     descriptionController.text.toString();
+  //                               // // });
+  //                               //
+  //                               // Navigator.pop(context, {
+  //                               //   'date' : selectedDates,
+  //                               //   'amount': amountController.text.toString(),
+  //                               //   // 'description': descriptionController.text.toString()
+  //                               // });
+  //                             },
+  //                             child: Container(
+  //                                 height: 40,
+  //                                 width: 100,
+  //                                 decoration: BoxDecoration(
+  //                                     borderRadius: BorderRadius.circular(50),
+  //                                     color: AppColors.pdfbtn),
+  //                                 child: const Center(
+  //                                     child: Text("Update",
+  //                                         style: TextStyle(
+  //                                             fontSize: 18,
+  //                                             color: AppColors.textclr)))),
+  //                           ),
+  //                           InkWell(
+  //                             onTap: () async{
+  //                               // setState(() {
+  //                               // });
+  //                               // await jsData.removeAt(index);
+  //                               Navigator.pop(context,true);
+  //                               setState((){});
+  //                             },
+  //                             child: Container(
+  //                                 height: 40,
+  //                                 width: 100,
+  //                                 decoration: BoxDecoration(
+  //                                     borderRadius: BorderRadius.circular(50),
+  //                                     color: AppColors.contaccontainerred),
+  //                                 child: const Center(
+  //                                     child: Text("Delete",
+  //                                         style: TextStyle(
+  //                                             fontSize: 18,
+  //                                             color: AppColors.textclr)))),
+  //                           ),
+  //
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 )),
+  //           );
+  //         });
+  //       });
+  // }
 
   getEventTypes() async {
     var uri = Uri.parse(getEventsApis.toString());
@@ -385,8 +706,9 @@ class _EditQuotationState extends State<EditQuotation> {
           await response.stream.transform(utf8.decoder).join();
       var userData = json.decode(responseData);
       if (userData['error'] == false) {
-        Navigator.pop(context, false);
+
         Fluttertoast.showToast(msg: userData['message']);
+        Navigator.pop(context, false);
 
       } else {
         Fluttertoast.showToast(msg: userData['message']);
@@ -518,29 +840,6 @@ class _EditQuotationState extends State<EditQuotation> {
     Navigator.pop(context);
     Navigator.pop(context, true);
   }
-  // getQuotationDetails() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   String? id = preferences.getString('id');
-  //   var uri =
-  //   Uri.parse(getQuotationApi.toString());
-  //   // '${Apipath.getCitiesUrl}');
-  //   var request = http.MultipartRequest("POST", uri);
-  //   Map<String, String> headers = {
-  //     "Accept": "application/json",
-  //   };
-  //
-  //   request.headers.addAll(headers);
-  //   request.fields[RequestKeys.userId] = id!;
-  //   request.fields[RequestKeys.type] = 'client';
-  //   var response = await request.send();
-  //   print(response.statusCode);
-  //   String responseData = await response.stream.transform(utf8.decoder).join();
-  //   var userData = json.decode(responseData);
-  //
-  //   setState(() {
-  //     getQuotation = GetQuotationModel.fromJson(userData).setting!;
-  //   });
-  // }
 
   updateQuotation() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
