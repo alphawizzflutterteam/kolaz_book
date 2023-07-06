@@ -25,6 +25,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
   void initState(){
     super.initState();
   }
+  Widget _homeLogo(){
+    return Container(
+      height: 100,
+      child: Center(child: Image.asset("assets/images/applogo.png",height: 50,)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +39,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
       builder: (controller) {
       return Scaffold(
         backgroundColor: AppColors.primary,
-
+        bottomSheet: _homeLogo(),
         appBar: AppBar(
           backgroundColor:AppColors.secondary ,
           leading: TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Icon(Icons.arrow_back_ios,size : 35,color: AppColors.AppbtnColor,)),
+              child: Icon(Icons.arrow_back_ios,color: AppColors.AppbtnColor,)),
           actions: [
             TextButton(
                 onPressed: () {},

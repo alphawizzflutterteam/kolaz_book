@@ -547,7 +547,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
               child: Text("Client Account",
                   style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xff1E90FF),
+                      color: AppColors.AppbtnColor,
                       fontWeight: FontWeight.bold)),
             ),
           ),
@@ -563,7 +563,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
               child: Text("Freelancing Account",
                   style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xff1E90FF),
+                      color: AppColors.AppbtnColor,
                       fontWeight: FontWeight.bold)),
             ),
           ),

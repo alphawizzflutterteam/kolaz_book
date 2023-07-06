@@ -206,9 +206,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
                     child: Column(
                       children: [
-                        Text("${controller.firstname} ${controller.lastname}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xff1E90FF)),),
+                        Text("${controller.firstname} ${controller.lastname}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.AppbtnColor),),
                         SizedBox(height: 5,),
-                        Text(controller.profiledata!.username.toString(), style: const TextStyle(fontSize: 15, color: Colors.white),),
+                        Text('ID : ${controller.profiledata!.username.toString()}', style: const TextStyle(fontSize: 15, color: Colors.white),),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -217,7 +217,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             Text(
                               controller.profiledata != null ?
                               "${controller.profiledata!.remainingDays} left"
-                                  : "15 Days Free Trial ",style: const TextStyle(fontSize: 12),)
+                                  : "15 Days Free Trial ",style: const TextStyle(fontSize: 14, color: AppColors.whit),)
                                 : Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: InkWell(
@@ -238,13 +238,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 : const Text("Something went wrong!", style: TextStyle(
                                 fontSize: 12
                             ),),
-                            // Text("Subscription 14 Days Free Trial", style: TextStyle(fontSize: 15, color: Colors.white),),
-                            // SizedBox(width: 6,),
-                            // InkWell(
-                            //   onTap: (){
-                            //     Navigator.push(context, MaterialPageRoute(builder: (context) => SubscriptionScreen()));
-                            //   },
-                            //     child: Text("Buy", style: TextStyle(fontSize: 15, color: Color(0xff1E90FF), decoration: TextDecoration.underline,),))
+
                           ],
                         ),
                         SizedBox(height: 10,),
@@ -252,11 +246,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Color(0xff303030)),
                             height: 50,
                             width: MediaQuery.of(context).size.width/1.1,
-                            child: Center(child: Text("Your Details", style: TextStyle(fontSize: 18, color: Color(0xff1E90FF))))
+                            child: Center(child: Text("Your Details", style: TextStyle(fontSize: 18, color: AppColors.AppbtnColor)))
                         ),
                         SizedBox(height: 5,),
                         Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          padding: const EdgeInsets.only(left: 10.0, right: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -445,7 +439,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     height: 50,
                                     width: MediaQuery.of(context).size.width/1.1,
                                     child: const Center(
-                                      child: Text("Company Details", style: TextStyle(fontSize: 14, color:  Color(0xff1E90FF), fontWeight: FontWeight.bold),
+                                      child: Text("Company Details", style: TextStyle(fontSize: 18, color: AppColors.AppbtnColor)
                                       ),
                                     ),
                                   ),
@@ -693,7 +687,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             ),
                                             multiSelectTag: 'Country',
                                             decoration: BoxDecoration(
-                                                color: AppColors.containerclr2,
+                                                color: AppColors.containerclr,
                                                 borderRadius:
                                                 BorderRadius.circular(15)
                                               // color: Colors.white
@@ -878,40 +872,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   ),
                                   SizedBox(height: 5,),
 
-                                  InkWell(
-                                    onTap: (){
-                                      controller.requestPermission(context,2);
-                                    },
-                                    child: Container(
-                                      height: 100,
-                                      width: MediaQuery.of(context).size.width/1.1,
-                                      child: Card(
-                                        color: const Color(0xff6D6A6A),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        elevation: 5,
-                                        child: controller.companyLogo == null || controller.companyLogo == '' ?
-                                        ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: controller.imageFile2 != null
-                                                ? Image.file(controller.imageFile2!, fit: BoxFit.cover, height: 90,width: 95,)
-                                                : const Center(child: Text("Upload Company Logo",style: TextStyle(fontSize: 18),))
-                                            // Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,)
-                                        )
-                                            : ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child:
-                                            // rcImage != null ?
-                                            Image.network(controller.companyLogo.toString(), fit: BoxFit.cover, height: 90,width: 95,)
-                                        )
 
-                                        // controller.imageFile2 != null || controller.imageFile2 == "" ? Container(
-                                        //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                                        //     child: Image.file(controller.imageFile2!,fit: BoxFit.fill,height: 80,)) : Center(child: const Text("Upload Company Logo",style: TextStyle(fontSize: 18),))
-                                      ),
-                                    ),
-                                  ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 10),
                                     child: Text("Company Website Link/ Email Id", style: TextStyle(fontSize: 14, color: Color(0xffCCCCCC)),),
@@ -1035,6 +996,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                   ),
+                  InkWell(
+                    onTap: (){
+                      controller.requestPermission(context,2);
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.width/2.4,
+                      width: MediaQuery.of(context).size.width/2.4,
+                      child: Card(
+                          color: const Color(0xff6D6A6A),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          elevation: 5,
+                          child: controller.companyLogo == null || controller.companyLogo == '' ?
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: controller.imageFile2 != null
+                                  ? Image.file(controller.imageFile2!, fit: BoxFit.cover, height: 90,width: 95,)
+                                  : const Center(child: Text("Upload Company Logo",style: TextStyle(fontSize: 18),))
+                            // Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,)
+                          )
+                              : ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child:
+                              // rcImage != null ?
+                              Image.network(controller.companyLogo.toString(), fit: BoxFit.cover, height: 90,width: 95,)
+                          )
+
+                        // controller.imageFile2 != null || controller.imageFile2 == "" ? Container(
+                        //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                        //     child: Image.file(controller.imageFile2!,fit: BoxFit.fill,height: 80,)) : Center(child: const Text("Upload Company Logo",style: TextStyle(fontSize: 18),))
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 10,),
                   GestureDetector(
                     onTap: (){
@@ -1048,7 +1043,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Container(
                       height: 40,
                       width: MediaQuery.of(context).size.width/2.2,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Color(0xff1E90FF)),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.AppbtnColor),
                       child: const Center(child: Text("Update",
                         style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
                       ),

@@ -7,6 +7,7 @@ import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Utils/colors.dart';
 
@@ -30,6 +31,8 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
   bool isSelected = true;
   List<LedgerData> ledgerData = [];
   String? totalOutstanding;
+  int currentIndex = 0 ;
+  String pdfUrl = '';
   TextEditingController amountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -37,7 +40,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
     return AlertDialog(
       backgroundColor: AppColors.primary,
       title: const Text(
-        'Delete Ledge Entry!',
+        'Delete Ledger Entry!',
         style: TextStyle(color: AppColors.textclr),
       ),
       content: const Text(
@@ -116,6 +119,48 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
       }
     } else {
       print(response.reasonPhrase);
+    }
+  }
+
+  downloadPdfs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri = Uri.parse(downloadPdfApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.type] = 'accounts';
+    request.fields[RequestKeys.userType] = isSelected ? 'client' : 'photographer';
+    request.fields[RequestKeys.filter] =
+    isSelected ? 'all' : 'outstanding';
+    request.fields[RequestKeys.photographerId] = widget.pid!;
+    var response = await request.send();
+    print("this is pdf download requests ${request.fields}");
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      pdfUrl = userData['url'];
+    });
+    _showPdf(pdfUrl);
+    print("this is our html content $pdfUrl");
+    // downloadPdfs();
+  }
+
+  _showPdf(pdf) async {
+    print("this is my url $pdf");
+    var url = pdf.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: "Could not open this pdf!");
+      throw 'Could not launch $url';
     }
   }
 
@@ -202,10 +247,18 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
             addAmount('credit');
           },
           child: Container(
-              height: 55,
+              height: 40,
               decoration: BoxDecoration(
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(1, 2),
+                      blurRadius: 1,
+                      color: AppColors.greyColor,
+                    )
+                  ],
                   borderRadius: BorderRadius.circular(50),
                   color: AppColors.greenbtn),
+
               width: MediaQuery.of(context).size.width / 1.5,
               child: const Center(
                   child: Text("Add Payment",
@@ -215,7 +268,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                           color: AppColors.textclr)))),
         ),
         const SizedBox(
-          height: 20,
+          height: 50,
         ),
       ],
     );
@@ -304,8 +357,15 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
             addAmount('debit');
           },
           child: Container(
-              height: 55,
+              height: 40,
               decoration: BoxDecoration(
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(1, 2),
+                      blurRadius: 1,
+                      color: AppColors.greyColor,
+                    )
+                  ],
                   borderRadius: BorderRadius.circular(50),
                   color: AppColors.contaccontainerred),
               width: MediaQuery.of(context).size.width / 1.5,
@@ -317,7 +377,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                           color: AppColors.textclr)))),
         ),
         const SizedBox(
-          height: 20,
+          height: 50,
         ),
       ],
     );
@@ -406,8 +466,15 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
             addAmount("debit");
           },
           child: Container(
-              height: 55,
+              height: 40,
               decoration: BoxDecoration(
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(1, 2),
+                    blurRadius: 1,
+                    color: AppColors.greyColor,
+                  )
+                ],
                 borderRadius: BorderRadius.circular(50),
                 color: AppColors.AppbtnColor,
               ),
@@ -420,7 +487,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                           color: AppColors.textclr)))),
         ),
         const SizedBox(
-          height: 20,
+          height: 50,
         ),
       ],
     );
@@ -508,14 +575,14 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                 width: MediaQuery.of(context).size.width / 1.1,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: AppColors.lightwhite),
+                    color: AppColors.teamcard2),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8, right: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "Total Outstanding Amount",
+                        "Total Amount",
                         style: TextStyle(color: AppColors.textclr),
                       ),
                       Text(
@@ -701,9 +768,16 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                       height: 40,
                       width: 160,
                       decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(1, 2),
+                              blurRadius: 1,
+                              color: AppColors.greyColor,
+                            )
+                          ],
                           borderRadius: BorderRadius.circular(40),
                           color: AppColors.pdfbtn),
-                      child: Center(
+                      child: const Center(
                         child: Text("Add Amount",
                             style: TextStyle(
                                 fontSize: 15,
@@ -712,9 +786,14 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                       ),
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/pdf.png",
-                    scale: 2.1,
+                  InkWell(
+                    onTap: (){
+                      downloadPdfs();
+                    },
+                    child: Image.asset(
+                      "assets/images/pdf.png",
+                      scale: 2.1,
+                    ),
                   ),
                 ],
               ),
@@ -728,65 +807,87 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
+            child: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
         backgroundColor: Color(0xff303030),
         actions: [
           Padding(
             padding: const EdgeInsets.all(15),
             child: Center(
                 child: Text("${widget.photographerName} Account",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 16,
-                        color: Color(0xff1E90FF),
+                        color: AppColors.AppbtnColor,
                         fontWeight: FontWeight.bold))),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, right: 8, top: 10, bottom: 10),
-              child: Container(
-                height: 45,
-                width: MediaQuery.of(context).size.width / 1.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColors.lightwhite),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 8.0, right: 8, top: 30, bottom: 10),
+            child: Container(
+              height: 45,
+              width: MediaQuery.of(context).size.width / 1.0,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.teamcard2),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8, right: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:  [
+                    Container(
+                      width: 70,
+                      child: const Text(
                         "Date",
                         style: TextStyle(color: AppColors.textclr),
                       ),
-                      Text("Description",
+                    ),
+                    Container(
+                      width: 140,
+                      child: const Text("Description",
                           style: TextStyle(color: AppColors.textclr)),
-                      Text("Credit",
+                    ),
+                    Container(
+                      width: 60,
+                      child: const Text("Credit",
                           style: TextStyle(color: AppColors.textclr)),
-                      Text("Debit", style: TextStyle(color: AppColors.textclr)),
-                    ],
-                  ),
+                    ),
+                  const Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: Text("Debit", style: TextStyle(color: AppColors.textclr)),
+                    ),
+                  ],
                 ),
               ),
             ),
-            ledgerData.isNotEmpty
-                ? ListView.builder(
+          ),
+          ledgerData.isNotEmpty
+              ? Container(
+            height: MediaQuery.of(context).size.height/ 1.75,
+                child: ListView.builder(
                     shrinkWrap: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: ledgerData.length,
                     itemBuilder: (context, k) {
                       return Padding(
                         padding:
                             const EdgeInsets.only(left: 8.0, right: 8, top: 8),
                         child: InkWell(
+                          onLongPress: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                              return deleteConfirmation(
+                                  context, ledgerData[k].id.toString());
+                            });
+                          },
                           onTap: () async {
+                           setState(() {
+                             currentIndex = k ;
+                           });
                             await showDialog(
                                 context: context,
                                 builder: (context) {
@@ -799,47 +900,65 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                             width: MediaQuery.of(context).size.width / 1.0,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: AppColors.lightwhite),
+                                color: currentIndex == k ?
+                                     AppColors.AppbtnColor :
+                                AppColors.lightwhite),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 8, right: 5),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    ledgerData[k].date.toString(),
-                                    style: const TextStyle(
-                                        color: AppColors.textclr),
+                                  Container(
+                                    width : 70,
+                                    child: Text(
+                                      ledgerData[k].date.toString(),
+                                      style: const TextStyle(
+                                          color: AppColors.textclr),
+                                    ),
                                   ),
                                   Container(
-                                      width: 120,
+                                      width: 130,
                                       child: Text(
                                           ledgerData[k].description.toString(),
                                           style: const TextStyle(
                                               color: AppColors.textclr))),
-                                  Text(ledgerData[k].credit.toString(),
-                                      style: const TextStyle(
-                                          color: AppColors.textclr)),
-                                  Text(ledgerData[k].debit.toString(),
-                                      style: const TextStyle(
-                                          color: AppColors.textclr)),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Container(
+                                      width: 65,
+                                      child: Text(double.parse(ledgerData[k].credit.toString()).toStringAsFixed(0),
+                                          style: const TextStyle(
+                                              color: AppColors.textclr)),
+                                    ),
+                                  ),
+                                  Container(
+                                    // width: 70,
+                                    child: Text(double.parse(ledgerData[k].debit.toString()).toStringAsFixed(0),
+                                        style: const TextStyle(
+                                            color: AppColors.textclr)),
+                                  ),
+                                  const SizedBox(height: 15,),
                                 ],
                               ),
                             ),
                           ),
                         ),
                       );
-                    })
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                    child: Center(
-                        child: const Text(
-                      "No data found!",
-                      style: TextStyle(color: AppColors.textclr),
-                    ))),
-          ],
-        ),
+                    }),
+              )
+              : Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width,
+                  child: Center(
+                      child: const Text(
+                    "No data found!",
+                    style: TextStyle(color: AppColors.textclr),
+                  ))),
+
+
+          const SizedBox(height: 300,),
+        ],
       ),
     );
   }

@@ -481,7 +481,7 @@
 //                   onTap: () {
 //                     Navigator.pop(context);
 //                   },
-//                   child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
+//                   child: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
 //               actions: const [
 //                 Center(
 //                   child: Padding(
@@ -489,7 +489,7 @@
 //                     child: Text("Add Freelancing Job",
 //                         style: TextStyle(
 //                             fontSize: 14,
-//                             color: Color(0xff1E90FF),
+//                             color: AppColors.AppbtnColor,
 //                             fontWeight: FontWeight.bold)),
 //                   ),
 //                 ),
@@ -1183,7 +1183,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
   List jsData = [];
 
   List<Categories> typeofPhotographyEvent = [];
-  List<Data> photographersList = [];
+  List<PhotographerData> photographersList = [];
   List<EventType> eventList = [];
   List<CityList> citiesList = [];
   TextEditingController amountController = TextEditingController();
@@ -1828,7 +1828,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
+                  child: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
               actions: const [
                 Center(
                   child: Padding(
@@ -1836,7 +1836,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                     child: Text("Add Freelancing Job",
                         style: TextStyle(
                             fontSize: 14,
-                            color: Color(0xff1E90FF),
+                            color: AppColors.AppbtnColor,
                             fontWeight: FontWeight.bold)),
                   ),
                 ),

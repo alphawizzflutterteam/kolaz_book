@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/edit_profile_controller.dart';
 import 'package:kolazz_book/Controller/home_controller.dart';
@@ -58,6 +59,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   List<JobData> getJobs = [];
+  List jobs = [];
 
   getClientJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -80,6 +82,7 @@ class _HomepageState extends State<Homepage> {
 
     setState(() {
       getJobs = GetClientJobsModel.fromJson(userData).data!;
+      jobs = userData['data'];
     });
   }
 
@@ -147,11 +150,11 @@ class _HomepageState extends State<Homepage> {
             children: [
               controller.profiledata != null || controller.profiledata == "" ? Text("${controller.profiledata!.fname} ${controller.profiledata!.lname} ",style: TextStyle(color: AppColors.AppbtnColor,fontSize: 15),): CircularProgressIndicator(),
               controller.profiledata != null ?
-              controller.profiledata!.isPlanActive! == true?
+              controller.profiledata!.isPlanActive! == true ?
               Text(
                 controller.profiledata != null ?
-                "${controller.profiledata!.remainingDays} Trial "
-                : "15 Days Free Trial ",style: const TextStyle(fontSize: 12),)
+                "${controller.profiledata!.remainingDays} left "
+                : "15 Days left ",style: const TextStyle(fontSize: 12),)
               : Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: InkWell(
@@ -181,7 +184,12 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> PortfolioScreen()));
+                     if(controller.profiledata!.isTrial! == false) {
+                       Navigator.push(context, MaterialPageRoute(
+                           builder: (context) => PortfolioScreen()));
+                     }else{
+                       Fluttertoast.showToast(msg: "You are not permitted! Please subscribe first!");
+                     }
                     },
                     child: Container(
                         height: 33,
@@ -215,7 +223,13 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (c)=>Broadcast_screen()));
+                      if(controller.profiledata!.isTrial! == false) {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => Broadcast_screen()));
+                      }else{
+                        Fluttertoast.showToast(msg: "You are not permitted! Please subscribe first!");
+                      }
+
                     },
                     child: Container(
                         height: 33,
@@ -250,84 +264,83 @@ class _HomepageState extends State<Homepage> {
 
           centerTitle: false,
         ),
-        body:  SingleChildScrollView(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [AppColors.primary3,AppColors.grd1,AppColors.grd2],
-                  stops: [0, 1,1]),
-            ),
-            child: Column(children: [
-              SizedBox(height: 20,),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    SizedBox(width: 5,),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0,top: 20),
-                      child: Text("Upcoming Client Jobs", style: TextStyle(fontSize: 17, color: AppColors.whit, fontWeight: FontWeight.w700)),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 5,),
-
-              getJobs.isEmpty ?
-              Container(
-                height: 150,
-                child: Center(
-                  child: Text("No Data to show!", style: TextStyle(
-                      color: AppColors.whit
-
-                  ),),
-                ),
-              )
-              : _clientCard(context),
-              SizedBox(height: 30,),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    SizedBox(width: 5,),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text("Upcoming Freelencing jobs", style: TextStyle(fontSize: 17, color: AppColors.whit, fontWeight: FontWeight.w700)),
-                    ),
-                  ],
-                ),
-              ),
-              freelancerJobs.isNotEmpty ?
-              freelancerJobs[0].upcomingJobs!.isNotEmpty ?
-              _clientCard2(context)
-              : Container(
-                height: 150,
-                child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
-              )
-              : Container(
-                height: 150,
-                child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
-              ),
-              SizedBox(height: 30,),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    width: double.infinity,
-                    child: Text("Photographer Yet To Be Allotment Clients Jobs ", style: TextStyle(fontSize: 17, color:AppColors.whit, fontWeight: FontWeight.w700,overflow: TextOverflow.ellipsis))),
-              ),
-              Container(
-                height: 150,
-                child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
-              ),
-              // _clientCard3(context),
-              SizedBox(height: 50,),
-              _homeLogo(),
-
-            ],),
+        body:  Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.primary3,AppColors.grd1,AppColors.grd2],
+                stops: [0, 1,1]),
           ),
+          child: Column(children: [
+            SizedBox(height: 20,),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  SizedBox(width: 5,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0,top: 20),
+                    child: Text("Upcoming Client Jobs", style: TextStyle(fontSize: 17, color: AppColors.whit, fontWeight: FontWeight.w700)),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 5,),
+
+            getJobs.isEmpty ?
+            Container(
+              height: 150,
+              child: Center(
+                child: Text("No Data to show!", style: TextStyle(
+                    color: AppColors.whit
+
+                ),),
+              ),
+            )
+            : _clientCard(context),
+            SizedBox(height: 30,),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  SizedBox(width: 5,),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text("Upcoming Freelencing jobs", style: TextStyle(fontSize: 17, color: AppColors.whit, fontWeight: FontWeight.w700)),
+                  ),
+                ],
+              ),
+            ),
+            freelancerJobs.isNotEmpty ?
+            freelancerJobs[0].upcomingJobs!.isNotEmpty ?
+            _clientCard2(context)
+            : Container(
+              height: 150,
+              child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
+            )
+            : Container(
+              height: 150,
+              child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
+            ),
+            Spacer(),
+            _homeLogo()
+
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Container(
+            //       width: double.infinity,
+            //       child: Text("Photographer Yet To Be Allotment Clients Jobs ", style: TextStyle(fontSize: 17, color:AppColors.whit, fontWeight: FontWeight.w700,overflow: TextOverflow.ellipsis))),
+            // ),
+            // Container(
+            //   height: 150,
+            //   child: Center(child: Text("No Data to show!", style: TextStyle(color: AppColors.whit),)),
+            // ),
+            // _clientCard3(context),
+
+
+          ],),
         ),
       );
     },);
@@ -352,6 +365,7 @@ class _HomepageState extends State<Homepage> {
               Navigator.push(context, MaterialPageRoute(builder: (context)=> EditClientJob(
                 type: false,
                 upcomingJobs:  getJobs[0].upcomingJobs![index],
+                data: jobs[0]['upcoming_jobs'][index] ,
               )));
             },
             child: Padding(
@@ -398,7 +412,8 @@ class _HomepageState extends State<Homepage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(data.eventName.toString(),style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
-                            Text(data.updateDate.toString(),style: TextStyle(color: AppColors.AppbtnColor),),
+                            Text(
+                              data.photographersDetails![0].date.toString(),style: TextStyle(color: AppColors.AppbtnColor, fontWeight: FontWeight.w600),),
                           ],
                         ),
                       ),
@@ -477,7 +492,7 @@ class _HomepageState extends State<Homepage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(data.eventName.toString(),style: TextStyle(color: AppColors.textclr,fontSize: 16,fontWeight: FontWeight.bold),),
-                              Text(data.updatedAt.toString(),style: TextStyle(color: AppColors.AppbtnColor),),
+                              Text(data.jsonData![0].date.toString(),style: TextStyle(color: AppColors.AppbtnColor),),
                             ],
                           ),
                         ),
@@ -567,7 +582,7 @@ class _HomepageState extends State<Homepage> {
   }
   Widget _homeLogo(){
     return Container(
-      child: Image.asset("assets/images/loginlogo.png",height: 50,),
+      child: Image.asset("assets/images/applogo.png",height: 50,),
     );
   }
 }

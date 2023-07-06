@@ -6,7 +6,7 @@ class PhotographerListModel {
   PhotographerListModel({
       String? responseCode, 
       String? msg, 
-      List<Data>? data,}){
+      List<PhotographerData>? data,}){
     _responseCode = responseCode;
     _msg = msg;
     _data = data;
@@ -18,23 +18,23 @@ class PhotographerListModel {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(PhotographerData.fromJson(v));
       });
     }
   }
   String? _responseCode;
   String? _msg;
-  List<Data>? _data;
+  List<PhotographerData>? _data;
 PhotographerListModel copyWith({  String? responseCode,
   String? msg,
-  List<Data>? data,
+  List<PhotographerData>? data,
 }) => PhotographerListModel(  responseCode: responseCode ?? _responseCode,
   msg: msg ?? _msg,
   data: data ?? _data,
 );
   String? get responseCode => _responseCode;
   String? get msg => _msg;
-  List<Data>? get data => _data;
+  List<PhotographerData>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -61,8 +61,8 @@ PhotographerListModel copyWith({  String? responseCode,
 /// created_at : "2023-05-31 11:50:51"
 /// user_id : "158"
 
-class Data {
-  Data({
+class PhotographerData {
+  PhotographerData({
       String? id, 
       String? firstName, 
       String? lastName, 
@@ -89,7 +89,7 @@ class Data {
     _userId = userId;
 }
 
-  Data.fromJson(dynamic json) {
+  PhotographerData.fromJson(dynamic json) {
     _id = json['id'];
     _firstName = json['first_name'];
     _lastName = json['last_name'];
@@ -115,7 +115,7 @@ class Data {
   String? _status;
   String? _createdAt;
   String? _userId;
-Data copyWith({  String? id,
+PhotographerData copyWith({  String? id,
   String? firstName,
   String? lastName,
   String? city,
@@ -127,7 +127,7 @@ Data copyWith({  String? id,
   String? status,
   String? createdAt,
   String? userId,
-}) => Data(  id: id ?? _id,
+}) => PhotographerData(  id: id ?? _id,
   firstName: firstName ?? _firstName,
   lastName: lastName ?? _lastName,
   city: city ?? _city,

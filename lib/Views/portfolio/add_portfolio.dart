@@ -38,6 +38,7 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
   List<Categories> typeofPhotographyEvent = [];
 
   getPhotographerType() async {
+    print("working");
     var uri = Uri.parse(getPhotographerApi.toString());
     // '${Apipath.getCitiesUrl}');
     var request = http.MultipartRequest("GET", uri);
@@ -350,11 +351,11 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
                                         controller.profiledata == ""
                                         ? Text(
                                       "${controller.profiledata!.fname} ${controller.profiledata!.lname} ",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: AppColors.AppbtnColor,
                                           fontSize: 15),
                                     )
-                                        : CircularProgressIndicator(),
+                                        : const CircularProgressIndicator(),
                                     InkWell(
                                         onTap: () {
                                           Navigator.push(
@@ -363,7 +364,7 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
                                                   builder: (context) =>
                                                       AddPortfolioScreen()));
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           "My Portfolio",
                                           style: TextStyle(
                                               color: AppColors.whit,
@@ -407,7 +408,7 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
                       ),
                     ),
                   ),
-                  Text(
+                 const  Text(
                     "Freelancer",
                     style: TextStyle(color: Colors.white),
                   ),
@@ -471,8 +472,6 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
                                 onChanged: (newValue) {
                                   photoGrapherType =
                                       newValue.toString();
-                                  print(
-                                      "this is photographer $photoGrapherType");
 
                                   setState(() {});
                                 },

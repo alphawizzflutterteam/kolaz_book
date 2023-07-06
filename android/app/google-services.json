@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "64108415997",
+    "project_id": "kolazbook-e43cf",
+    "storage_bucket": "kolazbook-e43cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64108415997:android:48742fad6a09af95eee794",
+        "android_client_info": {
+          "package_name": "com.kolaz.book"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64108415997-cuc80k9iiv8eg9ad0m9mhg4s3crl1812.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0TILIgA1Ad-YAzRfwUMKljcSVr51edTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64108415997-cuc80k9iiv8eg9ad0m9mhg4s3crl1812.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

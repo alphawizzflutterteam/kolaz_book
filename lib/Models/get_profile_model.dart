@@ -126,7 +126,9 @@ class ProfileData {
       String? createdAt, 
       String? updatedAt, 
       String? remainingDays, 
-      bool? isPlanActive,}){
+      bool? isPlanActive,
+    bool? isTrial,
+  }){
     _id = id;
     _username = username;
     _email = email;
@@ -165,6 +167,7 @@ class ProfileData {
     _updatedAt = updatedAt;
     _remainingDays = remainingDays;
     _isPlanActive = isPlanActive;
+    _isTrial = isTrial;
 }
 
   ProfileData.fromJson(dynamic json) {
@@ -206,6 +209,7 @@ class ProfileData {
     _updatedAt = json['updated_at'];
     _remainingDays = json['remaining_days'];
     _isPlanActive = json['is_plan_active'];
+    _isTrial = json['is_trial'];
   }
   String? _id;
   String? _username;
@@ -245,6 +249,7 @@ class ProfileData {
   String? _updatedAt;
   String? _remainingDays;
   bool? _isPlanActive;
+  bool? _isTrial;
 ProfileData copyWith({  String? id,
   String? username,
   String? email,
@@ -283,6 +288,7 @@ ProfileData copyWith({  String? id,
   String? updatedAt,
   String? remainingDays,
   bool? isPlanActive,
+  bool? isTrial
 }) => ProfileData(  id: id ?? _id,
   username: username ?? _username,
   email: email ?? _email,
@@ -321,6 +327,7 @@ ProfileData copyWith({  String? id,
   updatedAt: updatedAt ?? _updatedAt,
   remainingDays: remainingDays ?? _remainingDays,
   isPlanActive: isPlanActive ?? _isPlanActive,
+  isTrial: isTrial ?? _isTrial
 );
   String? get id => _id;
   String? get username => _username;
@@ -360,6 +367,7 @@ ProfileData copyWith({  String? id,
   String? get updatedAt => _updatedAt;
   String? get remainingDays => _remainingDays;
   bool? get isPlanActive => _isPlanActive;
+  bool? get isTrial => _isTrial;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -401,6 +409,7 @@ ProfileData copyWith({  String? id,
     map['updated_at'] = _updatedAt;
     map['remaining_days'] = _remainingDays;
     map['is_plan_active'] = _isPlanActive;
+    map['is_trial'] = _isTrial;
     return map;
   }
 

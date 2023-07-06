@@ -52,13 +52,13 @@
 //       backgroundColor: AppColors.backgruond,
 //       appBar: AppBar(
 //         automaticallyImplyLeading: false,
-//         // leading: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF)),
+//         // leading: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor),
 //         backgroundColor: Color(0xff303030),
 //         actions: [
 //           Padding(
 //             padding: const EdgeInsets.all(15),
 //             child: Center(child: Text("Calender",
-//                 style: TextStyle(fontSize: 16, color:Color(0xff1E90FF), fontWeight: FontWeight.bold)
+//                 style: TextStyle(fontSize: 16, color:AppColors.AppbtnColor, fontWeight: FontWeight.bold)
 //             ),
 //             ),
 //           ),
@@ -222,7 +222,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 child: Text("Calendar",
                     style: TextStyle(
                         fontSize: 16,
-                        color: Color(0xff1E90FF),
+                        color: AppColors.AppbtnColor,
                         fontWeight: FontWeight.bold))),
           ),
         ],
@@ -232,7 +232,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       // ),
       body: Column(
         children: [
-          const SizedBox(height: 20,),
+          const SizedBox(height: 15,),
           Container(
             // height: MediaQuery.of(context).size.height/3,
             color: AppColors.grd1,
@@ -249,8 +249,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   weekendStyle: TextStyle(color: AppColors.back)),
               // firstDay: kFirstDay,
               // lastDay: kLastDay,
-              firstDay: DateTime.utc(2023, 1, 1),
-              lastDay: DateTime.utc(2023, 12, 31),
+              firstDay: DateTime.utc(2022, 1, 1),
+              lastDay: DateTime.utc(2028, 12, 31),
               daysOfWeekHeight: 40,
               calendarStyle:  CalendarStyle(
                   todayDecoration: BoxDecoration(
@@ -335,15 +335,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
             //   },
             // ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height/3.2,
-            width: MediaQuery.of(context).size.width,
-            child: getJobs.isNotEmpty ?
+          // Container(
+          //   height: MediaQuery.of(context).size.height/3.2,
+          //   width: MediaQuery.of(context).size.width,
+          //   child:
+            getJobs.isNotEmpty ?
             ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               itemCount: getJobs.length ,
-              physics: ScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 var data = getJobs[index];
                 return Padding(
@@ -436,7 +437,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               child: Text("No data to show", style: TextStyle(
                 color: AppColors.whit
               ),),
-            ),
+            // ),
           )
         ],
       ),

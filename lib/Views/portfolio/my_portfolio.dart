@@ -65,7 +65,14 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
       throw Exception('Could not launch $uri');
     }
   }
-
+  _launchCaller(mobileNumber) async {
+    var url = "tel:${mobileNumber.toString()}";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -253,19 +260,23 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
                                   ),
-                                  const SizedBox(height: 5,),
+                                  const SizedBox(height: 10,),
                                   InkWell(
-                                    onTap : (){
+                                    onTap: (){
+                                      _launchCaller( widget.data.mobile.toString(),);
                                     },
                                     child: Container(
-                                      height: 30,
-                                      width: 30 ,
+                                      padding: const EdgeInsets.all(5),
                                       decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: AppColors.AppbtnColor
+                                        color: AppColors.back
                                       ),
-                                      child: Icon(Icons.call, color: AppColors.whit,),
-                                    ),
+                                      child: const Icon(Icons.call, color: AppColors.AppbtnColor, size:  20,),
+                                    )
+                                    // Image.asset(
+                                    //   "assets/calling.png",
+                                    //   scale: 1.1,
+                                    // ),
                                   ),
 
                                 ],

@@ -5,17 +5,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/contact_screen_controller.dart';
 import 'package:kolazz_book/Utils/strings.dart';
-// import 'package:kolazz_book/Views/AccountScreen/client_amt.dart';
-// import 'package:kolazz_book/Views/AccountScreen/account_details_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:kolazz_book/Views/Accounts/account_details_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Models/Type_of_photography_model.dart';
 import '../../Utils/colors.dart';
 import '../../Widgets/show_message.dart';
 import '../Accounts/client_amt.dart';
 import '../freelencing_jobpost/allotment.dart';
 import '../freelencing_jobpost/client_Jobs_screen.dart';
-import '../freelencing_jobpost/frelencing_post.dart';
+import '../freelancing_job/frelencing_post.dart';
 import '../freelencing_jobpost/team allotment.dart';
 
 class ContactScreen extends StatefulWidget {
@@ -95,9 +94,14 @@ class _ContactScreenState extends State<ContactScreen> {
                               selected = index;
                             });
                           },
-                          trailing: Image.asset(
-                            "assets/calling.png",
-                            scale: 1.1,
+                          trailing: InkWell(
+                            onTap: (){
+                              _launchCaller(controller.getphotographetClient[index].mobile.toString());
+                            },
+                            child: Image.asset(
+                              "assets/calling.png",
+                              scale: 1.1,
+                            ),
                           ),
 
                           title: Row(
@@ -106,8 +110,9 @@ class _ContactScreenState extends State<ContactScreen> {
                             children: [
                               Text(
                                 "${controller.getphotographetClient[index].firstName} ${controller.getphotographetClient[index].lastName}",
-                                style: TextStyle(
-                                    color: AppColors.textclr, fontSize: 13),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textclr, fontSize: 15),
                               ),
                               // Text(
                               //     "${controller.getphotographetClient[index].type}",
@@ -115,7 +120,8 @@ class _ContactScreenState extends State<ContactScreen> {
                               //         color: AppColors.textclr, fontSize: 13)),
                               Text(
                                   "${controller.getphotographetClient[index].city}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
                                       color: AppColors.textclr, fontSize: 13)),
                             ],
                           ),
@@ -147,7 +153,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        freelencingPost()));
+                                                        FreelancingJobsScreen(
+                                                          pId: controller.getphotographetClient[index].id,
+                                                        )));
                                           },
                                           child: Container(
                                             height: 40,
@@ -178,7 +186,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        AllotmentScreen()));
+                                                        AllotmentScreen(
+                                                          pid: controller.getphotographetClient[index].id,
+                                                        )));
                                           },
                                           child: Container(
                                               height: 40,
@@ -186,7 +196,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                       .size
                                                       .width /
                                                   2.9,
-                                              child: Center(
+                                              child:  Center(
                                                 child: Text(
                                                   'Allotment',
                                                   style: TextStyle(
@@ -205,25 +215,29 @@ class _ContactScreenState extends State<ContactScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                   const  SizedBox(
                                       height: 20,
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        // Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //         builder: (context) =>
-                                        //             AccountScreen()));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => AccountDetailsScreen(
+                                                  photographerName: controller.getphotographetClient[index].firstName,
+                                                  pid: controller.getphotographetClient[index].id,
+                                                  type: controller.isSelected ?  'photographer' : 'client',
+                                                  // totalOutstanding: data?.totalAmount.toString(),
+                                                )));
                                       },
                                       child: Container(
-                                          height: 45,
+                                          height: 40,
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(50),
                                               color: AppColors.pdfbtn),
                                           width:
-                                              MediaQuery.of(context).size.width,
+                                              MediaQuery.of(context).size.width /2,
                                           child: const  Center(
                                               child: Text("Account",
                                                   style: TextStyle(
@@ -298,9 +312,16 @@ class _ContactScreenState extends State<ContactScreen> {
                                             height: 30,
                                             width: 80,
                                             decoration: BoxDecoration(
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    offset: Offset(1, 2),
+                                                    blurRadius: 1,
+                                                    color: AppColors.greyColor,
+                                                  )
+                                                ],
                                                 color: AppColors.lightwhite,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                    BorderRadius.circular(30)),
                                             child: const Center(
                                               child: Text(
                                                 "Edit",
@@ -330,11 +351,18 @@ class _ContactScreenState extends State<ContactScreen> {
                                             height: 30,
                                             width: 80,
                                             decoration: BoxDecoration(
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    offset: Offset(1, 2),
+                                                    blurRadius: 1,
+                                                    color: AppColors.greyColor,
+                                                  )
+                                                ],
                                                 color: AppColors
                                                     .contaccontainerred,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            child: Center(
+                                                    BorderRadius.circular(30)),
+                                            child: const Center(
                                               child: Text(
                                                 "Delete",
                                                 style: TextStyle(
@@ -422,9 +450,14 @@ class _ContactScreenState extends State<ContactScreen> {
                                 selected = index;
                               });
                             },
-                            trailing: Image.asset(
-                              "assets/calling.png",
-                              scale: 1.1,
+                            trailing: InkWell(
+                              onTap: (){
+                                _launchCaller(controller.gettClient[index].mobile.toString());
+                              },
+                              child: Image.asset(
+                                "assets/calling.png",
+                                scale: 1.1,
+                              ),
                             ),
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -433,12 +466,14 @@ class _ContactScreenState extends State<ContactScreen> {
                                 Text(
                                   "${controller.gettClient[index].firstName} ${controller.gettClient[index].lastName}",
                                   style: const TextStyle(
-                                      color: AppColors.textclr, fontSize: 13),
+                                    fontWeight: FontWeight.w600,
+                                      color: AppColors.textclr, fontSize: 15),
                                 ),
                                 Text(
                                     "${controller.gettClient[index].city}",
                                     style: const TextStyle(
                                         color: AppColors.textclr,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 13)),
                               ],
                             ),
@@ -451,96 +486,100 @@ class _ContactScreenState extends State<ContactScreen> {
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Column(
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        FinalJobsScreen()));
-                                          },
-                                          child: Container(
-                                              height: 40,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.9,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.AppbtnColor,
-                                                // border: Border.all(color: AppColors.AppbtnColor),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: const Center(
-                                                child: Text(
-                                                  'Final Jobs',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                     ),
-                                                ),
-                                              )),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        TeamAllotment()));
-                                          },
-                                          child: Container(
-                                              height: 40,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.9,
-                                              decoration: BoxDecoration(
-                                                color: AppColors
-                                                    .contaccontainerblack,
-                                                // border: Border.all(color: AppColors.AppbtnColor),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: const Center(
-                                                child: Text(
-                                                  'Team Allotment',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                     ),
-                                                ),
-                                              )),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: [
+                                    //     InkWell(
+                                    //       onTap: () {
+                                    //         Navigator.push(
+                                    //             context,
+                                    //             MaterialPageRoute(
+                                    //                 builder: (context) =>
+                                    //                     FinalJobsScreen()));
+                                    //       },
+                                    //       child: Container(
+                                    //           height: 40,
+                                    //           width: MediaQuery.of(context)
+                                    //                   .size
+                                    //                   .width /
+                                    //               2.9,
+                                    //           decoration: BoxDecoration(
+                                    //             color: AppColors.AppbtnColor,
+                                    //             // border: Border.all(color: AppColors.AppbtnColor),
+                                    //             borderRadius:
+                                    //                 BorderRadius.circular(10),
+                                    //           ),
+                                    //           child: const Center(
+                                    //             child: Text(
+                                    //               'Final Jobs',
+                                    //               style: TextStyle(
+                                    //                   color: Colors.white,
+                                    //                   fontSize: 18,
+                                    //                  ),
+                                    //             ),
+                                    //           )),
+                                    //     ),
+                                    //     InkWell(
+                                    //       onTap: () {
+                                    //         Navigator.push(
+                                    //             context,
+                                    //             MaterialPageRoute(
+                                    //                 builder: (context) =>
+                                    //                     TeamAllotment()));
+                                    //       },
+                                    //       child: Container(
+                                    //           height: 40,
+                                    //           width: MediaQuery.of(context)
+                                    //                   .size
+                                    //                   .width /
+                                    //               2.9,
+                                    //           decoration: BoxDecoration(
+                                    //             color: AppColors
+                                    //                 .contaccontainerblack,
+                                    //             // border: Border.all(color: AppColors.AppbtnColor),
+                                    //             borderRadius:
+                                    //                 BorderRadius.circular(10),
+                                    //           ),
+                                    //           child: const Center(
+                                    //             child: Text(
+                                    //               'Team Allotment',
+                                    //               style: TextStyle(
+                                    //                   color: Colors.white,
+                                    //                   fontSize: 16,
+                                    //                  ),
+                                    //             ),
+                                    //           )),
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                    // const SizedBox(
+                                    //   height: 20,
+                                    // ),
                                     InkWell(
                                       onTap: () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ClientDetails()));
+                                                builder: (context) => AccountDetailsScreen(
+                                                  photographerName: controller.gettClient[index].firstName,
+                                                  pid: controller.gettClient[index].id,
+                                                  type: controller.isSelected ?  'photographer' : 'client',
+                                                  // totalOutstanding: data?.totalAmount.toString(),
+                                                )));
                                       },
                                       child: Container(
-                                          height: 45,
+                                          height: 40,
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(50),
                                               color: AppColors.pdfbtn),
                                           width:
-                                              MediaQuery.of(context).size.width,
+                                              MediaQuery.of(context).size.width /2,
                                           child: const Center(
                                               child: Text("Account",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       color:
                                                           AppColors.textclr)))),
                                     ),
@@ -588,9 +627,16 @@ class _ContactScreenState extends State<ContactScreen> {
                                             height: 30,
                                             width: 80,
                                             decoration: BoxDecoration(
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    offset: Offset(1, 2),
+                                                    blurRadius: 1,
+                                                    color: AppColors.greyColor,
+                                                  )
+                                                ],
                                                 color: AppColors.lightwhite,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                    BorderRadius.circular(30)),
                                             child: const Center(
                                               child: Text(
                                                 "Edit",
@@ -628,10 +674,17 @@ class _ContactScreenState extends State<ContactScreen> {
                                             height: 30,
                                             width: 80,
                                             decoration: BoxDecoration(
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    offset: Offset(1, 2),
+                                                    blurRadius: 1,
+                                                    color: AppColors.greyColor,
+                                                  )
+                                                ],
                                                 color: AppColors
                                                     .contaccontainerred,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                    BorderRadius.circular(30)),
                                             child: const Center(
                                               child: Text(
                                                 "Delete",
@@ -658,6 +711,15 @@ class _ContactScreenState extends State<ContactScreen> {
         ]);
       },
     );
+  }
+
+  _launchCaller(mobileNumber) async {
+    var url = "tel:${mobileNumber.toString()}";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   deleteConfirmation(String id, controller) {
@@ -1091,8 +1153,15 @@ class _ContactScreenState extends State<ContactScreen> {
                                         }
                                       },
                                       child: Container(
-                                          height: 55,
+                                          height: 40,
                                           decoration: BoxDecoration(
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  offset: Offset(1, 2),
+                                                  blurRadius: 1,
+                                                  color: AppColors.greyColor,
+                                                )
+                                              ],
                                               borderRadius:
                                                   BorderRadius.circular(50),
                                               color: AppColors.pdfbtn),
@@ -1100,10 +1169,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                                   .size
                                                   .width /
                                               1.5,
-                                          child: Center(
+                                          child: const Center(
                                               child: Text("Edit",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
                                                       color:
                                                           AppColors.textclr)))),
                                     ),
@@ -1315,8 +1385,15 @@ class _ContactScreenState extends State<ContactScreen> {
                                   }
                                 },
                                 child: Container(
-                                    height: 55,
+                                    height: 40,
                                     decoration: BoxDecoration(
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            offset: Offset(1, 2),
+                                            blurRadius: 1,
+                                            color: AppColors.greyColor,
+                                          )
+                                        ],
                                         borderRadius: BorderRadius.circular(50),
                                         color: AppColors.pdfbtn),
                                     width:
@@ -1324,7 +1401,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                     child: const Center(
                                         child: Text("Edit",
                                             style: TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
                                                 color: AppColors.textclr)))),
                               ),
                             ],
@@ -1359,7 +1437,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         child: Text("Photographers Contacts",
                             style: TextStyle(
                                 fontSize: 16,
-                                color: Color(0xff1E90FF),
+                                color: AppColors.AppbtnColor,
                                 fontWeight: FontWeight.bold)),
                       ),
                     ),
@@ -1375,7 +1453,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         child: Text("Clients Contacts",
                             style: TextStyle(
                                 fontSize: 16,
-                                color: Color(0xff1E90FF),
+                                color: AppColors.AppbtnColor,
                                 fontWeight: FontWeight.bold)),
                       ),
                     ),
@@ -1392,508 +1470,544 @@ class _ContactScreenState extends State<ContactScreen> {
                           size: 40,
                         ),
                         onPressed: () {
-                          controller.firstnameController.clear();
-                          controller.lastnameController.clear();
-                          controller.mobileController.clear();
-                          controller.cityController.clear();
-                          controller.photogreaphertypeController.clear();
-                          controller.companyController.clear();
-                          controller.perdayController.clear();
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return StatefulBuilder(
-                                builder: (BuildContext context,
-                                    Function(Function()) setState) {
-                                  return Padding(
-                                    padding: MediaQuery.of(context).viewInsets,
-                                    // padding: const EdgeInsets.all(8.0),
-                                    child: SingleChildScrollView(
-                                      child: Form(
-                                        key: controller.formKey,
-                                        child: Container(
-                                          // height: MediaQuery.of(context).size.height,
-                                          color: AppColors.teamcard2,
-                                          child: Center(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 15),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Container(
-                                                      height: 35,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          color: AppColors
-                                                              .AppbtnColor),
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              1.9,
-                                                      child: const Center(
-                                                          child: Text(
-                                                              "Photographer",
-                                                              style: TextStyle(
-                                                                  fontSize: 18,
-                                                                  color: AppColors
-                                                                      .textclr)))),
-                                                 const SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 5.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width /
-                                                              2.2,
-                                                          // height: 40,
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 0),
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              color: AppColors
-                                                                  .cardclr),
-                                                          child: TextFormField(
-                                                            style: const TextStyle(
-                                                                color: AppColors
-                                                                    .textclr),
-                                                            controller: controller
-                                                                .firstnameController,
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .name,
-                                                            validator: (val) {
-                                                              if (val!
-                                                                  .isEmpty) {
-                                                                return 'Please Enter Firstname';
-                                                              }
-                                                            },
-                                                            decoration: const InputDecoration(
-                                                                hintText:
-                                                                    'First Name',
-                                                                hintStyle: TextStyle(
+                          if(controller.profiledata!.isPlanActive! == true) {
+                            controller.firstnameController.clear();
+                            controller.lastnameController.clear();
+                            controller.mobileController.clear();
+                            controller.cityController.clear();
+                            controller.photogreaphertypeController.clear();
+                            controller.companyController.clear();
+                            controller.perdayController.clear();
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return StatefulBuilder(
+                                  builder: (BuildContext context,
+                                      Function(Function()) setState) {
+                                    return Padding(
+                                      padding: MediaQuery
+                                          .of(context)
+                                          .viewInsets,
+                                      // padding: const EdgeInsets.all(8.0),
+                                      child: SingleChildScrollView(
+                                        child: Form(
+                                          key: controller.formKey,
+                                          child: Container(
+                                            // height: MediaQuery.of(context).size.height,
+                                            color: AppColors.teamcard2,
+                                            child: Center(
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 8.0,
+                                                    vertical: 15),
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Container(
+                                                        height: 35,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                            color: AppColors
+                                                                .AppbtnColor),
+                                                        width:
+                                                        MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width /
+                                                            1.9,
+                                                        child: const Center(
+                                                            child: Text(
+                                                                "Photographer",
+                                                                style: TextStyle(
+                                                                    fontSize: 18,
                                                                     color: AppColors
-                                                                        .textclr,
-                                                                    fontSize:
-                                                                        14),
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                                contentPadding:
-                                                                    EdgeInsets.only(
-                                                                        left:
-                                                                            10,
-                                                                        bottom:
-                                                                            16)),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width /
-                                                              2.2,
-                                                          // height: 40,
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 0),
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              color: AppColors
-                                                                  .cardclr),
-                                                          child: Center(
-                                                            child:
-                                                                TextFormField(
+                                                                        .textclr)))),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5.0),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            width: MediaQuery
+                                                                .of(
+                                                                context)
+                                                                .size
+                                                                .width /
+                                                                2.2,
+                                                            // height: 40,
+                                                            padding: const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 0),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    5),
+                                                                color: AppColors
+                                                                    .cardclr),
+                                                            child: TextFormField(
                                                               style: const TextStyle(
                                                                   color: AppColors
                                                                       .textclr),
                                                               controller: controller
-                                                                  .lastnameController,
+                                                                  .firstnameController,
                                                               keyboardType:
-                                                                  TextInputType
-                                                                      .name,
-                                                              validator: (value) =>
-                                                                  value!.isEmpty
-                                                                      ? 'Lastname cannot be blank'
-                                                                      : null,
+                                                              TextInputType
+                                                                  .name,
+                                                              validator: (val) {
+                                                                if (val!
+                                                                    .isEmpty) {
+                                                                  return 'Please Enter Firstname';
+                                                                }
+                                                              },
                                                               decoration: const InputDecoration(
                                                                   hintText:
-                                                                      'Last Name(Surname)',
+                                                                  'First Name',
                                                                   hintStyle: TextStyle(
                                                                       color: AppColors
                                                                           .textclr,
                                                                       fontSize:
-                                                                          14),
+                                                                      14),
                                                                   border:
-                                                                      InputBorder
-                                                                          .none,
+                                                                  InputBorder
+                                                                      .none,
                                                                   contentPadding:
-                                                                      EdgeInsets.only(
-                                                                          left:
-                                                                              9,
-                                                                          bottom:
-                                                                              17)),
+                                                                  EdgeInsets
+                                                                      .only(
+                                                                      left:
+                                                                      10,
+                                                                      bottom:
+                                                                      16)),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 9,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 5.0),
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      // height: 40,
-                                                      padding:
-                                                         const EdgeInsets.symmetric(
-                                                              vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: AppColors
-                                                              .cardclr),
-                                                      child: TextFormField(
-                                                        style: TextStyle(
-                                                            color: AppColors
-                                                                .textclr),
-                                                        controller: controller
-                                                            .mobileController,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        maxLength: 10,
-                                                        validator: (text) {
-                                                          if (text == null ||
-                                                              text.isEmpty) {
-                                                            return 'Can\'t be empty';
-                                                          }
-                                                          if (text.length <
-                                                              10) {
-                                                            return 'Too short';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration: const InputDecoration(
-                                                            counterText: "",
-                                                            hintText:
-                                                                'Phone Number',
-                                                            hintStyle: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr,
-                                                                fontSize: 14),
-                                                            border: InputBorder
-                                                                .none,
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    left: 10,
-                                                                    bottom:
-                                                                        16)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 9,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                        horizontal: 5.0),
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      // height: 34,
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                              vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: AppColors
-                                                              .cardclr),
-                                                      child: TextFormField(
-                                                        style: const TextStyle(
-                                                            color: AppColors
-                                                                .textclr),
-                                                        controller: controller
-                                                            .cityController,
-                                                        keyboardType:
-                                                            TextInputType.name,
-                                                        validator: (value) =>
-                                                            value!.isEmpty
-                                                                ? 'City cannot be blank'
-                                                                : null,
-                                                        decoration: const InputDecoration(
-                                                            hintText: 'City',
-                                                            hintStyle: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr,
-                                                                fontSize: 14),
-                                                            border: InputBorder
-                                                                .none,
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    left: 10,
-                                                                    bottom:
-                                                                        16)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 9,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 5.0),
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      // height: 34,
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                              horizontal: 8),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: AppColors
-                                                              .cardclr),
-                                                      child:
-                                                          DropdownButtonHideUnderline(
-                                                        child: DropdownButton(
-                                                          dropdownColor:
-                                                              AppColors.cardclr,
-                                                          // Initial Value
-                                                          value: controller
-                                                              .categoryValue,
-                                                          isExpanded: true,
-                                                          hint: const Text(
-                                                            "Type Of Photography",
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr),
-                                                          ),
-                                                          icon: const Icon(
-                                                            Icons
-                                                                .keyboard_arrow_down,
-                                                            color: AppColors
-                                                                .textclr,
-                                                          ),
-                                                          // Array list of items
-                                                          items: controller
-                                                              .typeofPhotographyEvent
-                                                              .map((Categories
-                                                                  items) {
-                                                            return DropdownMenuItem(
-                                                              value: items.resId,
-                                                              child: Text(
-                                                                items.resName
-                                                                    .toString(),
-                                                                style: TextStyle(
-                                                                    color: AppColors
-                                                                        .textclr),
-                                                              ),
-                                                            );
-                                                          }).toList(),
-                                                          // After selecting the desired option,it will
-                                                          // change button value to selected value
-                                                          onChanged:
-                                                              (newValue) {
-                                                            setState(() {
-                                                              controller
-                                                                      .categoryValue =
-                                                                  newValue;
-                                                            });
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 9,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 5.0),
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      // height: 34,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: AppColors
-                                                              .cardclr),
-                                                      child: TextFormField(
-                                                        style: TextStyle(
-                                                            color: AppColors
-                                                                .textclr),
-                                                        controller: controller
-                                                            .companyController,
-                                                        keyboardType:
-                                                            TextInputType.name,
-                                                        validator: (value) =>
-                                                            value!.isEmpty
-                                                                ? 'City cannot be blank'
-                                                                : null,
-                                                        decoration: InputDecoration(
-                                                            hintText:
-                                                                'Company Name (Optional)',
-                                                            hintStyle: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr,
-                                                                fontSize: 14),
-                                                            border: InputBorder
-                                                                .none,
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    left: 10,
-                                                                    bottom:
-                                                                        16)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 9,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 5.0),
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      // height: 34,
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: AppColors
-                                                              .cardclr),
-                                                      child: TextFormField(
-                                                        style: const TextStyle(
-                                                            color: AppColors
-                                                                .textclr),
-                                                        controller: controller
-                                                            .perdayController,
-                                                        keyboardType:
-                                                            TextInputType.name,
-                                                        validator: (value) =>
-                                                            value!.isEmpty
-                                                                ? 'City cannot be blank'
-                                                                : null,
-                                                        decoration: const InputDecoration(
-                                                            hintText:
-                                                                'Add Per Day Charges',
-                                                            hintStyle: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr,
-                                                                fontSize: 14),
-                                                            border: InputBorder
-                                                                .none,
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    left: 10,
-                                                                    bottom:
-                                                                        16)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 40,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      print(
-                                                          "plese_enterrrrrrrrrrrr__________");
-                                                      if (controller
-                                                          .formKey.currentState!
-                                                          .validate()) {
-                                                        controller
-                                                            .AddPhotographerr();
-                                                        Get.back();
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                        height: 55,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50),
-                                                            color: AppColors
-                                                                .pdfbtn),
-                                                        width: MediaQuery.of(context)
+                                                          Container(
+                                                            width: MediaQuery
+                                                                .of(
+                                                                context)
                                                                 .size
                                                                 .width /
-                                                            1.5,
-                                                        child: const Center(
-                                                            child: Text("Add",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        18,
+                                                                2.2,
+                                                            // height: 40,
+                                                            padding: const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 0),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    5),
+                                                                color: AppColors
+                                                                    .cardclr),
+                                                            child: Center(
+                                                              child:
+                                                              TextFormField(
+                                                                style: const TextStyle(
                                                                     color: AppColors
-                                                                        .textclr)))),
-                                                  ),
-                                                ],
+                                                                        .textclr),
+                                                                controller: controller
+                                                                    .lastnameController,
+                                                                keyboardType:
+                                                                TextInputType
+                                                                    .name,
+                                                                validator: (
+                                                                    value) =>
+                                                                value!.isEmpty
+                                                                    ? 'Lastname cannot be blank'
+                                                                    : null,
+                                                                decoration: const InputDecoration(
+                                                                    hintText:
+                                                                    'Last Name(Surname)',
+                                                                    hintStyle: TextStyle(
+                                                                        color: AppColors
+                                                                            .textclr,
+                                                                        fontSize:
+                                                                        14),
+                                                                    border:
+                                                                    InputBorder
+                                                                        .none,
+                                                                    contentPadding:
+                                                                    EdgeInsets
+                                                                        .only(
+                                                                        left:
+                                                                        9,
+                                                                        bottom:
+                                                                        17)),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 9,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5.0),
+                                                      child: Container(
+                                                        width:
+                                                        MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width,
+                                                        // height: 40,
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                            color: AppColors
+                                                                .cardclr),
+                                                        child: TextFormField(
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .textclr),
+                                                          controller: controller
+                                                              .mobileController,
+                                                          keyboardType:
+                                                          TextInputType
+                                                              .number,
+                                                          maxLength: 10,
+                                                          validator: (text) {
+                                                            if (text == null ||
+                                                                text.isEmpty) {
+                                                              return 'Can\'t be empty';
+                                                            }
+                                                            if (text.length <
+                                                                10) {
+                                                              return 'Too short';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          decoration: const InputDecoration(
+                                                              counterText: "",
+                                                              hintText:
+                                                              'Phone Number',
+                                                              hintStyle: TextStyle(
+                                                                  color: AppColors
+                                                                      .textclr,
+                                                                  fontSize: 14),
+                                                              border: InputBorder
+                                                                  .none,
+                                                              contentPadding:
+                                                              EdgeInsets.only(
+                                                                  left: 10,
+                                                                  bottom:
+                                                                  16)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 9,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5.0),
+                                                      child: Container(
+                                                        width:
+                                                        MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width,
+                                                        // height: 34,
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                            color: AppColors
+                                                                .cardclr),
+                                                        child: TextFormField(
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .textclr),
+                                                          controller: controller
+                                                              .cityController,
+                                                          keyboardType:
+                                                          TextInputType.name,
+                                                          validator: (value) =>
+                                                          value!.isEmpty
+                                                              ? 'City cannot be blank'
+                                                              : null,
+                                                          decoration: const InputDecoration(
+                                                              hintText: 'City',
+                                                              hintStyle: TextStyle(
+                                                                  color: AppColors
+                                                                      .textclr,
+                                                                  fontSize: 14),
+                                                              border: InputBorder
+                                                                  .none,
+                                                              contentPadding:
+                                                              EdgeInsets.only(
+                                                                  left: 10,
+                                                                  bottom:
+                                                                  16)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 9,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5.0),
+                                                      child: Container(
+                                                        width:
+                                                        MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width,
+                                                        // height: 34,
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 8),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                            color: AppColors
+                                                                .cardclr),
+                                                        child:
+                                                        DropdownButtonHideUnderline(
+                                                          child: DropdownButton(
+                                                            dropdownColor:
+                                                            AppColors.cardclr,
+                                                            // Initial Value
+                                                            value: controller
+                                                                .categoryValue,
+                                                            isExpanded: true,
+                                                            hint: const Text(
+                                                              "Type Of Photography",
+                                                              style: TextStyle(
+                                                                  color: AppColors
+                                                                      .textclr),
+                                                            ),
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .keyboard_arrow_down,
+                                                              color: AppColors
+                                                                  .textclr,
+                                                            ),
+                                                            // Array list of items
+                                                            items: controller
+                                                                .typeofPhotographyEvent
+                                                                .map((Categories
+                                                            items) {
+                                                              return DropdownMenuItem(
+                                                                value: items
+                                                                    .resId,
+                                                                child: Text(
+                                                                  items.resName
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      color: AppColors
+                                                                          .textclr),
+                                                                ),
+                                                              );
+                                                            }).toList(),
+                                                            // After selecting the desired option,it will
+                                                            // change button value to selected value
+                                                            onChanged:
+                                                                (newValue) {
+                                                              setState(() {
+                                                                controller
+                                                                    .categoryValue =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 9,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5.0),
+                                                      child: Container(
+                                                        width:
+                                                        MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width,
+                                                        // height: 34,
+                                                        padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                            color: AppColors
+                                                                .cardclr),
+                                                        child: TextFormField(
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .textclr),
+                                                          controller: controller
+                                                              .companyController,
+                                                          keyboardType:
+                                                          TextInputType.name,
+                                                          validator: (value) =>
+                                                          value!.isEmpty
+                                                              ? 'City cannot be blank'
+                                                              : null,
+                                                          decoration: InputDecoration(
+                                                              hintText:
+                                                              'Company Name (Optional)',
+                                                              hintStyle: TextStyle(
+                                                                  color: AppColors
+                                                                      .textclr,
+                                                                  fontSize: 14),
+                                                              border: InputBorder
+                                                                  .none,
+                                                              contentPadding:
+                                                              EdgeInsets.only(
+                                                                  left: 10,
+                                                                  bottom:
+                                                                  16)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 9,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5.0),
+                                                      child: Container(
+                                                        width:
+                                                        MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width,
+                                                        // height: 34,
+                                                        padding: const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                            color: AppColors
+                                                                .cardclr),
+                                                        child: TextFormField(
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .textclr),
+                                                          controller: controller
+                                                              .perdayController,
+                                                          keyboardType:
+                                                          TextInputType.name,
+                                                          validator: (value) =>
+                                                          value!.isEmpty
+                                                              ? 'City cannot be blank'
+                                                              : null,
+                                                          decoration: const InputDecoration(
+                                                              hintText:
+                                                              'Add Per Day Charges',
+                                                              hintStyle: TextStyle(
+                                                                  color: AppColors
+                                                                      .textclr,
+                                                                  fontSize: 14),
+                                                              border: InputBorder
+                                                                  .none,
+                                                              contentPadding:
+                                                              EdgeInsets.only(
+                                                                  left: 10,
+                                                                  bottom:
+                                                                  16)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 40,
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        print(
+                                                            "plese_enterrrrrrrrrrrr__________");
+                                                        if (controller
+                                                            .formKey
+                                                            .currentState!
+                                                            .validate()) {
+                                                          controller
+                                                              .AddPhotographerr();
+                                                          Get.back();
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                              boxShadow: const [
+                                                                BoxShadow(
+                                                                  offset: Offset(
+                                                                      1, 2),
+                                                                  blurRadius: 1,
+                                                                  color: AppColors
+                                                                      .greyColor,
+                                                                )
+                                                              ],
+                                                              borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                  50),
+                                                              color: AppColors
+                                                                  .pdfbtn),
+                                                          width: MediaQuery
+                                                              .of(context)
+                                                              .size
+                                                              .width /
+                                                              1.5,
+                                                          child: const Center(
+                                                              child: Text("Add",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      16,
+                                                                      fontWeight: FontWeight
+                                                                          .w600,
+                                                                      color: AppColors
+                                                                          .textclr)))),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          }
+                          else{
+                            Fluttertoast.showToast(msg: "You don't have any active plan!");
+                          }
                         },
                       )
                     : FloatingActionButton(
@@ -1902,301 +2016,315 @@ class _ContactScreenState extends State<ContactScreen> {
                           size: 40,
                         ),
                         onPressed: () {
-                          controller.firstnameController.clear();
-                          controller.lastnameController.clear();
-                          controller.mobileController.clear();
-                          controller.cityController.clear();
-                          showModalBottomSheet<void>(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return SingleChildScrollView(
-                                child: Padding(
-                                  padding: MediaQuery.of(context).viewInsets,
-                                  // padding: const EdgeInsets.all(8.0),
-                                  child: Form(
-                                    key: controller.formKey,
-                                    child: Container(
-                                      // height: MediaQuery.of(context).size.height,
-                                      color: AppColors.teamcard2,
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 15),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Container(
-                                                  height: 35,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: AppColors
-                                                          .AppbtnColor),
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2.5,
-                                                  child: const Center(
-                                                      child: Text("Client",
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              color: AppColors
-                                                                  .textclr)))),
-                                              const SizedBox(
-                                                height: 15,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              2.2,
-                                                      // height: 34,
-                                                      padding:
-                                                         const  EdgeInsets.symmetric(
-                                                              vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: AppColors
-                                                              .cardclr),
-                                                      child: TextFormField(
-                                                        style: const TextStyle(
-                                                            color: AppColors
-                                                                .textclr),
-                                                        controller: controller
-                                                            .firstnameController,
-                                                        keyboardType:
-                                                            TextInputType.name,
-                                                        validator: (value) =>
-                                                            value!.isEmpty
-                                                                ? 'Firstname cannot be blank'
-                                                                : null,
-                                                        decoration: const InputDecoration(
-                                                            hintText:
-                                                                'First Name',
-                                                            hintStyle: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr,
-                                                                fontSize: 14),
-                                                            border: InputBorder
-                                                                .none,
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    left: 10,
-                                                                    bottom:
-                                                                        16)),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              2.2,
-                                                      // height: 34,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: AppColors
-                                                              .cardclr),
-                                                      child: Center(
-                                                        child: TextFormField(
-                                                          style: TextStyle(
-                                                              color: AppColors
-                                                                  .textclr),
-                                                          controller: controller
-                                                              .lastnameController,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .name,
-                                                          validator: (value) =>
-                                                              value!.isEmpty
-                                                                  ? 'Lastname cannot be blank'
-                                                                  : null,
-                                                          decoration: const InputDecoration(
-                                                              hintText:
-                                                                  'Last Name(Surname)',
-                                                              hintStyle: TextStyle(
-                                                                  color: AppColors
-                                                                      .textclr,
-                                                                  fontSize: 14),
-                                                              border:
-                                                                  InputBorder
-                                                                      .none,
-                                                              contentPadding:
-                                                                  EdgeInsets.only(
-                                                                      left: 9,
-                                                                      bottom:
-                                                                          17)),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 9,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5.0),
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  // height: 34,
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 0),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      color: AppColors.cardclr),
-                                                  child: TextFormField(
-                                                    style: const TextStyle(
-                                                        color:
-                                                            AppColors.textclr),
-                                                    controller: controller
-                                                        .mobileController,
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    validator: (text) {
-                                                      if (text == null ||
-                                                          text.isEmpty) {
-                                                        return 'Can\'t be empty';
-                                                      }
-                                                      if (text.length < 10) {
-                                                        return 'Too short';
-                                                      }
-                                                      return null;
-                                                    },
-                                                    maxLength: 10,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                            counterText: "",
-                                                            hintText:
-                                                                'Phone Number',
-                                                            hintStyle: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr,
-                                                                fontSize: 14),
-                                                            border: InputBorder
-                                                                .none,
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    left: 10,
-                                                                    bottom:
-                                                                        16)),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 9,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5.0),
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  // height: 34,
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 0),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      color: AppColors.cardclr),
-                                                  child: TextFormField(
-                                                    style: const TextStyle(
-                                                        color:
-                                                            AppColors.textclr),
-                                                    controller: controller
-                                                        .cityController,
-                                                    keyboardType:
-                                                        TextInputType.name,
-                                                    validator: (value) => value!
-                                                            .isEmpty
-                                                        ? 'City cannot be blank'
-                                                        : null,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                            hintText: 'City',
-                                                            hintStyle: TextStyle(
-                                                                color: AppColors
-                                                                    .textclr,
-                                                                fontSize: 14),
-                                                            border: InputBorder
-                                                                .none,
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    left: 10,
-                                                                    bottom:
-                                                                        16)),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 40,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  if (controller
-                                                      .formKey.currentState!
-                                                      .validate()) {
-                                                    controller.AddClient();
-                                                    Get.back();
-                                                  }
-                                                },
-                                                child: Container(
-                                                    height: 55,
+                          if(controller.profiledata!.isPlanActive! == true) {
+                            controller.firstnameController.clear();
+                            controller.lastnameController.clear();
+                            controller.mobileController.clear();
+                            controller.cityController.clear();
+                            showModalBottomSheet<void>(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SingleChildScrollView(
+                                  child: Padding(
+                                    padding: MediaQuery.of(context).viewInsets,
+                                    // padding: const EdgeInsets.all(8.0),
+                                    child: Form(
+                                      key: controller.formKey,
+                                      child: Container(
+                                        // height: MediaQuery.of(context).size.height,
+                                        color: AppColors.teamcard2,
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 15),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Container(
+                                                    height: 35,
                                                     decoration: BoxDecoration(
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color:
-                                                            AppColors.pdfbtn),
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            1.5,
+                                                        BorderRadius.circular(
+                                                            10),
+                                                        color: AppColors
+                                                            .AppbtnColor),
+                                                    width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                        2.5,
                                                     child: const Center(
-                                                        child: Text("Add",
+                                                        child: Text("Client",
                                                             style: TextStyle(
                                                                 fontSize: 18,
                                                                 color: AppColors
                                                                     .textclr)))),
-                                              ),
-                                            ],
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                            2.2,
+                                                        // height: 34,
+                                                        padding:
+                                                        const  EdgeInsets.symmetric(
+                                                            vertical: 0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                            color: AppColors
+                                                                .cardclr),
+                                                        child: TextFormField(
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .textclr),
+                                                          controller: controller
+                                                              .firstnameController,
+                                                          keyboardType:
+                                                          TextInputType.name,
+                                                          validator: (value) =>
+                                                          value!.isEmpty
+                                                              ? 'Firstname cannot be blank'
+                                                              : null,
+                                                          decoration: const InputDecoration(
+                                                              hintText:
+                                                              'First Name',
+                                                              hintStyle: TextStyle(
+                                                                  color: AppColors
+                                                                      .textclr,
+                                                                  fontSize: 14),
+                                                              border: InputBorder
+                                                                  .none,
+                                                              contentPadding:
+                                                              EdgeInsets.only(
+                                                                  left: 10,
+                                                                  bottom:
+                                                                  16)),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                            2.2,
+                                                        // height: 34,
+                                                        padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                            color: AppColors
+                                                                .cardclr),
+                                                        child: Center(
+                                                          child: TextFormField(
+                                                            style: TextStyle(
+                                                                color: AppColors
+                                                                    .textclr),
+                                                            controller: controller
+                                                                .lastnameController,
+                                                            keyboardType:
+                                                            TextInputType
+                                                                .name,
+                                                            validator: (value) =>
+                                                            value!.isEmpty
+                                                                ? 'Lastname cannot be blank'
+                                                                : null,
+                                                            decoration: const InputDecoration(
+                                                                hintText:
+                                                                'Last Name(Surname)',
+                                                                hintStyle: TextStyle(
+                                                                    color: AppColors
+                                                                        .textclr,
+                                                                    fontSize: 14),
+                                                                border:
+                                                                InputBorder
+                                                                    .none,
+                                                                contentPadding:
+                                                                EdgeInsets.only(
+                                                                    left: 9,
+                                                                    bottom:
+                                                                    17)),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 9,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5.0),
+                                                  child: Container(
+                                                    width: MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                    // height: 34,
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 0),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                        color: AppColors.cardclr),
+                                                    child: TextFormField(
+                                                      style: const TextStyle(
+                                                          color:
+                                                          AppColors.textclr),
+                                                      controller: controller
+                                                          .mobileController,
+                                                      keyboardType:
+                                                      TextInputType.number,
+                                                      validator: (text) {
+                                                        if (text == null ||
+                                                            text.isEmpty) {
+                                                          return 'Can\'t be empty';
+                                                        }
+                                                        if (text.length < 10) {
+                                                          return 'Too short';
+                                                        }
+                                                        return null;
+                                                      },
+                                                      maxLength: 10,
+                                                      decoration:
+                                                      const InputDecoration(
+                                                          counterText: "",
+                                                          hintText:
+                                                          'Phone Number',
+                                                          hintStyle: TextStyle(
+                                                              color: AppColors
+                                                                  .textclr,
+                                                              fontSize: 14),
+                                                          border: InputBorder
+                                                              .none,
+                                                          contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 10,
+                                                              bottom:
+                                                              16)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 9,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5.0),
+                                                  child: Container(
+                                                    width: MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                    // height: 34,
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 0),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                        color: AppColors.cardclr),
+                                                    child: TextFormField(
+                                                      style: const TextStyle(
+                                                          color:
+                                                          AppColors.textclr),
+                                                      controller: controller
+                                                          .cityController,
+                                                      keyboardType:
+                                                      TextInputType.name,
+                                                      validator: (value) => value!
+                                                          .isEmpty
+                                                          ? 'City cannot be blank'
+                                                          : null,
+                                                      decoration:
+                                                      const InputDecoration(
+                                                          hintText: 'City',
+                                                          hintStyle: TextStyle(
+                                                              color: AppColors
+                                                                  .textclr,
+                                                              fontSize: 14),
+                                                          border: InputBorder
+                                                              .none,
+                                                          contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 10,
+                                                              bottom:
+                                                              16)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 40,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    if (controller
+                                                        .formKey.currentState!
+                                                        .validate()) {
+                                                      controller.AddClient();
+                                                      Get.back();
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                      height: 40,
+                                                      decoration: BoxDecoration(
+                                                          boxShadow: const [
+                                                            BoxShadow(
+                                                              offset: Offset(1, 2),
+                                                              blurRadius: 1,
+                                                              color: AppColors.greyColor,
+                                                            )
+                                                          ],
+                                                          borderRadius:
+                                                          BorderRadius
+                                                              .circular(50),
+                                                          color:
+                                                          AppColors.pdfbtn),
+                                                      width:
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                          1.5,
+                                                      child: const Center(
+                                                          child: Text("Add",
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: AppColors
+                                                                      .textclr)))),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
+                                );
+                              },
+                            );
+                          }
+                          else{
+                            Fluttertoast.showToast(msg: "You don't have any active plan!");
+                          }
+
                         },
                       )),
           ),
@@ -2215,6 +2343,83 @@ class _ContactScreenState extends State<ContactScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     // Container(
+                      //     //   decoration: BoxDecoration(
+                      //     //       color: AppColors.containerclr,
+                      //     //       borderRadius: BorderRadius.circular(10)),
+                      //     //   child: Row(
+                      //     //     children: [
+                      //     //       InkWell(
+                      //     //         onTap: () {
+                      //     //           controller.getClientPhotographer();
+                      //     //
+                      //     //           setState(() {
+                      //     //             controller.isSelected = true;
+                      //     //           });
+                      //     //           controller.searchController.clear();
+                      //     //         },
+                      //     //         child: Container(
+                      //     //             height: 50,
+                      //     //             width: 120,
+                      //     //             child: Center(
+                      //     //               child: Text(
+                      //     //                 'Client',
+                      //     //                 style: TextStyle(
+                      //     //                     color: controller.isSelected
+                      //     //                         ? Color(0xffffffff)
+                      //     //                         : Colors.white,
+                      //     //                     fontSize: 16,
+                      //     //                     fontWeight: FontWeight.w600),
+                      //     //               ),
+                      //     //             ),
+                      //     //             decoration: BoxDecoration(
+                      //     //               color: isSelected
+                      //     //                   ? AppColors.AppbtnColor
+                      //     //                   : AppColors.containerclr,
+                      //     //               // border: Border.all(color: AppColors.AppbtnColor),
+                      //     //               borderRadius: BorderRadius.circular(10),
+                      //     //             )),
+                      //     //       ),
+                      //     //       InkWell(
+                      //     //         onTap: () {
+                      //     //           setState(() {
+                      //     //             // Navigator.of(context).push(MaterialPageRoute(
+                      //     //             //   builder: (context) => NextPage(),
+                      //     //             // ));
+                      //     //             isSelected = false;
+                      //     //           });
+                      //     //           getAccountsData();
+                      //     //         },
+                      //     //         child: Container(
+                      //     //             height: 50,
+                      //     //             width: 130,
+                      //     //             child: Center(
+                      //     //               child: Text(
+                      //     //                 'Photographer',
+                      //     //                 style: TextStyle(
+                      //     //                   color: isSelected
+                      //     //                       ? AppColors.whit
+                      //     //                       : Colors.white,
+                      //     //                   fontWeight: FontWeight.w600,
+                      //     //                   fontSize: 16,
+                      //     //                 ),
+                      //     //               ),
+                      //     //             ),
+                      //     //             decoration: BoxDecoration(
+                      //     //                 color: isSelected
+                      //     //                     ? AppColors.containerclr
+                      //     //                     : AppColors.AppbtnColor,
+                      //     //                 borderRadius: BorderRadius.circular(10))),
+                      //     //       ),
+                      //     //     ],
+                      //     //   ),
+                      //     // )
+                      //   ],
+                      // ),
                       Container(
                         decoration: BoxDecoration(
                             color: AppColors.containerclr,
@@ -2231,10 +2436,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                 controller.searchController.clear();
                               },
                               child: Container(
-                                  height: 40,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),
+                                  height: 50,
+                                  width: 120,
+                                  child: Center(
                                     child: Text(
                                       'Photographers',
                                       style: TextStyle(
@@ -2242,6 +2446,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                             ? Color(0xffffffff)
                                             : Colors.white,
                                         fontSize: 16,
+                                        fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
@@ -2267,8 +2472,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                 controller.searchController.clear();
                               },
                               child: Container(
-                                  height: 40,
-                                  width: 90,
+                                  height: 50,
+                                  width: 120,
                                   child: Center(
                                     child: Text(
                                       'Clients',
@@ -2277,6 +2482,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                             ? AppColors.whit
                                             : Colors.white,
                                         fontSize: 16,
+                                        fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),

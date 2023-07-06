@@ -1,4 +1,4 @@
-package com.kollaz.user
+package com.kolaz.book
 
 import io.flutter.embedding.android.FlutterActivity
 

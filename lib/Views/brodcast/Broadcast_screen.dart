@@ -6,8 +6,6 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:kolazz_book/Controller/broadcast_controller.dart';
-import 'package:kolazz_book/Controller/edit_profile_controller.dart';
 import 'package:kolazz_book/Controller/home_controller.dart';
 import 'package:kolazz_book/Models/broadcast_list_model.dart';
 import 'package:kolazz_book/Models/get_cities_model.dart';
@@ -328,7 +326,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
+              child: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
           backgroundColor: Color(0xff303030),
           actions: [
             Column(
@@ -340,7 +338,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                   child: const Text("Broadcast",
                       style: TextStyle(
                           fontSize: 18,
-                          color: Color(0xff1E90FF),
+                          color: AppColors.AppbtnColor,
                           fontWeight: FontWeight.bold)),
                 ),
                 Expanded(
@@ -462,7 +460,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                               children: [
                                 Text(
                                   "Photographer",
-                                  style: TextStyle(color: Color(0xff1E90FF)),
+                                  style: TextStyle(color: AppColors.AppbtnColor),
                                 ),
                                 Container(
                                   height: 50,
@@ -526,7 +524,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                               children: [
                                 Text(
                                   "Date",
-                                  style: TextStyle(color: Color(0xff1E90FF)),
+                                  style: TextStyle(color: AppColors.AppbtnColor),
                                 ),
                                 InkWell(
                                   onTap: () async {
@@ -584,7 +582,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                             //   children: [
                             //     Text(
                             //       "Country",
-                            //       style: TextStyle(color: Color(0xff1E90FF)),
+                            //       style: TextStyle(color: AppColors.AppbtnColor),
                             //     ),
                             //     Container(
                             //       // height: 50,
@@ -658,7 +656,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                               children: [
                                 Text(
                                   "State",
-                                  style: TextStyle(color: Color(0xff1E90FF)),
+                                  style: TextStyle(color: AppColors.AppbtnColor),
                                 ),
                                 Container(
                                   // height: 50,
@@ -731,7 +729,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                               children: [
                                const Text(
                                   "City",
-                                  style: TextStyle(color: Color(0xff1E90FF)),
+                                  style: TextStyle(color: AppColors.AppbtnColor),
                                 ),
                                 Container(
                                   // height: 50,
@@ -838,7 +836,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                           child: Text(
                             "Kolaz Book Users",
                             style: TextStyle(
-                                color: Color(0xff1E90FF),
+                                color: AppColors.AppbtnColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18),
                           ),
@@ -851,7 +849,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                 child: Text(
                                   '${controller.profiledata?.country}',
                                   style: const TextStyle(
-                                      color: Color(0xff1E90FF),
+                                      color: AppColors.AppbtnColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
                                 ),
@@ -928,7 +926,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                                           style: const TextStyle(
                                                               fontSize: 16,
                                                               color:
-                                                                  Color(0xff1E90FF),
+                                                                  AppColors.AppbtnColor,
                                                               fontWeight:
                                                                   FontWeight.bold),
                                                         ),

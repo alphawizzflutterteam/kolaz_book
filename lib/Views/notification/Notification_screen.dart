@@ -101,7 +101,7 @@ class _Notification_screenState extends State<Notification_screen> {
               onTap: (){
                 Navigator.pop(context);
               },
-              child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
+              child: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
           backgroundColor: Color(0xff303030),
           actions: [
             Column(
@@ -110,7 +110,7 @@ class _Notification_screenState extends State<Notification_screen> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(top: 10.0,right: 10),
-                  child: Text("Notification", style: TextStyle(fontSize: 18, color:Color(0xff1E90FF), fontWeight: FontWeight.bold)
+                  child: Text("Notification", style: TextStyle(fontSize: 18, color:AppColors.AppbtnColor, fontWeight: FontWeight.bold)
                   ),
                 ),
                 Expanded(

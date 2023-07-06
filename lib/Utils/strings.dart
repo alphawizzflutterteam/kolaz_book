@@ -4,9 +4,11 @@ const String baseUrl = 'https://developmentalphawizz.com/kolaz_book/api/';
 final Uri addQuotationApi = Uri.parse('${baseUrl}add_quatation');
 final Uri getQuotationApi = Uri.parse('${baseUrl}get_quatation');
 final Uri updateClientJobApi = Uri.parse('${baseUrl}update_job');
+final Uri forgotSendOtpApi = Uri.parse('${baseUrl}send_otp');
+final Uri updatePasswordApi = Uri.parse('${baseUrl}update_password');
 
 final Uri getClientJobsApi = Uri.parse('${baseUrl}get_job_list');
-
+final Uri allotedJobsApi = Uri.parse('${baseUrl}allotted_jobs');
 final Uri downloadPdfApi = Uri.parse('${baseUrl}download_pdf');
 final Uri getAccountsDataApi = Uri.parse('${baseUrl}accounts');
 final Uri ledgerDataApi = Uri.parse('${baseUrl}ledger_entries');
@@ -23,6 +25,7 @@ final Uri updateQuotationApi = Uri.parse('${baseUrl}get_sellers');
 final Uri getCitiesApi = Uri.parse('${baseUrl}get_cities');
 final Uri getStatesApi = Uri.parse('${baseUrl}get_states');
 final Uri getCountryApi = Uri.parse('${baseUrl}get_countries');
+final Uri removeProfileImageApi = Uri.parse('${baseUrl}remove_profile');
 final Uri updateUserProfileApi = Uri.parse('${baseUrl}user_edit');
 final Uri getBroadcastListApi = Uri.parse('${baseUrl}user_broadcast_list');
 final Uri addBroadcastDataApi = Uri.parse('${baseUrl}user_broadcast');

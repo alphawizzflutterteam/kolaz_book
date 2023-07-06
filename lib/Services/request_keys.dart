@@ -31,6 +31,8 @@ class RequestKeys {
   static String type = 'type';
   static String filter = 'filter';
   static String userType = 'user_type';
+  static String jobId = 'job_id';
+  static String freelanceId = 'freelance_id';
   static String searchText = 'search_text';
   static String companyImage = 'company_image';
   static String profileImage = 'profile_pic';

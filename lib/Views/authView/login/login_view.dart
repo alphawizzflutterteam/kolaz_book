@@ -1,6 +1,8 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kolazz_book/Models/forgot_password.dart';
+import 'package:kolazz_book/Views/authView/forgot_password/forgot_password_view.dart';
 
 import '../../../Controller/login_controller.dart';
 import '../../../Route_managements/routes.dart';
@@ -202,6 +204,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> ForgotPasswordScreen()));
+
+                        }, child: const Text("Forget Password?",
+                          style: TextStyle(color: AppColors.whit, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
+                        ))
+                      ],
                     ),
                     const SizedBox(
                       height: 150,

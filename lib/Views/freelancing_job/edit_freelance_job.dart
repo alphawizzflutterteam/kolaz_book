@@ -10,9 +10,11 @@ import 'package:kolazz_book/Models/event_type_model.dart';
 import 'package:kolazz_book/Models/get_cities_model.dart';
 import 'package:kolazz_book/Models/get_freelancer_jobs_model.dart';
 import 'package:kolazz_book/Models/photographer_list_model.dart';
+import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import '../../Utils/colors.dart';
 
 class EditFreelanceJob extends StatefulWidget {
@@ -67,9 +69,50 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
 
   }
 
+  String pdfUrl = '';
+  downloadPdfs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri = Uri.parse(downloadPdfApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.type] =  'freelance' ;
+    request.fields[RequestKeys.filter] = 'all';
+    request.fields[RequestKeys.freelanceId] = widget.type == true ? widget.allJobs!.id.toString() : widget.upcomingJobs!.id.toString();
+    var response = await request.send();
+    print("this is pdf download requests ${request.fields}");
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      pdfUrl = userData['url'];
+    });
+    _showPdf(pdfUrl);
+    print("this is our html content $pdfUrl");
+    // downloadPdfs();
+  }
+
+  _showPdf(pdf) async {
+    print("this is my url $pdf");
+    var url = pdf.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: "Could not open this pdf!");
+      throw 'Could not launch $url';
+    }
+  }
+
 
   List<Categories> typeofPhotographyEvent = [];
-  List<Data> photographersList = [];
+  List<PhotographerData> photographersList = [];
   List<EventType> eventList = [];
   List<CityList> citiesList = [];
   TextEditingController amountController = TextEditingController();
@@ -775,7 +818,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
   //   getPhotographerList();
   //   getEventTypes();
   //   getCitiesList();
-  // }
+  // }ic
 
   @override
   Widget build(BuildContext context) {
@@ -784,7 +827,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
         builder: (controller) {
           return Scaffold(
             bottomSheet: Padding(
-              padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 40),
+              padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 50),
               child: Container(
                 height: 90,
                 child: Column(
@@ -827,62 +870,95 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                       mainAxisAlignment:
                       MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: 140,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: () {
-                               dummyData = jsData;
-                               if(widget.type == true) {
-                                 for(var i = 0; i <widget.allJobs!.jsonData!.length; i ++) {
-                                   dummyData.add(widget.allJobs!.jsonData![i]);
+                        InkWell(
+                          onTap: () async {
+                            dummyData = jsData;
+                            if(widget.type == true) {
+                              for(var i = 0; i <widget.allJobs!.jsonData!.length; i ++) {
+                                dummyData.add(widget.allJobs!.jsonData![i]);
 
-                                 }
-                               }else{
-                                 for(var i = 0; i <widget.upcomingJobs!.jsonData!.length; i ++) {
-                                   dummyData.add(widget.upcomingJobs!.jsonData![i]);
-                                 }
-                               }
-                              jsonData = jsonEncode(dummyData);
-                              print("this is  my final data $jsonData");
-                              // dummyData =
-                               Future.delayed(const Duration(milliseconds: 200), (){
-                                 editFreelancerJob();
-                               });
-
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: const StadiumBorder(),
-                              backgroundColor: Color(0xff40ACFF),
-                            ),
-                            child:  Text('Update'),
+                              }
+                            }else{
+                              for(var i = 0; i <widget.upcomingJobs!.jsonData!.length; i ++) {
+                                dummyData.add(widget.upcomingJobs!.jsonData![i]);
+                              }
+                            }
+                            jsonData = jsonEncode(dummyData);
+                            print("this is  my final data $jsonData");
+                            // dummyData =
+                            Future.delayed(const Duration(milliseconds: 200), (){
+                              editFreelancerJob();
+                            });
+                          },
+                          child: Container(
+                            height: 35,
+                            width: 120,
+                            decoration: BoxDecoration(
+                                boxShadow: const [
+                                  BoxShadow(
+                                    offset: Offset(1, 2),
+                                    blurRadius: 1,
+                                    color: AppColors.greyColor,
+                                  )
+                                ],
+                                color: AppColors.AppbtnColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: const Center(
+                                child: Text(
+                                  "Update",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textclr,
+                                      fontSize: 18),
+                                )),
                           ),
                         ),
-                        Image.asset(
-                          "assets/images/pdf.png",
-                          scale: 2.1,
-                        ),
-                        SizedBox(
-                          width: 140,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return deleteConfirmation(context);
-                                  }
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: const StadiumBorder(),
-                              backgroundColor: AppColors.red,
-                            ),
-                            child: const Text('Delete'),
+
+                        InkWell(
+                          onTap: (){
+                            downloadPdfs();
+                          },
+                          child: Image.asset(
+                            "assets/images/pdf.png",
+                            scale: 2.1,
                           ),
                         ),
+                        InkWell(
+                          onTap: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return deleteConfirmation(context);
+                                }
+                            );
+                          },
+                          child: Container(
+                            height: 35,
+                            width: 120,
+                            decoration: BoxDecoration(
+                                boxShadow: const [
+                                  BoxShadow(
+                                    offset: Offset(1, 2),
+                                    blurRadius: 1,
+                                    color: AppColors.greyColor,
+                                  )
+                                ],
+                                color: AppColors.contaccontainerred,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: const Center(
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textclr,
+                                      fontSize: 18),
+                                )),
+                          ),
+                        ),
+
                       ],
                     ),
+
                   ],
                 ),
               ),
@@ -890,9 +966,10 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
               backgroundColor: AppColors.backgruond,
               appBar: AppBar(
                 backgroundColor: Color(0xff303030),
-                leading: const BackButton(
-                  color: Color(0xff1E90FF), // <-- SEE HERE
-                ),
+                leading:  IconButton(onPressed: (){
+                  Navigator.pop(context);
+                }, icon: const Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor,)),
+
                 actions: const [
                   Center(
                     child: Padding(
@@ -900,7 +977,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                       child: Text("Edit Freelancing Job",
                           style: TextStyle(
                               fontSize: 14,
-                              color: Color(0xff1E90FF),
+                              color: AppColors.AppbtnColor,
                               fontWeight: FontWeight.bold)),
                     ),
                   ),
@@ -2742,7 +2819,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
 //               appBar: AppBar(
 //                 backgroundColor: Color(0xff303030),
 //                 leading: const BackButton(
-//                   color: Color(0xff1E90FF), // <-- SEE HERE`
+//                   color: AppColors.AppbtnColor, // <-- SEE HERE`
 //                 ),
 //                 actions: const [
 //                   Center(
@@ -2751,7 +2828,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
 //                       child: Text("Edit Freelancing Job",
 //                           style: TextStyle(
 //                               fontSize: 14,
-//                               color: Color(0xff1E90FF),
+//                               color: AppColors.AppbtnColor,
 //                               fontWeight: FontWeight.bold)),
 //                     ),
 //                   ),

@@ -95,13 +95,13 @@ class _JobsScreenState extends State<TeamAllotment> {
             onTap: (){
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
+            child: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
         backgroundColor: Color(0xff303030),
         actions: [
           Padding(
             padding: const EdgeInsets.all(15),
             child: Center(child: Text(" Team Allotment ",
-                style: TextStyle(fontSize: 16, color:Color(0xff1E90FF), fontWeight: FontWeight.bold)
+                style: TextStyle(fontSize: 16, color:AppColors.AppbtnColor, fontWeight: FontWeight.bold)
             )),
           ),
         ],

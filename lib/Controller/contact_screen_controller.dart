@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/edit_client_model.dart';
+import 'package:kolazz_book/Models/get_profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/Type_of_photography_model.dart';
 import '../Models/add_clientmodel.dart';
@@ -35,6 +36,12 @@ class addPhotographerController extends AppBaseController {
   var categoryValue;
   String? newValue;
 
+
+  ProfileData? profiledata;
+
+  String? firstname;
+  String? lastname;
+  String? updatedata;
 
   Future<void>AddPhotographerr() async {
     print("working here!!");
@@ -76,6 +83,37 @@ class addPhotographerController extends AppBaseController {
     } finally {
       setBusy(false);
       update();
+    }
+  }
+
+  Future<void>getProfile() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    id = preferences.getString('id');
+    setBusy(true);
+    try {
+      Map<String, String> body = {};
+      body[
+      RequestKeys.userId] = id!;
+      GetProfileModel res = await api.getProfile(body);
+      if (!(res.error ?? true)) {
+        profiledata = res.data  ;
+        firstname = profiledata?.fname;
+        lastname = profiledata?.lname;
+        update();
+
+        firstnameController.text = profiledata?.fname ?? "";
+
+        // ShowMessage.showSnackBar('Server Res', res.message ?? '');
+        setBusy(false);
+        update();
+      }
+
+    } catch (e) {
+      ShowMessage.showSnackBar('Server Res', '$e');
+    } finally {
+      setBusy(false);
+      update();
+
     }
   }
 
@@ -410,5 +448,6 @@ class addPhotographerController extends AppBaseController {
     super.onInit();
     getClientPhotographer();
     GateEventType();
+    getProfile();
   }
 }

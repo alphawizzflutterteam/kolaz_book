@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kolazz_book/Models/accounts_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
@@ -14,6 +15,7 @@ import 'dart:ui' as ui;
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import '../../Utils/colors.dart';
 import 'add_amount.dart';
 
@@ -33,6 +35,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
   AccountData? data;
   int currentIndex = 0;
   int photographerIndex = 0;
+  String pdfUrl = '';
 
   @override
   void initState() {
@@ -42,30 +45,74 @@ class _AccountsScreenState extends State<AccountsScreen> {
   }
 
 
-  accountCard(result){
+  downloadPdfs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri = Uri.parse(downloadPdfApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.type] = 'accounts';
+    request.fields[RequestKeys.userType] = isSelected ? 'client' : 'photographer';
+    request.fields[RequestKeys.filter] =
+    isSelected ? 'all' : 'outstanding';
+    var response = await request.send();
+    print("this is pdf download requests ${request.fields}");
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      pdfUrl = userData['url'];
+    });
+    _showPdf(pdfUrl);
+    print("this is our html content $pdfUrl");
+    // downloadPdfs();
+  }
+
+  _showPdf(pdf) async {
+    print("this is my url $pdf");
+    var url = pdf.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: "Could not open this pdf!");
+      throw 'Could not launch $url';
+    }
+  }
+
+  accountCard(result) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8,  top: 10),
+      padding: const EdgeInsets.only(left: 8.0, right: 8, top: 10),
       child: InkWell(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetailsScreen(
-            photographerName: result.name,
-            pid: result.photographerId,
-            type: isSelected? 'client' : 'photographer',
-            totalOutstanding: data?.totalAmount.toString(),
-          )));
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AccountDetailsScreen(
+                        photographerName: result.name,
+                        pid: result.photographerId,
+                        type: isSelected ? 'client' : 'photographer',
+                        totalOutstanding: data?.totalAmount.toString(),
+                      )));
         },
         child: Container(
           height: 45,
           width: MediaQuery.of(context).size.width / 1.1,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              gradient:  LinearGradient(
+              gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    double.parse(result.amount.toString()) < 0 ?
-                    Colors.red :
-                    Color(0xff68913F),
+                    double.parse(result.amount.toString()) < 0
+                        ? Colors.red
+                        : Color(0xff68913F),
                     Color(0xff424242)
                   ])),
           child: Padding(
@@ -73,17 +120,25 @@ class _AccountsScreenState extends State<AccountsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${result.name}',
-                  style:
-                  const TextStyle(color: AppColors.textclr),
+                Container(
+                  width: MediaQuery.of(context).size.width / 3 ,
+                  child: Text(
+                    '${result.name}',
+                    style: const TextStyle(color: AppColors.textclr),
+                  ),
                 ),
-                Text('${result.city}',
-                    style: const TextStyle(
-                        color: AppColors.textclr)),
-                Text('₹ ${result.amount}',
-                    style: const TextStyle(
-                        color: AppColors.textclr)),
+                const SizedBox(width: 5,),
+                Container(
+                  width: MediaQuery.of(context).size.width / 3 - 15,
+                  child: Text('${result.city}',
+                      style: const TextStyle(color: AppColors.textclr)),
+                ),
+                const SizedBox(width: 10,),
+                Container(
+                  width: MediaQuery.of(context).size.width / 3 - 40,
+                  child: Text('₹ ${result.amount}',
+                      style: const TextStyle(color: AppColors.textclr)),
+                ),
                 // Image.asset("assets/calling.png", scale: 1.4,)
               ],
             ),
@@ -93,35 +148,33 @@ class _AccountsScreenState extends State<AccountsScreen> {
     );
   }
 
-
   takeScreenShot() async {
     // iconVisible = true ;
-    var status =  await Permission.photos.request();
+    var status = await Permission.photos.request();
     //Permission.manageExternalStorage.request();
 
     //PermissionStatus storagePermission = await Permission.storage.request();
-    if ( status.isGranted/*storagePermission == PermissionStatus.denied*/) {
+    if (status.isGranted /*storagePermission == PermissionStatus.denied*/) {
       final directory = (await getApplicationDocumentsDirectory()).path;
 
-      RenderRepaintBoundary bound = keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary bound =
+          keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
       /*if(bound.debugNeedsPaint){
         Timer(const Duration(seconds: 2),()=>_shareQrCode());
         return null;
       }*/
       ui.Image image = await bound.toImage(pixelRatio: 10);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
 
       print('${byteData?.buffer.lengthInBytes}___________');
       // this will save image screenshot in gallery
-      if(byteData != null ){
+      if (byteData != null) {
         Uint8List pngBytes = byteData.buffer.asUint8List();
-        String fileName = DateTime
-            .now()
-            .microsecondsSinceEpoch
-            .toString();
+        String fileName = DateTime.now().microsecondsSinceEpoch.toString();
         final imagePath = await File('$directory/$fileName.png').create();
         await imagePath.writeAsBytes(pngBytes);
-        Share.shareFiles([imagePath.path],text: '');
+        Share.shareFiles([imagePath.path], text: '');
         // final resultsave = await ImageGallerySaver.saveImage(Uint8List.fromList(pngBytes),quality: 90,name: 'screenshot-${DateTime.now()}.png');
         //print(resultsave);
       }
@@ -143,17 +196,15 @@ class _AccountsScreenState extends State<AccountsScreen> {
       }).catchError((onError) {
         print('Error --->> $onError');
       });*/
-    } else if (await status.isDenied/*storagePermission == PermissionStatus.denied*/) {
+    } else if (await status
+        .isDenied /*storagePermission == PermissionStatus.denied*/) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('This Permission is recommended')));
-    } else if (await status.isPermanentlyDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
-      openAppSettings().then((value) {
-
-      });
+    } else if (await status
+        .isPermanentlyDenied /*storagePermission == PermissionStatus.permanentlyDenied*/) {
+      openAppSettings().then((value) {});
     }
   }
-
-
 
   getAccountsData() async {
     print("account initiated!");
@@ -167,9 +218,11 @@ class _AccountsScreenState extends State<AccountsScreen> {
     };
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
-    request.fields[RequestKeys.userType] = isSelected ? 'client' : 'photographer';
+    request.fields[RequestKeys.userType] =
+        isSelected ? 'client' : 'photographer';
 
-    print("this is account request ${request.fields.toString()} and $getAccountsDataApi");
+    print(
+        "this is account request ${request.fields.toString()} and $getAccountsDataApi");
     var response = await request.send();
     print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
@@ -196,11 +249,11 @@ class _AccountsScreenState extends State<AccountsScreen> {
 
   Widget _clients() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           height: 45,
-          width: MediaQuery.of(context).size.width / 1.1,
+          width: MediaQuery.of(context).size.width / 1.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -227,12 +280,11 @@ class _AccountsScreenState extends State<AccountsScreen> {
                       child: Text(
                         "All",
                         style: TextStyle(
-                            color: AppColors.whit,
-                            fontWeight: FontWeight.w600),
+                            color: AppColors.whit, fontWeight: FontWeight.w600),
                       ),
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 15,
               ),
               InkWell(
@@ -240,6 +292,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                   setState(() {
                     currentIndex = 1;
                   });
+                  getAccountsData();
                 },
                 child: Container(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -254,7 +307,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                             color: currentIndex == 1
                                 ? Colors.transparent
                                 : const Color(0xff668D3F))),
-                    child: const  Center(
+                    child: const Center(
                       child: Text(
                         "Outstanding",
                         style: TextStyle(
@@ -275,16 +328,24 @@ class _AccountsScreenState extends State<AccountsScreen> {
         Container(
           height: 45,
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          width: MediaQuery.of(context).size.width ,
+          width: MediaQuery.of(context).size.width,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                "Client name",
-                style: TextStyle(color: AppColors.whit),
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children:  [
+              Container(
+                width: MediaQuery.of(context).size.width / 3 ,
+                child:  Text(
+                  "Client name",
+                  style: TextStyle(color: AppColors.whit),
+                ),
               ),
-              Text("City Name", style: TextStyle(color: AppColors.whit)),
-              Text("Remaining", style: TextStyle(color: AppColors.whit)),
+              Container(
+                  width: MediaQuery.of(context).size.width / 3 - 15,
+                  child: Text("City Name", style: TextStyle(color: AppColors.whit))),
+              const SizedBox(width: 10,),
+              Container(
+                  width: MediaQuery.of(context).size.width / 3 - 40,
+                  child: Text("Remaining", style: TextStyle(color: AppColors.whit))),
             ],
           ),
         ),
@@ -293,39 +354,39 @@ class _AccountsScreenState extends State<AccountsScreen> {
         ),
         data != null
             ? currentIndex == 0
-            ? Container(
-          // color: Colors.red,
-          height: MediaQuery.of(context).size.height / 1.8,
-          width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: data!.all!.length,
-            physics: const ScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              var result = data!.all![index];
-              return accountCard(result);
-            },
-          ),
-        )
+                ? Container(
+                    // color: Colors.red,
+                    height: MediaQuery.of(context).size.height / 1.8,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: data!.all!.length,
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        var result = data!.all![index];
+                        return accountCard(result);
+                      },
+                    ),
+                  )
+                : Container(
+                    height: MediaQuery.of(context).size.height / 1.8,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: data!.outstanting!.length,
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        var result = data!.outstanting![index];
+                        return accountCard(result);
+                      },
+                    ),
+                  )
             : Container(
-          height: MediaQuery.of(context).size.height / 1.8,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: data!.outstanting!.length,
-            physics: const ScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              var result = data!.outstanting![index];
-              return accountCard(result);
-            },
-          ),
-        )
-            : Container(
-            height: MediaQuery.of(context).size.width,
-            width: MediaQuery.of(context).size.width,
-            child: const Center(
-                child: Text(
+                height: MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width,
+                child: const Center(
+                    child: Text(
                   "No Data to show",
                   style: TextStyle(color: AppColors.whit),
                 )))
@@ -334,52 +395,105 @@ class _AccountsScreenState extends State<AccountsScreen> {
   }
 
   Widget _phptographers() {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         height: 45,
         width: MediaQuery.of(context).size.width / 1.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-                width: 80,
-                child: ElevatedButton(onPressed: () {
-                  setState(() {
-                    photographerIndex = 0 ;
-                  });
-                  // getAccountsData();
-                }, child: Text("All"))),
-            const SizedBox(width: 10,),
-            SizedBox(
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      photographerIndex = 0 ;
-                    });
-                    // getAccountsData();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.red, // Background color
-                  ),
-                  child: Text("Payout"),
-                )),
-            const SizedBox(width: 10,),
-            SizedBox(
-                width: 120,
-                child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        photographerIndex = 0 ;
-                      });
-                      // getAccountsData();
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => AddAmountScreen()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff668D3F),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  photographerIndex = 0;
+                });
+                getAccountsData();
+              },
+              child: Container(
+                  width: 80,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: photographerIndex == 0
+                          ? AppColors.AppbtnColor
+                          : Colors.transparent,
+                      border: Border.all(
+                          color: photographerIndex == 0
+                              ? Colors.transparent
+                              : AppColors.AppbtnColor)),
+                  child: const Center(
+                    child: Text(
+                      "All",
+                      style: TextStyle(
+                          color: AppColors.whit, fontWeight: FontWeight.w600),
                     ),
-                    child: Text("Outstanding"))),
+                  )),
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  photographerIndex = 1;
+                });
+                getAccountsData();
+              },
+              child: Container(
+                  width: 80,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: photographerIndex == 1
+                          ? AppColors.contaccontainerred
+                          : Colors.transparent,
+                      border: Border.all(
+                          color: photographerIndex == 1
+                              ? Colors.transparent
+                              : AppColors.contaccontainerred)),
+                  child: const Center(
+                    child: Text(
+                      "Payout",
+                      style: TextStyle(
+                          color: AppColors.whit, fontWeight: FontWeight.w600),
+                    ),
+                  )),
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  photographerIndex = 2;
+                });
+                getAccountsData();
+              },
+              child: Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  // width: 80,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: photographerIndex == 2
+                          ? const Color(0xff668D3F)
+                          : Colors.transparent,
+                      border: Border.all(
+                          color: photographerIndex == 2
+                              ? Colors.transparent
+                              : const Color(0xff668D3F))),
+                  child: const Center(
+                    child: Text(
+                      "Outstanding",
+                      style: TextStyle(
+                          color: AppColors.whit,
+                          // currentIndex == 1
+                          //     ? AppColors.whit
+                          //     : Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )),
+            ),
           ],
         ),
       ),
@@ -393,74 +507,104 @@ class _AccountsScreenState extends State<AccountsScreen> {
           width: MediaQuery.of(context).size.width / 1.1,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                "Photographer name",
-                style: TextStyle(color: AppColors.whit),
+            children:  [
+              Container(
+                width: MediaQuery.of(context).size.width / 3  ,
+                child: Text(
+                  "Photographer Name",
+                  style: TextStyle(color: AppColors.whit),
+                ),
               ),
-              Text("City Name", style: TextStyle(color: AppColors.whit)),
-              Text("Remaining", style: TextStyle(color: AppColors.whit)),
+              const SizedBox(width: 10,),
+              Container(
+                  width: MediaQuery.of(context).size.width / 3  - 15,
+                  child: Text("City Name", style: TextStyle(color: AppColors.whit))),
+
+              Container(
+                  width: MediaQuery.of(context).size.width / 3 - 40,
+                  child: Text("Remaining", style: TextStyle(color: AppColors.whit))),
             ],
           ),
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 4,
       ),
       data != null
-          ? currentIndex == 0
-          ? Container(
-        // color: Colors.red,
-        height: MediaQuery.of(context).size.height / 1.8,
-        width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          itemCount: data!.all!.length,
-          physics: const ScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            var result = data!.all![index];
-            return accountCard(result);
-          },
-        ),
-      )
-      // :
-      // currentIndex == 1
-      //     ? Container(
-      //   // color: Colors.red,
-      //   height: MediaQuery.of(context).size.height / 1.8,
-      //   width: MediaQuery.of(context).size.width,
-      //   child: ListView.builder(
-      //     shrinkWrap: true,
-      //     scrollDirection: Axis.vertical,
-      //     itemCount: data!.payout!.length,
-      //     physics: const ScrollPhysics(),
-      //     itemBuilder: (BuildContext context, int index) {
-      //       var result = data!.payout![index];
-      //       return accountCard(result);
-      //     },
-      //   ),
-      // )
-      : Container(
-        // color: Colors.red,
-        height: MediaQuery.of(context).size.height / 1.8,
-        width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          itemCount: data!.outstanting!.length,
-          physics: const ScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            var result = data!.outstanting![index];
-            return accountCard(result);
-          },
-        ),
-      )
+          ? photographerIndex == 0
+              ? Container(
+                  // color: Colors.red,
+                  height: MediaQuery.of(context).size.height / 1.8,
+                  width: MediaQuery.of(context).size.width,
+                  child: data!.all!.isNotEmpty
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: data!.all!.length,
+                          physics: const ScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            var result = data!.all![index];
+                            return accountCard(result);
+                          },
+                        )
+                      : const Center(
+                          child: Text(
+                            "No data to show!",
+                            style: TextStyle(color: AppColors.whit),
+                          ),
+                        ),
+                )
+              : photographerIndex == 1
+                  ? Container(
+                      // color: Colors.red,
+                      height: MediaQuery.of(context).size.height / 1.8,
+                      width: MediaQuery.of(context).size.width,
+                      child:
+                      data!.payout != null
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: data!.payout!.length,
+                              physics: const ScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                var result = data!.payout![index];
+                                return accountCard(result);
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                "No data to show!",
+                                style: TextStyle(color: AppColors.whit),
+                              ),
+                            ),
+                    )
+                  : Container(
+                      // color: Colors.red,
+                      height: MediaQuery.of(context).size.height / 1.8,
+                      width: MediaQuery.of(context).size.width,
+                      child: data!.outstanting!.isNotEmpty
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: data!.outstanting!.length,
+                              physics: const ScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                var result = data!.outstanting![index];
+                                return accountCard(result);
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                "No data to show!",
+                                style: TextStyle(color: AppColors.whit),
+                              ),
+                            ),
+                    )
           : Container(
-          height: MediaQuery.of(context).size.width,
-          width: MediaQuery.of(context).size.width,
-          child: const Center(
-              child: Text(
+              height: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width,
+              child: const Center(
+                  child: Text(
                 "No Data to show",
                 style: TextStyle(color: AppColors.whit),
               )))
@@ -474,37 +618,37 @@ class _AccountsScreenState extends State<AccountsScreen> {
       backgroundColor: AppColors.backgruond,
       appBar: isSelected
           ? AppBar(
-        backgroundColor: Color(0xff303030),
-        automaticallyImplyLeading: false,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(15),
-            child: Center(
-              child: Text("Client Account",
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff1E90FF),
-                      fontWeight: FontWeight.bold)),
-            ),
-          ),
-        ],
-      )
+              backgroundColor: Color(0xff303030),
+              automaticallyImplyLeading: false,
+              actions: const [
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Center(
+                    child: Text("Client Account",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.AppbtnColor,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ],
+            )
           : AppBar(
-        backgroundColor: Color(0xff303030),
-        automaticallyImplyLeading: false,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(15),
-            child: Center(
-              child: Text("Photographer Account",
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff1E90FF),
-                      fontWeight: FontWeight.bold)),
+              backgroundColor: Color(0xff303030),
+              automaticallyImplyLeading: false,
+              actions: const [
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Center(
+                    child: Text("Photographer Account",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.AppbtnColor,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       floatingActionButton: Container(
         // padding: EdgeInsets.only(bottom: 100.0),
         child: Align(
@@ -512,7 +656,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
           child: FloatingActionButton(
             child: Image.asset("assets/images/pdf.png"),
             onPressed: () {
-              takeScreenShot();
+              downloadPdfs();
             },
           ),
         ),
@@ -524,7 +668,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
+               const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -551,11 +695,11 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                   child: Text(
                                     'Client',
                                     style: TextStyle(
-                                      color: isSelected
-                                          ? Color(0xffffffff)
-                                          : Colors.white,
-                                      fontSize: 16,
-                                    ),
+                                        color: isSelected
+                                            ? Color(0xffffffff)
+                                            : Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 decoration: BoxDecoration(
@@ -578,7 +722,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                             },
                             child: Container(
                                 height: 50,
-                                width: 130,
+                                width: 120,
                                 child: Center(
                                   child: Text(
                                     'Photographer',
@@ -586,6 +730,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                       color: isSelected
                                           ? AppColors.whit
                                           : Colors.white,
+                                      fontWeight: FontWeight.w600,
                                       fontSize: 16,
                                     ),
                                   ),

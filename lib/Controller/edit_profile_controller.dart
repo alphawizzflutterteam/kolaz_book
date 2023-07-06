@@ -123,6 +123,31 @@ class EditProfileController extends AppBaseController {
     update();
   }
 
+  removeProfileImage(BuildContext context) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri = Uri.parse(removeProfileImageApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+     request.fields[RequestKeys.userId] = id.toString();
+    // request.fields['vendor_id'] = userID;
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+    Fluttertoast.showToast(msg: userData['message']);
+    Navigator.pop(context);
+    Navigator.pop(context);
+
+    print("this is country list ${countryList.length}");
+
+  }
+
 
   @override
   void onInit() {
@@ -421,6 +446,22 @@ class EditProfileController extends AppBaseController {
                         color: AppColors.primary,
                       )),
                 ),
+              ),
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  removeProfileImage(context);
+                },
+                child:  ListTile(
+                    title:  Text("Remove Image"),
+                    leading: Icon(
+                      Icons.delete,
+                      color: AppColors.primary,
+                    )),
               ),
             ],
           ),

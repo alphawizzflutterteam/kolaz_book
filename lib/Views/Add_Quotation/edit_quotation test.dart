@@ -1716,22 +1716,7 @@ class _TestEditQuotationState extends State<TestEditQuotation> {
               ),
             ),
           ),
-          // Positioned(
-          //     right: -12,
-          //     top: -17,
-          //     child: IconButton(
-          //         onPressed: () {
-          //           setState(() {
-          //
-          //           });
-          //           showSelectedDate.removeAt(index);
-          //           // removeDate(index);
-          //         },
-          //         icon: const Icon(
-          //           Icons.remove_circle_outline,
-          //           size: 18,
-          //           color: AppColors.temtextclr,
-          //         )))
+
         ],
       ),
     );
@@ -2833,21 +2818,7 @@ class _TestEditQuotationState extends State<TestEditQuotation> {
                                 )),
                           ),
                         ),
-                        // Container(
-                        //   height: 50,
-                        //   width: 150,
-                        //   decoration: BoxDecoration(
-                        //       color: AppColors.AppbtnColor,
-                        //       borderRadius: BorderRadius.circular(5)),
-                        //   child: Center(
-                        //       child: Text(
-                        //     "Update",
-                        //     style: TextStyle(
-                        //         fontWeight: FontWeight.bold,
-                        //         color: AppColors.textclr,
-                        //         fontSize: 18),
-                        //   )),
-                        // ),
+
                         Image.asset(
                           "assets/images/pdf.png",
                           scale: 1.6,

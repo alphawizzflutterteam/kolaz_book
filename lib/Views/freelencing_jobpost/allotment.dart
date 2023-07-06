@@ -1,15 +1,18 @@
 
 
-import 'package:flutter/material.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:kolazz_book/Models/alloted_jobs_model.dart';
+import 'package:kolazz_book/Services/request_keys.dart';
+import 'package:kolazz_book/Utils/strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/colors.dart';
-import '../Add_Quotation/MoreQuatations.dart';
-import '../freelancing_job/add_freelance_job.dart';
-import '../freelancing_job/edit_freelance_job.dart';
+import 'package:http/http.dart' as http;
 
 class AllotmentScreen extends StatefulWidget {
-  const AllotmentScreen({Key? key}) : super(key: key);
+  final String? pid;
+  const AllotmentScreen({Key? key, this.pid}) : super(key: key);
 
   @override
   State<AllotmentScreen> createState() => _JobsScreenState();
@@ -20,6 +23,7 @@ class _JobsScreenState extends State<AllotmentScreen> {
   bool isClickable = true;
   bool isSelected = false;
 
+  int currentindex = 0;
 
   Widget _allDates() {
     return Column(
@@ -88,6 +92,39 @@ class _JobsScreenState extends State<AllotmentScreen> {
     );
   }
 
+  String? userId;
+
+  List<AllotedJobs> getJobs = [];
+  getClientJobs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    userId = preferences.getString('id');
+    var uri = Uri.parse(allotedJobsApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = userId!;
+    request.fields[RequestKeys.photographerId] = widget.pid!;
+    request.fields[RequestKeys.type] = currentindex == 0 ? 'all' :  'upcoming';
+
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      getJobs = AllotedJobsModel.fromJson(userData).data!;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getClientJobs();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,13 +135,13 @@ class _JobsScreenState extends State<AllotmentScreen> {
             onTap: (){
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back_ios, color: Color(0xff1E90FF))),
+            child: const Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
         backgroundColor: Color(0xff303030),
-        actions: [
+        actions: const [
           Padding(
             padding: const EdgeInsets.all(15),
-            child: Center(child: Text(" Allotment in Clients Jobs",
-                style: TextStyle(fontSize: 16, color:Color(0xff1E90FF), fontWeight: FontWeight.bold)
+            child: Center(child: Text("Photographers Jobs Allotment",
+                style: TextStyle(fontSize: 16, color:AppColors.AppbtnColor, fontWeight: FontWeight.bold)
             )),
           ),
         ],
@@ -114,56 +151,116 @@ class _JobsScreenState extends State<AllotmentScreen> {
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
+
               SizedBox(height: 25,),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Team Member  - ",style: TextStyle(color: AppColors.textclr,fontSize: 20,fontWeight: FontWeight.bold),),
-                  Text("Ramesh Khan",style: TextStyle(color: AppColors.textclr,fontSize: 20,fontWeight: FontWeight.bold),),
-                ],
-              ),
-              SizedBox(height: 25,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        isSelected = true;
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Color(0xff8B8B8B)
+              Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          currentindex = 0;
+                        });
+                        getClientJobs();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: currentindex == 0
+                                ? AppColors.AppbtnColor
+                                : const Color(0xff8B8B8B)),
+                        child: const Center(
+                            child: Text("All Jobs",
+                                style: TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontSize: 16))),
                       ),
-                      child: const Center(child: Text("All Dates", style: TextStyle(color: Color(0xffFFFFFF), fontSize: 16))),
                     ),
-                  ),
-                  SizedBox(width: 15,),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //   builder: (context) => NextPage(),
-                        // ));
-                        isSelected = false;
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.AppbtnColor
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          currentindex = 1;
+                        });
+                        getClientJobs();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: currentindex == 1
+                                ? AppColors.AppbtnColor
+                                : Color(0xff8B8B8B)),
+                        child: const Center(
+                            child: Text(
+                              "Upcoming Jobs",
+                              style: TextStyle(
+                                  color: Color(0xffFFFFFF), fontSize: 16),
+                            )),
                       ),
-                      child: const Center(child: Text("Upcoming Dates", style: TextStyle(color: Color(0xffFFFFFF), fontSize: 16),)),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-
               SizedBox(height: 15,),
-              isSelected ? _allDates() : _upcomingDates(),
+              Container(
+                  height: MediaQuery.of(context).size.height / 1.5,
+                  child: ListView.builder(
+                    itemCount: getJobs.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 2),
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          // height: 45,
+                          width: MediaQuery.of(context).size.width / 1,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.lightwhite),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width : MediaQuery.of(context).size.width/3 - 20,
+                                child: Text(
+                                  "${getJobs[index].date}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.textclr, fontSize: 15),
+                                ),
+                              ),
+                              Container(
+                                width : MediaQuery.of(context).size.width/3 - 20,
+                                child: Text(
+                                  "${getJobs[index].city}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.textclr, fontSize: 15),
+                                ),
+                              ),
+                              Container(
+                                width : MediaQuery.of(context).size.width/3  ,
+                                child: Text(
+                                  "${getJobs[index].cName}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.textclr, fontSize: 15),
+                                ),
+                              ),
+                            ],
+                          )
+                        ),
+                      );
+                    },
+                  ))
 
             ],
           ),
