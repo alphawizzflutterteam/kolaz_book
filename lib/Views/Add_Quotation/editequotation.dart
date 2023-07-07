@@ -10,8 +10,10 @@ import 'package:kolazz_book/Models/client_model.dart';
 import 'package:kolazz_book/Models/event_type_model.dart';
 import 'package:kolazz_book/Models/get_cities_model.dart';
 import 'package:kolazz_book/Models/get_quotation_model.dart';
+import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Controller/addQuatation_controller.dart';
 import '../../Models/Type_of_photography_model.dart';
 import '../../Utils/colors.dart';
@@ -108,6 +110,48 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
       Fluttertoast.showToast(msg: userData['message']);
     } else {
       print(response.reasonPhrase);
+    }
+  }
+
+  String pdfUrl = '';
+  downloadPdfs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri = Uri.parse(downloadPdfApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.type] =  'jobs' ;
+    // request.fields[RequestKeys.filter] =
+    // widget.type == true ? 'all' : 'upcomings';
+    request.fields[RequestKeys.jobId] = widget.id.toString();
+    var response = await request.send();
+    print("this is pdf download requests ${request.fields}");
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      pdfUrl = userData['url'];
+    });
+    _showPdf(pdfUrl);
+    print("this is our html content $pdfUrl");
+    // downloadPdfs();
+  }
+
+  _showPdf(pdf) async {
+    print("this is my url $pdf");
+    var url = pdf.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: "Could not open this pdf!");
+      throw 'Could not launch $url';
     }
   }
 
@@ -1494,10 +1538,16 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                           ),
                         ),
 
-                        Image.asset(
-                          "assets/images/pdf.png",
-                          scale: 1.6,
-                        ),
+                        // InkWell(
+                        //   onTap: (){
+                        //     downloadPdfs();
+                        //   },
+                        //   child
+                        //       : Image.asset(
+                        //     "assets/images/pdf.png",
+                        //     scale: 1.6,
+                        //   ),
+                        // ),
                         InkWell(
                           onTap: () async {
                             await showDialog(

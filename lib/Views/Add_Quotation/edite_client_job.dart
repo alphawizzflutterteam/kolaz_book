@@ -1977,7 +1977,12 @@ class _EditClientJobState extends State<EditClientJob> {
                               print("this final List $newList and $finalList");
 
                               if(eventController != null) {
-                                updateClientJob();
+                                if( pType[0]['photographer_id'] != null ) {
+                                  updateClientJob();
+                                }else{
+                                  Fluttertoast.showToast(
+                                      msg: "Please select photographers!");
+                                }
                               }
                               else {
                                 Fluttertoast.showToast(
@@ -2013,7 +2018,7 @@ class _EditClientJobState extends State<EditClientJob> {
                           ),
                         ),
 
-                        InkWell(
+                        InkWell (
                           onTap: (){
                             downloadPdfs();
                           },

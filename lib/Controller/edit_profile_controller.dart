@@ -280,7 +280,7 @@ class EditProfileController extends AppBaseController {
             RequestKeys.companyImage, imageFile2!.path.toString()));
 
 
-    print("ok++++++++======>>>>${request.fields} ${request.files}");
+    print("ok++++++++======>>>> ${request.files}");
     request.headers.addAll(headers);
 
     var response = await request.send();
@@ -399,7 +399,7 @@ class EditProfileController extends AppBaseController {
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
-      if(type=='profile') {
+      if(type =='profile') {
         imageFile = File(pickedFile.path);
       }else {
         imageFile2 = File(pickedFile.path);
