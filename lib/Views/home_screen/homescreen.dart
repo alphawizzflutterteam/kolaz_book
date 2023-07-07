@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/edit_profile_controller.dart';
 import 'package:kolazz_book/Controller/home_controller.dart';
+import 'package:kolazz_book/Models/banner_list_model.dart';
 import 'package:kolazz_book/Models/get_client_jobs_model.dart';
 import 'package:kolazz_book/Models/get_freelancer_jobs_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
@@ -86,6 +87,133 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
+  List bannerList = [];
+
+  getBannerImages() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri =
+    Uri.parse(getBannersApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("GET", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    // request.fields[RequestKeys.type] = 'client';
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+
+    setState(() {
+      bannerList = userData['data'];
+      loading = false;
+    });
+    print("this is my bannerdata $bannerList");
+
+    // Future.delayed(Duration(seconds: 5), (){
+    //   setState(() {
+    //     loading = false;
+    //   });
+    // });
+  }
+
+
+  int _currentPage = 0;
+  final PageController _pageController = PageController(initialPage: 0);
+  Animation? buttonSqueezeanimation;
+  AnimationController? buttonController;
+
+  bool loading = true;
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+    buttonController!.dispose();
+
+    // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+  }
+
+  _onPageChanged(int index) {
+    if (mounted)
+      setState(() {
+        _currentPage = index;
+      });
+  }
+
+  Widget _slider() {
+    return PageView.builder(
+      itemCount: bannerList.length,
+      scrollDirection: Axis.horizontal,
+      controller: _pageController,
+      onPageChanged: _onPageChanged,
+      itemBuilder: (BuildContext context, int index) {
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              InkWell(
+                onTap: (){
+                  setState(() {
+                    loading = true;
+                  });
+                },
+                child: Container(
+                  // height: MediaQuery.of(context).size.height ,
+                  child: Image.network(
+                    bannerList[index],
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              // Container(
+              //     margin: EdgeInsetsDirectional.only(top: 20),
+              //     child: Text(slideList[index].title,
+              //         style: Theme.of(context).textTheme.headline5!.copyWith(
+              //             color: Colors.black12,
+              //             fontWeight: FontWeight.bold))),
+              // Container(
+              //   padding: EdgeInsetsDirectional.only(
+              //       top: 30.0, start: 15.0, end: 15.0),
+              //   child: Text(slideList[index].description,
+              //       textAlign: TextAlign.center,
+              //       style: Theme.of(context).textTheme.subtitle1!.copyWith(
+              //           color: Colors.black12,
+              //           fontWeight: FontWeight.normal)),
+              // ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+  List<Widget> getList() {
+    List<Widget> childs = [];
+
+    for (int i = 0; i < bannerList.length; i++) {
+      childs.add(Container(
+          width: 10.0,
+          height: 10.0,
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: _currentPage == i
+                ? AppColors.AppbtnColor
+                : AppColors.AppbtnColor.withOpacity((0.5)),
+          )));
+    }
+    return childs;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -93,6 +221,45 @@ class _HomepageState extends State<Homepage> {
     getClientJobs();
     getFreelancingJobs();
     getClientJobs();
+    getBannerImages();
+
+  }
+
+  skipBtn() {
+    return Positioned(
+      bottom: 50,
+      child: InkWell(
+        onTap: (){
+          setState(() {
+            loading = true;
+          });
+        },
+        child: Container(
+          height: 30,
+          width: 80,
+          decoration: BoxDecoration(
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(1, 2),
+                  blurRadius: 1,
+                  color: AppColors.greyColor,
+                )
+              ],
+              color: AppColors.lightwhite,
+              borderRadius:
+              BorderRadius.circular(30)),
+          child: const Center(
+            child: Text(
+              "Skip",
+              style: TextStyle(
+                  color: AppColors.textclr,
+                  fontWeight:
+                  FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -223,12 +390,12 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
                     onTap: (){
-                      if(controller.profiledata!.isTrial! == false) {
+                      // if(controller.profiledata!.isTrial! == false) {
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => Broadcast_screen()));
-                      }else{
-                        Fluttertoast.showToast(msg: "You are not permitted! Please subscribe first!");
-                      }
+                            builder: (context) => BroadcastScreen()));
+                      // }else{
+                      //   Fluttertoast.showToast(msg: "You are not permitted! Please subscribe first!");
+                      // }
 
                     },
                     child: Container(
@@ -264,7 +431,53 @@ class _HomepageState extends State<Homepage> {
 
           centerTitle: false,
         ),
-        body:  Container(
+        body: !loading ?
+        Stack(
+          alignment: Alignment.bottomCenter,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _slider(),
+            skipBtn(),
+            Positioned(
+              bottom: 15,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: getList()),
+                  // Center(
+                  //     child: Padding(
+                  //       padding: const EdgeInsetsDirectional.only(bottom: 18.0),
+                  //       child: AppBtn(
+                  //           title: _currentPage == 0 || _currentPage == 1
+                  //               ? getTranslated(context, 'NEXT_LBL')
+                  //               : getTranslated(context, 'GET_STARTED'),
+                  //           btnAnim: buttonSqueezeanimation,
+                  //           btnCntrl: buttonController,
+                  //           onBtnSelected: () {
+                  //             if (_currentPage == 2) {
+                  //               setPrefrenceBool(ISFIRSTTIME, true);
+                  //               Navigator.pushReplacement(
+                  //                 context,
+                  //                 MaterialPageRoute(builder: (context) => SignInUpAcc()),
+                  //               );
+                  //             } else {
+                  //               _currentPage = _currentPage + 1;
+                  //               _pageController.animateToPage(_currentPage,
+                  //                   curve: Curves.decelerate,
+                  //                   duration: Duration(milliseconds: 300));
+                  //             }
+                  //           }),
+                  //     )),
+                ],
+              ),
+            ),
+            // _btn(),
+          ],
+        )
+        : Container(
           height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -506,6 +719,8 @@ class _HomepageState extends State<Homepage> {
         ),
       );
   }
+
+
   Widget _clientCard3(BuildContext context){
     return
       Container(

@@ -5,9 +5,9 @@
 
 class BroadcastListModel {
   BroadcastListModel({
-      bool? error, 
-      String? message, 
-      String? leftMessage, 
+      bool? error,
+      String? message,
+      String? leftMessage,
       List<BroadcastList>? data,}){
     _error = error;
     _message = message;
@@ -75,20 +75,21 @@ BroadcastListModel copyWith({  bool? error,
 
 class BroadcastList {
   BroadcastList({
-      String? typeOfPhotograpym, 
-      String? countyName, 
-      String? statename, 
-      String? cityName, 
-      String? id, 
-      String? userId, 
-      String? type, 
-      String? date, 
-      String? country, 
-      String? state, 
-      String? city, 
-      String? createdAt, 
-      String? updatedAt, 
-      String? userName, 
+      String? typeOfPhotograpym,
+      String? countyName,
+      String? statename,
+      String? cityName,
+      String? id,
+      String? userId,
+      String? type,
+      String? date,
+      String? country,
+      String? state,
+      String? city,
+      String? createdAt,
+      String? updatedAt,
+      String? userName,
+      String? mobile,
       String? profilePic,}){
     _typeOfPhotograpym = typeOfPhotograpym;
     _countyName = countyName;
@@ -103,6 +104,7 @@ class BroadcastList {
     _city = city;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
+    _mobile = mobile;
     _userName = userName;
     _profilePic = profilePic;
 }
@@ -122,6 +124,7 @@ class BroadcastList {
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
     _userName = json['user_name'];
+    _mobile = json['mobile'];
     _profilePic = json['profile_pic'];
   }
   String? _typeOfPhotograpym;
@@ -138,6 +141,7 @@ class BroadcastList {
   String? _createdAt;
   String? _updatedAt;
   String? _userName;
+  String? _mobile;
   String? _profilePic;
 BroadcastList copyWith({  String? typeOfPhotograpym,
   String? countyName,
@@ -152,6 +156,7 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
   String? city,
   String? createdAt,
   String? updatedAt,
+  String? mobile,
   String? userName,
   String? profilePic,
 }) => BroadcastList(  typeOfPhotograpym: typeOfPhotograpym ?? _typeOfPhotograpym,
@@ -168,6 +173,7 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
   createdAt: createdAt ?? _createdAt,
   updatedAt: updatedAt ?? _updatedAt,
   userName: userName ?? _userName,
+  mobile: mobile ?? _mobile,
   profilePic: profilePic ?? _profilePic,
 );
   String? get typeOfPhotograpym => _typeOfPhotograpym;
@@ -184,6 +190,7 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
   String? get userName => _userName;
+  String? get mobile => _mobile;
   String? get profilePic => _profilePic;
 
   Map<String, dynamic> toJson() {
@@ -202,8 +209,8 @@ BroadcastList copyWith({  String? typeOfPhotograpym,
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;
     map['user_name'] = _userName;
+    map['mobile'] = _mobile;
     map['profile_pic'] = _profilePic;
     return map;
   }
-
 }

@@ -21,7 +21,7 @@ class SplashController extends AppBaseController {
         if(id == null || id == ''){
           Get.offNamed(loginScreen);
         }else{
-          Get.offNamed(introScreen);
+          Get.offNamed(dashbord);
          // Get.offNamed(dashbord);
         }
       });

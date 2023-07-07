@@ -1,8 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
+import 'package:kolazz_book/Services/request_keys.dart';
+import 'package:kolazz_book/Views/authView/otp/otp_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import '../../../Controller/signup_controller.dart';
+import '../../../Route_managements/routes.dart';
 import '../../../Utils/colors.dart';
+import '../../../Utils/strings.dart';
 
 class SignupScreen extends StatelessWidget {
    SignupScreen({Key? key}) : super(key: key);
@@ -10,6 +17,60 @@ class SignupScreen extends StatelessWidget {
 
 
   final _formKey = GlobalKey<FormState>();
+   TextEditingController firstnameController = TextEditingController();
+   TextEditingController lastnameController = TextEditingController();
+   TextEditingController emailController = TextEditingController();
+   TextEditingController mobileController = TextEditingController();
+   TextEditingController nameController = TextEditingController();
+   TextEditingController passwordController = TextEditingController();
+   TextEditingController cPasswordController = TextEditingController();
+
+   sendOtpSignUp(BuildContext context) async {
+
+     var uri = Uri.parse(forgotSendOtpApi.toString());
+     // '${Apipath.getCitiesUrl}');
+     var request = http.MultipartRequest("POST", uri);
+     Map<String, String> headers = {
+       "Accept": "application/json",
+     };
+
+     request.headers.addAll(headers);
+     request.fields[RequestKeys.mobile] = mobileController.text.toString();
+     request.fields[RequestKeys.name] = firstnameController.text.toString();
+     // request.fields['vendor_id'] = userID;
+     var response = await request.send();
+     print(response.statusCode);
+     String responseData = await response.stream.transform(utf8.decoder).join();
+     var userData = json.decode(responseData);
+
+     if(userData['error'] == false){
+       Fluttertoast.showToast(msg: "${userData['message']}");
+       int otp = userData['otp'];
+       Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(
+         otp: otp,
+         fName: firstnameController.text.toString(),
+         lName: lastnameController.text.toString(),
+         mobile: mobileController.text.toString(),
+           email:  emailController.text.toString(),
+         password: passwordController.text.toString(),
+       )));
+
+     }else{
+       Fluttertoast.showToast(msg: "${userData['message']}");
+     }
+
+
+     // var finalResult = BroadcastListModel.fromJson(userData);
+     //
+     // setState(() {
+     //   message = finalResult.leftMessage.toString();
+     //   broadCastList = BroadcastListModel.fromJson(userData).data!;
+     // });
+     // print("this is my message ${finalResult.leftMessage}");
+   }
+
+
+
   @override
   Widget build(BuildContext context) {
     final setHeight = MediaQuery.of(context).size.height;
@@ -34,10 +95,10 @@ class SignupScreen extends StatelessWidget {
                         crossAxisAlignment:
                         CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left:130.0,top:50),
+                          Center(child: Padding(
+                            padding: const EdgeInsets.only(top: 60.0),
                             child: Image.asset('assets/images/loginlogo.png',height:70,width:70,),
-                          ),
+                          )),
                           const SizedBox(
                             height:20,
                           ),
@@ -67,11 +128,11 @@ class SignupScreen extends StatelessWidget {
                                         return 'Please enter your name';
                                       }
                                     },
-                                    style: TextStyle(color: AppColors.whit),
+                                    style: const TextStyle(color: AppColors.whit),
                                     keyboardType:
                                     TextInputType.text,
                                     controller:
-                                    controller.firstnameController,
+                                    firstnameController,
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       focusColor: Colors.white,
@@ -102,7 +163,7 @@ class SignupScreen extends StatelessWidget {
                                       keyboardType:
                                       TextInputType.text,
                                       controller:
-                                      controller.lastnameController,
+                                      lastnameController,
                                       decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         focusColor: Colors.white,
@@ -131,7 +192,7 @@ class SignupScreen extends StatelessWidget {
                                 style: const TextStyle(color: AppColors.whit),
                                 keyboardType: TextInputType.text,
                                 controller:
-                                controller.emailController,
+                                emailController,
                                 decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     focusColor: Colors.white,
@@ -160,7 +221,7 @@ class SignupScreen extends StatelessWidget {
                                 maxLength: 10,
                                 keyboardType: TextInputType.number,
                                 controller:
-                                controller.mobileController,
+                                mobileController,
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
                                   focusColor: Colors.white,
@@ -191,7 +252,7 @@ class SignupScreen extends StatelessWidget {
                                 obscureText: controller.isVisible,
                                 keyboardType: TextInputType.text,
                                 controller:
-                                controller.passwordController,
+                                passwordController,
                                 decoration:  InputDecoration(
                                   border: InputBorder.none,
                                   focusColor: Colors.white,
@@ -219,15 +280,14 @@ class SignupScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(5)),
                             child: TextFormField(
                                 validator: (val){
-                                  if(controller.passwordController.text != val){
+                                  if(passwordController.text != val){
                                     return 'Password does not match';
                                   }
                                 },
                                 style: const TextStyle(color: AppColors.whit),
                                 keyboardType: TextInputType.text,
                                 obscureText: controller.isVisible2,
-                                controller:
-                                controller.cPasswordController,
+                                controller: cPasswordController,
                                 decoration:  InputDecoration(
                                   border: InputBorder.none,
                                   focusColor: Colors.white,
@@ -262,7 +322,7 @@ class SignupScreen extends StatelessWidget {
                               ),
                               const Text('I Agree To All',style:TextStyle(color: AppColors.whit,fontSize: 13,),),
                               const SizedBox(width: 2,),
-                              const Text('Term & Condition',style:TextStyle(color: AppColors.AppbtnColor,fontSize: 13,fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),),
+                              const Text('Term of Use',style:TextStyle(color: AppColors.AppbtnColor,fontSize: 13,fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),),
                               const Text(' And',style:TextStyle(color: AppColors.whit,fontSize: 13,),),
                               const Text(' Privacy',style:TextStyle(color: AppColors.AppbtnColor,fontSize: 13,fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),),
                             ],
@@ -273,7 +333,10 @@ class SignupScreen extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               if(_formKey.currentState!.validate()) {
-                                  controller.registerUser();
+
+                                sendOtpSignUp(context);
+                                // controller.onTapResend();
+                                  // controller.registerUser();
                                 }
                               },
                             child: Padding(

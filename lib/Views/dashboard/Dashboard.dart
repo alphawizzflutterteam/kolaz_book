@@ -1,14 +1,20 @@
 
+import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kolazz_book/Models/banner_list_model.dart';
+import 'package:kolazz_book/Services/request_keys.dart';
+import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/Jobs/jobs_screen.dart';
 import 'package:kolazz_book/Views/contact_screen/Contact_screen.dart';
 import 'package:kolazz_book/Views/team_screen/team_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Controller/dashboard_controller.dart';
 import '../../Utils/colors.dart';
-
+import 'package:http/http.dart' as http;
 import '../Accounts/account_screen.dart';
 import '../calender_screen/New_calender.dart';
 import '../calender_screen/calender.dart';
@@ -53,13 +59,13 @@ class _DashBoardState extends State<DashBoard>
        });
      });
    }
-
    Future<void> checkInternetConnection() async {
      final connectivityResult = await Connectivity().checkConnectivity();
      setState(() {
        _connectivityResult = connectivityResult;
      });
    }
+
 
 
   @override

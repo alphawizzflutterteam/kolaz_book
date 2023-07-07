@@ -424,10 +424,17 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                   height: 40,
                                   width: 100,
                                   decoration: BoxDecoration(
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          offset: Offset(1, 2),
+                                          blurRadius: 1,
+                                          color: AppColors.greyColor,
+                                        )
+                                      ],
                                       borderRadius: BorderRadius.circular(50),
                                       color: AppColors.pdfbtn),
                                   child: const Center(
-                                      child: Text("Edit",
+                                      child: Text("Update",
                                           style: TextStyle(
                                               fontSize: 18,
                                               color: AppColors.textclr)))),
@@ -444,6 +451,13 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                   height: 40,
                                   width: 100,
                                   decoration: BoxDecoration(
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          offset: Offset(1, 2),
+                                          blurRadius: 1,
+                                          color: AppColors.greyColor,
+                                        )
+                                      ],
                                       borderRadius: BorderRadius.circular(50),
                                       color: AppColors.contaccontainerred),
                                   child: const Center(

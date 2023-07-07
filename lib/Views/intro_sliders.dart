@@ -22,7 +22,7 @@ class _GettingStartedScreenState extends State<IntroSlider>
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.top]);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle( const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ));
@@ -140,41 +140,6 @@ class _GettingStartedScreenState extends State<IntroSlider>
     );
   }
 
-  _btn() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: getList()),
-        // Center(
-        //     child: Padding(
-        //       padding: const EdgeInsetsDirectional.only(bottom: 18.0),
-        //       child: AppBtn(
-        //           title: _currentPage == 0 || _currentPage == 1
-        //               ? getTranslated(context, 'NEXT_LBL')
-        //               : getTranslated(context, 'GET_STARTED'),
-        //           btnAnim: buttonSqueezeanimation,
-        //           btnCntrl: buttonController,
-        //           onBtnSelected: () {
-        //             if (_currentPage == 2) {
-        //               setPrefrenceBool(ISFIRSTTIME, true);
-        //               Navigator.pushReplacement(
-        //                 context,
-        //                 MaterialPageRoute(builder: (context) => SignInUpAcc()),
-        //               );
-        //             } else {
-        //               _currentPage = _currentPage + 1;
-        //               _pageController.animateToPage(_currentPage,
-        //                   curve: Curves.decelerate,
-        //                   duration: Duration(milliseconds: 300));
-        //             }
-        //           }),
-        //     )),
-      ],
-    );
-  }
 
   List<Widget> getList() {
     List<Widget> childs = [];

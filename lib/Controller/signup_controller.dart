@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:kolazz_book/Models/first_veryfy_otp_response.dart';
+import 'package:kolazz_book/Models/verify_otp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/resister_user_response.dart';
 import '../Route_managements/routes.dart';
@@ -80,6 +82,31 @@ class SignupController extends AppBaseController{
        update();
      }
    }
+
+  // void onTapResend() async{
+  //
+  //   setBusy(true);
+  //   try {
+  //     Map<String, String> body = {};
+  //     body[RequestKeys.mobile] = mobileController.text.toString() ?? "";
+  //     body[RequestKeys.name] = nameController.text.toString() ?? "";
+  //
+  //     ResendOtpResponse res = await api.resendOTPApi(body);
+  //     if (!(res.error ?? true)) {
+  //       VerifyOtpResponse = res;
+  //
+  //       setBusy(false);
+  //       otp = VerifyOtpResponse.otp.toString();
+  //
+  //       update();
+  //     }
+  //   } catch (e) {
+  //     ShowMessage.showSnackBar('Server Res', '$e');
+  //   } finally {
+  //     setBusy(false);
+  //     update();
+  //   }
+  // }
 
    void tapOnLoginButton(){
      Get.toNamed(loginScreen);

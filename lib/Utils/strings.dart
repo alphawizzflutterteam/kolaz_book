@@ -4,9 +4,10 @@ const String baseUrl = 'https://developmentalphawizz.com/kolaz_book/api/';
 final Uri addQuotationApi = Uri.parse('${baseUrl}add_quatation');
 final Uri getQuotationApi = Uri.parse('${baseUrl}get_quatation');
 final Uri updateClientJobApi = Uri.parse('${baseUrl}update_job');
+final Uri userRegisterApi = Uri.parse('${baseUrl}user_register');
 final Uri forgotSendOtpApi = Uri.parse('${baseUrl}send_otp');
 final Uri updatePasswordApi = Uri.parse('${baseUrl}update_password');
-
+final Uri getBannersApi = Uri.parse('${baseUrl}get_all_banners');
 final Uri getClientJobsApi = Uri.parse('${baseUrl}get_job_list');
 final Uri allotedJobsApi = Uri.parse('${baseUrl}allotted_jobs');
 final Uri downloadPdfApi = Uri.parse('${baseUrl}download_pdf');
@@ -44,6 +45,8 @@ final Uri planPurchaseApi = Uri.parse('${baseUrl}purchase_plan');
 final Uri getPortfolioApi = Uri.parse('${baseUrl}get_portfolio');
 final Uri addPortfolioApi = Uri.parse('${baseUrl}add_portfolio');
 final Uri getUpcomingJobsTeamApi = Uri.parse('${baseUrl}upcoming_clients_jobs');
+final Uri helpSupportApi = Uri.parse('${baseUrl}send_contact');
+
 
 // final Uri de = Uri.parse('${baseUrl}get_sellers');
 // final Uri getSellerApi = Uri.parse('${baseUrl}get_sellers');

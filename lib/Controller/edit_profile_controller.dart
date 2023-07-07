@@ -31,6 +31,7 @@ class EditProfileController extends AppBaseController {
   TextEditingController lastnameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
   TextEditingController companynameController = TextEditingController();
   TextEditingController companyphoneController = TextEditingController();
   TextEditingController companyaddressController = TextEditingController();
@@ -83,6 +84,29 @@ class EditProfileController extends AppBaseController {
     var userData = json.decode(responseData);
       citiesList = GetCitiesModel.fromJson(userData).data!;
       update();
+  }
+
+  sendHelpSupportMessage(BuildContext context) async {
+    var uri = Uri.parse(helpSupportApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields['name'] = '${firstnameController.text.toString()} ${lastnameController.text.toString()}';
+    request.fields['email'] = emailController.text.toString();
+    request.fields['message'] = messageController.text.toString();
+    // request.fields['vendor_id'] = userID;
+    var response = await request.send();
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+    Fluttertoast.showToast(msg: userData['message']);
+    Navigator.pop(context);
+    // citiesList = GetCitiesModel.fromJson(userData).data!;
+    update();
   }
 
   getStateList(String countryId) async {

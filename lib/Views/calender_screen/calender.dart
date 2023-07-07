@@ -177,7 +177,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.type] = 'client';
     request.fields['date']= DateFormat('yyyy-MM-dd').format(_selectedDay).toString();
-    // print("this is my request ${request.fields.toString()}");
+     print("this is my request ${request.fields.toString()}");
     Map<String, String> headers = {
       "Accept": "application/json",
     };
@@ -232,9 +232,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
       // ),
       body: Column(
         children: [
-          const SizedBox(height: 15,),
+          const SizedBox(height: 20,),
           Container(
-            // height: MediaQuery.of(context).size.height/3,
+             // height: MediaQuery.of(context).size.height/3,
             color: AppColors.grd1,
             child: TableCalendar(
               headerStyle: const HeaderStyle(
@@ -249,8 +249,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   weekendStyle: TextStyle(color: AppColors.back)),
               // firstDay: kFirstDay,
               // lastDay: kLastDay,
-              firstDay: DateTime.utc(2022, 1, 1),
-              lastDay: DateTime.utc(2028, 12, 31),
+              firstDay: DateTime.utc(2023, 1, 1),
+              lastDay: DateTime.utc(2023, 12, 31),
               daysOfWeekHeight: 40,
               calendarStyle:  CalendarStyle(
                   todayDecoration: BoxDecoration(
@@ -265,11 +265,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 return _selectedDates.contains(day);
               },
               onDaySelected: (selectedDay, focusedDay) {
+                print("this is mt selected days $selectedDay");
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
                   _selectedDates.add(selectedDay);
                 });
+                getCalendarJobs();
               },
               onFormatChanged: (format) {
                 setState(() {
@@ -335,16 +337,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
             //   },
             // ),
           ),
-          // Container(
-          //   height: MediaQuery.of(context).size.height/3.2,
-          //   width: MediaQuery.of(context).size.width,
-          //   child:
-            getJobs.isNotEmpty ?
+          Container(
+            height: MediaQuery.of(context).size.height/4.3,
+            width: MediaQuery.of(context).size.width,
+            child: getJobs.isNotEmpty ?
             ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               itemCount: getJobs.length ,
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: ScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 var data = getJobs[index];
                 return Padding(
@@ -437,7 +438,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               child: Text("No data to show", style: TextStyle(
                 color: AppColors.whit
               ),),
-            // ),
+            ),
           )
         ],
       ),

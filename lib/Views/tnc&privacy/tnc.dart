@@ -31,7 +31,7 @@ class _TermandConidionState extends State<TermandConidion> {
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Center(child: Text("Terms And Condition",
+                  child: Center(child: Text("Terms of Use",
                       style: TextStyle(fontSize: 16, color:AppColors.AppbtnColor, fontWeight: FontWeight.bold)
                   )),
                 ),

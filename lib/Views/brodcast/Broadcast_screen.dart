@@ -15,17 +15,18 @@ import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Models/Type_of_photography_model.dart';
 import '../../Utils/colors.dart';
 
-class Broadcast_screen extends StatefulWidget {
-  const Broadcast_screen({Key? key}) : super(key: key);
+class BroadcastScreen extends StatefulWidget {
+  const BroadcastScreen({Key? key}) : super(key: key);
 
   @override
-  State<Broadcast_screen> createState() => _Broadcast_screenState();
+  State<BroadcastScreen> createState() => _BroadcastScreenState();
 }
 
-class _Broadcast_screenState extends State<Broadcast_screen> {
+class _BroadcastScreenState extends State<BroadcastScreen> {
   bool _isToggled = false;
 
   List<CityList> citiesList = [];
@@ -317,6 +318,14 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
     getBroadCastData();
   }
 
+  _launchCaller(mobileNumber) async {
+    var url = "tel:${mobileNumber.toString()}";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -877,6 +886,43 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                        broadCastList[index].userId == userId ?
+                                        InkWell(
+                                            onTap: () async{
+                                              await showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return deleteConfirmation(context, broadCastList[index].id.toString());
+                                                  }
+                                              );
+                                            }, child: Container(
+                                            padding: const EdgeInsets.all(5),
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: AppColors.containerclr2
+                                          ),
+                                            child: const Icon(Icons.clear, color: AppColors.contaccontainerred, size: 18,)))
+                                            :  InkWell(
+                                            onTap: () {
+                                              _launchCaller(broadCastList[index].mobile);
+                                            },
+                                           child:  Container(
+                                             padding: EdgeInsets.all(5),
+                                              decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: AppColors.containerclr2
+                                              ),
+                                            child: const Icon(
+                                              Icons.phone,
+                                              size: 18,
+                                              color: AppColors.AppbtnColor,
+                                            )),
+                                        )
+                                          ],
+                                        ),
                                         // Align(
                                         //     alignment: Alignment.topRight,
                                         //     child: broadCastList[index].userId == userId ?
@@ -931,22 +977,7 @@ class _Broadcast_screenState extends State<Broadcast_screen> {
                                                                   FontWeight.bold),
                                                         ),
                                                       ),
-                                                      broadCastList[index].userId == userId ?
-                                                      InkWell(
-                                                          onTap: () async{
-                                                            await showDialog(
-                                                                context: context,
-                                                                builder: (context) {
-                                                                  return deleteConfirmation(context, broadCastList[index].id.toString());
-                                                                }
-                                                            );
-                                                          }, child: const Icon(Icons.clear, color: AppColors.contaccontainerred,))
-                                                          :  InkWell(
-                                                          onTap: () {},
-                                                          child: const Icon(
-                                                            Icons.phone,
-                                                            color: AppColors.AppbtnColor,
-                                                          ))
+
                                                     ],
                                                   ),
                                                   SizedBox(

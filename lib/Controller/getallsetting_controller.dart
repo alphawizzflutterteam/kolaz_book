@@ -12,7 +12,6 @@ class TermsAndConditionsController extends AppBaseController {
 
   Future<void> onInit() async {
     // TODO: implement onInit
-
     getSetting();
     getTnc();
     aboutUs();
@@ -59,7 +58,7 @@ class TermsAndConditionsController extends AppBaseController {
         print("this Is Privacyyyyyyyyy${getprivacypolicy}");
 
         getprivacypolicy1 = res.setting!;
-        print('${getprivacypolicy.first.title}this is privacypolicyyyyyyyyyyy__________________');
+        // print('${getprivacypolicy.first.title}this is privacypolicyyyyyyyyyyy__________________');
         update();
 
         // Fluttertoast.showToast(msg:res.message ?? '' );
@@ -76,6 +75,7 @@ class TermsAndConditionsController extends AppBaseController {
 
     }
   }
+
   Future<void>aboutUs() async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
     // id = preferences.getString('id');

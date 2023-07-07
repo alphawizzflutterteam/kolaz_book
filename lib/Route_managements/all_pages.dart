@@ -45,10 +45,10 @@ class AllPages {
           name:dashbord,
           page: ()=>DashBoard(),
           binding: ScreenBindings()),
-      GetPage(
-          name:introScreen,
-          page: ()=>IntroSlider(),
-          binding: ScreenBindings()),
+      // GetPage(
+      //     name:introScreen,
+      //     page: ()=>IntroSlider(),
+      //     binding: ScreenBindings()),
 
       GetPage(
           name:privacypolicyScreen,
