@@ -447,10 +447,10 @@ teamCard(result){
   takeScreenShot(GlobalKey keyList) async {
 
     // iconVisible = true ;
-    var status =  await Permission.photos.request();
+    // var status =  await Permission.photos.request();
     //Permission.manageExternalStorage.request();
 
-    //PermissionStatus storagePermission = await Permission.storage.request();
+    PermissionStatus status = await Permission.storage.request();
     if ( status.isGranted/*storagePermission == PermissionStatus.denied*/) {
       final directory = (await getApplicationDocumentsDirectory()).path;
 
@@ -494,10 +494,12 @@ teamCard(result){
       }).catchError((onError) {
         print('Error --->> $onError');
       });*/
-    } else if (await status.isDenied/*storagePermission == PermissionStatus.denied*/) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('This Permission is recommended')));
-    } else if (await status.isPermanentlyDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
+    }
+    // else if (await status.isDenied/*storagePermission == PermissionStatus.denied*/) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(content: Text('This Permission is recommended')));
+    // }
+    else if (await status.isDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
       openAppSettings().then((value) {
 
       });

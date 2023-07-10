@@ -122,8 +122,9 @@ class ProfileController extends AppBaseController {
       Map<String, String> body = {};
       body[
       RequestKeys.userId] = id!;
+      // body['status'] = 'all';
 
-      LogoutModel res = await api.logoutApi(body);
+      LogoutModel res = await api.logoutAllDeviceApi(body);
       if(res.status == '1' ) {
         print("logout_successssss____________");
         preferences.setString('id', '');

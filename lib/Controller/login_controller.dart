@@ -70,8 +70,8 @@ class LoginController extends AppBaseController {
       Map<String, String> body = {};
       body[RequestKeys.mobile] = mobileController.text.trim();
       body[RequestKeys.password] = passwordController.text.trim();
-      // body[RequestKeys.deviceid] = '${deviceid}';
-      // body[RequestKeys.ipaddress] = "${address}";
+      body[RequestKeys.deviceid] = '${deviceid}';
+      body[RequestKeys.ipaddress] = "${address}";
 
       LoginResponseModel res = await api.loginUserApi(body);
       if (!(res.error ?? true)) {

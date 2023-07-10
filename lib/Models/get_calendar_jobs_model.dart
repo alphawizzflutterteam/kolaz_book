@@ -1,14 +1,17 @@
+/// freelancer : [{"type_of_photography":"249","photographer_name":"Vijay Chauhan","event_name":"Wedding","id":"1","user_id":"4","uid":"FRJ00001","photographer_id":"7","event_id":"1","city_name":"Visnagar","json_data":[{"date":"14-07-2023","description":"Wedding","amount":"5000"}],"created_at":"2023-07-10 12:31:44","updated_at":"2023-07-10 12:23:49","total_amount":"5000"},{"type_of_photography":"256","photographer_name":"Vijay Chauhan","event_name":"Pre Wedding","id":"2","user_id":"4","uid":"FRJ00002","photographer_id":"7","event_id":"2","city_name":"Visnagar","json_data":[{"date":"07-07-2023","description":"","amount":"55000"}],"created_at":"2023-07-10 12:47:43","updated_at":"2023-07-10 12:47:43","total_amount":"55000"},{"type_of_photography":"255","photographer_name":"Koushik Prajapati","event_name":"Pre Wedding","id":"3","user_id":"4","uid":"FRJ00003","photographer_id":"8","event_id":"2","city_name":"Palanpur","json_data":[{"date":"11-07-2023","description":"","amount":"2500"}],"created_at":"2023-07-10 12:49:20","updated_at":"2023-07-10 12:49:20","total_amount":"2500"},{"type_of_photography":"256","photographer_name":"Koushik Prajapati","event_name":"Pre Wedding","id":"4","user_id":"4","uid":"FRJ00004","photographer_id":"8","event_id":"2","city_name":"Palanpur","json_data":[{"date":"26-07-2023","description":"5600","amount":"2500"}],"created_at":"2023-07-10 12:58:22","updated_at":"2023-07-10 12:58:22","total_amount":"2500"}]
 /// error : false
 /// message : "All Job Lists"
-/// data : [{"id":"162","client_name":"Harish choudhary","mobile":"","city":"Itarsi","qid":"QUA00001","user_id":"5","output":"I want a best offer from you for this full package","amount":"50000","type":"client","type_event":"2","booking_id":"0","grapher_id":"0","status":"1","photographers_details":[{"date":"2023-06-26","data":[{"photographer_type":"LED Wall","photographer_id":"248","photographer_name":""},{"photographer_type":"Candid Cinematography","photographer_id":"249","photographer_name":""}]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]}],"update_date":"2023-06-24 12:06:43","event_name":"Pre Wedding"}]
-/// dates : ["2023-06-24","2023-06-25","2023-06-26","2023-06-27","2023-06-28","2023-06-29","2023-06-30","2023-07-20","2023-09-14","2023-09-15"]
+/// data : [{"id":"7","client_name":"Keyur Patel","mobile":"1234567890","city":"Palanpur","qid":"JOB00001","user_id":"4","output":"Album and Video Full Edited","amount":"56000","type":"client","type_event":"2","booking_id":"0","grapher_id":"0","status":"1","photographers_details":[{"date":"11-07-2023","data":[{"photographer_type":"Fashion Photography","photographer_name":"","photographer_id":"7"},{"photographer_type":"Product Photography","photographer_name":"","photographer_id":"8"}]}],"update_date":"2023-07-10 12:56:51","event_name":"Pre Wedding"},{"id":"8","client_name":"Keyur Patel","mobile":"1234567890","city":"Palanpur","qid":"JOB00002","user_id":"4","output":"bbb","amount":"5000","type":"client","type_event":"2","booking_id":"0","grapher_id":"0","status":"1","photographers_details":[{"date":"11-07-2023","data":[{"photographer_type":"Video Editor","photographer_name":"","photographer_id":"9"},{"photographer_type":"Drone","photographer_name":"","photographer_id":"7"}]}],"update_date":"2023-07-10 12:59:44","event_name":"Pre Wedding"}]
+/// dates : ["2023-07-11T00:00:00.000Z"]
 
 class GetCalendarJobsModel {
   GetCalendarJobsModel({
+      List<Freelancer>? freelancer, 
       bool? error, 
       String? message, 
-      List<CalendarJobs>? data,
+      List<ClientJobs>? data,
       List<String>? dates,}){
+    _freelancer = freelancer;
     _error = error;
     _message = message;
     _data = data;
@@ -16,36 +19,49 @@ class GetCalendarJobsModel {
 }
 
   GetCalendarJobsModel.fromJson(dynamic json) {
+    if (json['freelancer'] != null) {
+      _freelancer = [];
+      json['freelancer'].forEach((v) {
+        _freelancer?.add(Freelancer.fromJson(v));
+      });
+    }
     _error = json['error'];
     _message = json['message'];
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(CalendarJobs.fromJson(v));
+        _data?.add(ClientJobs.fromJson(v));
       });
     }
     _dates = json['dates'] != null ? json['dates'].cast<String>() : [];
   }
+  List<Freelancer>? _freelancer;
   bool? _error;
   String? _message;
-  List<CalendarJobs>? _data;
+  List<ClientJobs>? _data;
   List<String>? _dates;
-GetCalendarJobsModel copyWith({  bool? error,
+GetCalendarJobsModel copyWith({  List<Freelancer>? freelancer,
+  bool? error,
   String? message,
-  List<CalendarJobs>? data,
+  List<ClientJobs>? data,
   List<String>? dates,
-}) => GetCalendarJobsModel(  error: error ?? _error,
+}) => GetCalendarJobsModel(  freelancer: freelancer ?? _freelancer,
+  error: error ?? _error,
   message: message ?? _message,
   data: data ?? _data,
   dates: dates ?? _dates,
 );
+  List<Freelancer>? get freelancer => _freelancer;
   bool? get error => _error;
   String? get message => _message;
-  List<CalendarJobs>? get data => _data;
+  List<ClientJobs>? get data => _data;
   List<String>? get dates => _dates;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    if (_freelancer != null) {
+      map['freelancer'] = _freelancer?.map((v) => v.toJson()).toList();
+    }
     map['error'] = _error;
     map['message'] = _message;
     if (_data != null) {
@@ -57,25 +73,25 @@ GetCalendarJobsModel copyWith({  bool? error,
 
 }
 
-/// id : "162"
-/// client_name : "Harish choudhary"
-/// mobile : ""
-/// city : "Itarsi"
-/// qid : "QUA00001"
-/// user_id : "5"
-/// output : "I want a best offer from you for this full package"
-/// amount : "50000"
+/// id : "7"
+/// client_name : "Keyur Patel"
+/// mobile : "1234567890"
+/// city : "Palanpur"
+/// qid : "JOB00001"
+/// user_id : "4"
+/// output : "Album and Video Full Edited"
+/// amount : "56000"
 /// type : "client"
 /// type_event : "2"
 /// booking_id : "0"
 /// grapher_id : "0"
 /// status : "1"
-/// photographers_details : [{"date":"2023-06-26","data":[{"photographer_type":"LED Wall","photographer_id":"248","photographer_name":""},{"photographer_type":"Candid Cinematography","photographer_id":"249","photographer_name":""}]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-25","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]},{"date":"2023-06-26","data":[]}]
-/// update_date : "2023-06-24 12:06:43"
+/// photographers_details : [{"date":"11-07-2023","data":[{"photographer_type":"Fashion Photography","photographer_name":"","photographer_id":"7"},{"photographer_type":"Product Photography","photographer_name":"","photographer_id":"8"}]}]
+/// update_date : "2023-07-10 12:56:51"
 /// event_name : "Pre Wedding"
 
-class CalendarJobs {
-  CalendarJobs({
+class ClientJobs {
+  ClientJobs({
       String? id, 
       String? clientName, 
       String? mobile, 
@@ -110,7 +126,7 @@ class CalendarJobs {
     _eventName = eventName;
 }
 
-  CalendarJobs.fromJson(dynamic json) {
+  ClientJobs.fromJson(dynamic json) {
     _id = json['id'];
     _clientName = json['client_name'];
     _mobile = json['mobile'];
@@ -149,7 +165,7 @@ class CalendarJobs {
   List<PhotographersDetails>? _photographersDetails;
   String? _updateDate;
   String? _eventName;
-CalendarJobs copyWith({  String? id,
+ClientJobs copyWith({  String? id,
   String? clientName,
   String? mobile,
   String? city,
@@ -165,7 +181,7 @@ CalendarJobs copyWith({  String? id,
   List<PhotographersDetails>? photographersDetails,
   String? updateDate,
   String? eventName,
-}) => CalendarJobs(  id: id ?? _id,
+}) => ClientJobs(  id: id ?? _id,
   clientName: clientName ?? _clientName,
   mobile: mobile ?? _mobile,
   city: city ?? _city,
@@ -224,8 +240,8 @@ CalendarJobs copyWith({  String? id,
 
 }
 
-/// date : "2023-06-26"
-/// data : [{"photographer_type":"LED Wall","photographer_id":"248","photographer_name":""},{"photographer_type":"Candid Cinematography","photographer_id":"249","photographer_name":""}]
+/// date : "11-07-2023"
+/// data : [{"photographer_type":"Fashion Photography","photographer_name":"","photographer_id":"7"},{"photographer_type":"Product Photography","photographer_name":"","photographer_id":"8"}]
 
 class PhotographersDetails {
   PhotographersDetails({
@@ -265,44 +281,227 @@ PhotographersDetails copyWith({  String? date,
 
 }
 
-/// photographer_type : "LED Wall"
-/// photographer_id : "248"
+/// photographer_type : "Fashion Photography"
 /// photographer_name : ""
+/// photographer_id : "7"
 
 class Data {
   Data({
       String? photographerType, 
-      String? photographerId, 
-      String? photographerName,}){
+      String? photographerName, 
+      String? photographerId,}){
     _photographerType = photographerType;
-    _photographerId = photographerId;
     _photographerName = photographerName;
+    _photographerId = photographerId;
 }
 
   Data.fromJson(dynamic json) {
     _photographerType = json['photographer_type'];
-    _photographerId = json['photographer_id'];
     _photographerName = json['photographer_name'];
+    _photographerId = json['photographer_id'];
   }
   String? _photographerType;
-  String? _photographerId;
   String? _photographerName;
+  String? _photographerId;
 Data copyWith({  String? photographerType,
-  String? photographerId,
   String? photographerName,
+  String? photographerId,
 }) => Data(  photographerType: photographerType ?? _photographerType,
-  photographerId: photographerId ?? _photographerId,
   photographerName: photographerName ?? _photographerName,
+  photographerId: photographerId ?? _photographerId,
 );
   String? get photographerType => _photographerType;
-  String? get photographerId => _photographerId;
   String? get photographerName => _photographerName;
+  String? get photographerId => _photographerId;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['photographer_type'] = _photographerType;
-    map['photographer_id'] = _photographerId;
     map['photographer_name'] = _photographerName;
+    map['photographer_id'] = _photographerId;
+    return map;
+  }
+
+}
+
+/// type_of_photography : "249"
+/// photographer_name : "Vijay Chauhan"
+/// event_name : "Wedding"
+/// id : "1"
+/// user_id : "4"
+/// uid : "FRJ00001"
+/// photographer_id : "7"
+/// event_id : "1"
+/// city_name : "Visnagar"
+/// json_data : [{"date":"14-07-2023","description":"Wedding","amount":"5000"}]
+/// created_at : "2023-07-10 12:31:44"
+/// updated_at : "2023-07-10 12:23:49"
+/// total_amount : "5000"
+
+class Freelancer {
+  Freelancer({
+      String? typeOfPhotography, 
+      String? photographerName, 
+      String? eventName, 
+      String? id, 
+      String? userId, 
+      String? uid, 
+      String? photographerId, 
+      String? eventId, 
+      String? cityName, 
+      List<JsonData>? jsonData, 
+      String? createdAt, 
+      String? updatedAt, 
+      String? totalAmount,}){
+    _typeOfPhotography = typeOfPhotography;
+    _photographerName = photographerName;
+    _eventName = eventName;
+    _id = id;
+    _userId = userId;
+    _uid = uid;
+    _photographerId = photographerId;
+    _eventId = eventId;
+    _cityName = cityName;
+    _jsonData = jsonData;
+    _createdAt = createdAt;
+    _updatedAt = updatedAt;
+    _totalAmount = totalAmount;
+}
+
+  Freelancer.fromJson(dynamic json) {
+    _typeOfPhotography = json['type_of_photography'];
+    _photographerName = json['photographer_name'];
+    _eventName = json['event_name'];
+    _id = json['id'];
+    _userId = json['user_id'];
+    _uid = json['uid'];
+    _photographerId = json['photographer_id'];
+    _eventId = json['event_id'];
+    _cityName = json['city_name'];
+    if (json['json_data'] != null) {
+      _jsonData = [];
+      json['json_data'].forEach((v) {
+        _jsonData?.add(JsonData.fromJson(v));
+      });
+    }
+    _createdAt = json['created_at'];
+    _updatedAt = json['updated_at'];
+    _totalAmount = json['total_amount'];
+  }
+  String? _typeOfPhotography;
+  String? _photographerName;
+  String? _eventName;
+  String? _id;
+  String? _userId;
+  String? _uid;
+  String? _photographerId;
+  String? _eventId;
+  String? _cityName;
+  List<JsonData>? _jsonData;
+  String? _createdAt;
+  String? _updatedAt;
+  String? _totalAmount;
+Freelancer copyWith({  String? typeOfPhotography,
+  String? photographerName,
+  String? eventName,
+  String? id,
+  String? userId,
+  String? uid,
+  String? photographerId,
+  String? eventId,
+  String? cityName,
+  List<JsonData>? jsonData,
+  String? createdAt,
+  String? updatedAt,
+  String? totalAmount,
+}) => Freelancer(  typeOfPhotography: typeOfPhotography ?? _typeOfPhotography,
+  photographerName: photographerName ?? _photographerName,
+  eventName: eventName ?? _eventName,
+  id: id ?? _id,
+  userId: userId ?? _userId,
+  uid: uid ?? _uid,
+  photographerId: photographerId ?? _photographerId,
+  eventId: eventId ?? _eventId,
+  cityName: cityName ?? _cityName,
+  jsonData: jsonData ?? _jsonData,
+  createdAt: createdAt ?? _createdAt,
+  updatedAt: updatedAt ?? _updatedAt,
+  totalAmount: totalAmount ?? _totalAmount,
+);
+  String? get typeOfPhotography => _typeOfPhotography;
+  String? get photographerName => _photographerName;
+  String? get eventName => _eventName;
+  String? get id => _id;
+  String? get userId => _userId;
+  String? get uid => _uid;
+  String? get photographerId => _photographerId;
+  String? get eventId => _eventId;
+  String? get cityName => _cityName;
+  List<JsonData>? get jsonData => _jsonData;
+  String? get createdAt => _createdAt;
+  String? get updatedAt => _updatedAt;
+  String? get totalAmount => _totalAmount;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['type_of_photography'] = _typeOfPhotography;
+    map['photographer_name'] = _photographerName;
+    map['event_name'] = _eventName;
+    map['id'] = _id;
+    map['user_id'] = _userId;
+    map['uid'] = _uid;
+    map['photographer_id'] = _photographerId;
+    map['event_id'] = _eventId;
+    map['city_name'] = _cityName;
+    if (_jsonData != null) {
+      map['json_data'] = _jsonData?.map((v) => v.toJson()).toList();
+    }
+    map['created_at'] = _createdAt;
+    map['updated_at'] = _updatedAt;
+    map['total_amount'] = _totalAmount;
+    return map;
+  }
+
+}
+
+/// date : "14-07-2023"
+/// description : "Wedding"
+/// amount : "5000"
+
+class JsonData {
+  JsonData({
+      String? date, 
+      String? description, 
+      String? amount,}){
+    _date = date;
+    _description = description;
+    _amount = amount;
+}
+
+  JsonData.fromJson(dynamic json) {
+    _date = json['date'];
+    _description = json['description'];
+    _amount = json['amount'];
+  }
+  String? _date;
+  String? _description;
+  String? _amount;
+JsonData copyWith({  String? date,
+  String? description,
+  String? amount,
+}) => JsonData(  date: date ?? _date,
+  description: description ?? _description,
+  amount: amount ?? _amount,
+);
+  String? get date => _date;
+  String? get description => _description;
+  String? get amount => _amount;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['date'] = _date;
+    map['description'] = _description;
+    map['amount'] = _amount;
     return map;
   }
 

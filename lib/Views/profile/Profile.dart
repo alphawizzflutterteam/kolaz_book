@@ -22,9 +22,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
 
 
-  void initState(){
-    super.initState();
-  }
+
   Widget _homeLogo(){
     return Container(
       height: 100,
@@ -190,8 +188,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text("Confirm Sign out"),
-                            content: Text("Are you sure to sign out from app now?"),
+                            title: Text("Confirm Log out"),
+                            content: Text("Are you sure to log out from app now?"),
                             actions: <Widget>[
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(primary: AppColors.primary),
@@ -278,8 +276,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text("Confirm Sign out"),
-                            content: Text("Are You Sure To Sign Out All Device?"),
+                            title: Text("Confirm Log out"),
+                            content: Text("Are You Sure To Log Out All Device?"),
                             actions: <Widget>[
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(primary: AppColors.primary),

@@ -135,7 +135,7 @@ class _HomepageState extends State<Homepage> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
-    buttonController!.dispose();
+    // buttonController!.dispose();
 
     // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   }
@@ -390,12 +390,12 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
                     onTap: (){
-                      // if(controller.profiledata!.isTrial! == false) {
+                      if(controller.profiledata!.isTrial! == false) {
                         Navigator.push(context, MaterialPageRoute(
                             builder: (context) => BroadcastScreen()));
-                      // }else{
-                      //   Fluttertoast.showToast(msg: "You are not permitted! Please subscribe first!");
-                      // }
+                      }else{
+                        Fluttertoast.showToast(msg: "You are not permitted! Please subscribe first!");
+                      }
 
                     },
                     child: Container(

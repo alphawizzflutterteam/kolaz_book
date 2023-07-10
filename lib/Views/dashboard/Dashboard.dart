@@ -1,13 +1,17 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Models/banner_list_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/Jobs/jobs_screen.dart';
+import 'package:kolazz_book/Views/authView/login/login_view.dart';
 import 'package:kolazz_book/Views/contact_screen/Contact_screen.dart';
 import 'package:kolazz_book/Views/team_screen/team_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,11 +57,8 @@ class _DashBoardState extends State<DashBoard>
      super.initState();
      _tabController = TabController(length: 6, vsync: this);
      checkInternetConnection();
-     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-       setState(() {
-         _connectivityResult = result;
-       });
-     });
+       checkLoginStatus();
+
    }
    Future<void> checkInternetConnection() async {
      final connectivityResult = await Connectivity().checkConnectivity();
@@ -65,7 +66,51 @@ class _DashBoardState extends State<DashBoard>
        _connectivityResult = connectivityResult;
      });
    }
+   String? deviceId;
 
+   void getDeviceId() async  {
+     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+     if (Platform.isAndroid) {
+       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+       deviceId = androidInfo.androidId;
+
+       print('Device ID____for android: $deviceId');
+     } else if (Platform.isIOS) {
+       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+       deviceId = iosInfo.identifierForVendor;
+       print('Device ID: $deviceId');
+     }
+   }
+
+   checkLoginStatus() async {
+     SharedPreferences preferences = await SharedPreferences.getInstance();
+     String? userId = preferences.getString('id');
+     String? deviceId = preferences.getString('deviceId');
+     var uri = Uri.parse(checkLoginStatusApi.toString());
+     // '${Apipath.getCitiesUrl}');
+     var request = http.MultipartRequest("POST", uri);
+     Map<String, String> headers = {
+       "Accept": "application/json",
+     };
+
+     request.headers.addAll(headers);
+     request.fields['user_id'] = userId!;
+     request.fields[RequestKeys.deviceid] = '$deviceId';
+     print("this is checking login status ${request.fields.toString()}");
+     var response = await request.send();
+     print(response.statusCode);
+     String responseData = await response.stream.transform(utf8.decoder).join();
+     var userData = json.decode(responseData);
+     if(userData['error'] == true){
+       preferences.setString('id', '');
+       preferences.setString('deviceId', '');
+       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+     }else{
+
+     }
+
+
+   }
 
 
   @override

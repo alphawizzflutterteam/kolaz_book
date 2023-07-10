@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:kolazz_book/Controller/customer_drawer_controller.dart';
+import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
@@ -25,6 +26,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   OtpFieldController otpController = OtpFieldController();
 
   int? otp;
+  String? time;
   bool pass = false;
   bool confirmPass = false;
   bool show = false;
@@ -38,7 +40,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     };
 
     request.headers.addAll(headers);
-     request.fields['mobile'] = mobileController.text.toString();
+     request.fields[RequestKeys.mobile] = mobileController.text.toString();
+    request.fields[RequestKeys.time] =  time.toString();
 
     var response = await request.send();
     print(response.statusCode);
@@ -50,6 +53,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if(error == false){
       setState(() {
         otp = userData['otp'];
+        time = userData['time'];
         show = true;
       });
       Fluttertoast.showToast(msg: message.toString());

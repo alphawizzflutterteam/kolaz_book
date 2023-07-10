@@ -199,8 +199,8 @@ class EditProfileController extends AppBaseController {
         lastname = profiledata?.lname;
         profilePic = profiledata?.profilePic;
         companyLogo = profiledata?.companyLogo;
-         SharedPreferences prefe = await SharedPreferences.getInstance();
-         prefe.setString('name',firstname!);
+         // SharedPreferences prefe = await SharedPreferences.getInstance();
+         // prefe.setString('name',firstname!);
         firstnameController.text = profiledata?.fname ?? "";
         usernameController.text = profiledata?.username ?? "";
         lastnameController.text= profiledata?.lname??'';

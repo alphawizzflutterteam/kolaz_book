@@ -59,8 +59,8 @@ class _AccountsScreenState extends State<AccountsScreen> {
     request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.type] = 'accounts';
     request.fields[RequestKeys.userType] = isSelected ? 'client' : 'photographer';
-    request.fields[RequestKeys.filter] =
-    isSelected ? 'all' : 'outstanding';
+    request.fields[RequestKeys.filter] = 'all' ;
+        //: 'outstanding';
     var response = await request.send();
     print("this is pdf download requests ${request.fields}");
     print(response.statusCode);
@@ -325,28 +325,34 @@ class _AccountsScreenState extends State<AccountsScreen> {
         const SizedBox(
           height: 4,
         ),
-        Container(
-          height: 45,
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children:  [
-              Container(
-                width: MediaQuery.of(context).size.width / 3 ,
-                child:  Text(
-                  "Client name",
-                  style: TextStyle(color: AppColors.whit),
+        Padding(
+          padding: const EdgeInsets.only(left: 5.0, right: 5),
+          child: Container(
+            height: 45,
+            width: MediaQuery.of(context).size.width / 1.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColors.teamcard2),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children:  [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3 ,
+                  child:  Text(
+                    "Client name",
+                    style: TextStyle(color: AppColors.whit),
+                  ),
                 ),
-              ),
-              Container(
-                  width: MediaQuery.of(context).size.width / 3 - 15,
-                  child: Text("City Name", style: TextStyle(color: AppColors.whit))),
-              const SizedBox(width: 10,),
-              Container(
-                  width: MediaQuery.of(context).size.width / 3 - 40,
-                  child: Text("Remaining", style: TextStyle(color: AppColors.whit))),
-            ],
+                Container(
+                    width: MediaQuery.of(context).size.width / 3 - 15,
+                    child: Text("City Name", style: TextStyle(color: AppColors.whit))),
+                const SizedBox(width: 10,),
+                Container(
+                    width: MediaQuery.of(context).size.width / 3 - 40,
+                    child: Text("Remaining", style: TextStyle(color: AppColors.whit))),
+              ],
+            ),
           ),
         ),
         const SizedBox(
@@ -503,8 +509,12 @@ class _AccountsScreenState extends State<AccountsScreen> {
       Padding(
         padding: const EdgeInsets.only(left: 10.0),
         child: Container(
+          padding: EdgeInsets.only(left: 7),
           height: 45,
           width: MediaQuery.of(context).size.width / 1.1,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: AppColors.teamcard2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children:  [

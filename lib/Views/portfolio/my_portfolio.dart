@@ -311,7 +311,7 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Text(
-                "About (User Name)",
+                "About",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

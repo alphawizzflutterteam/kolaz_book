@@ -36,6 +36,7 @@ class _OtpScreenState extends State<OtpScreen> {
   RegisterUserData? registerData;
 
   int? newOtp;
+  String time = '';
   sendOtpSignUp(BuildContext context) async {
 
     var uri = Uri.parse(forgotSendOtpApi.toString());
@@ -48,6 +49,7 @@ class _OtpScreenState extends State<OtpScreen> {
     request.headers.addAll(headers);
     request.fields[RequestKeys.mobile] = widget.mobile.toString();
     request.fields[RequestKeys.name] = widget.fName.toString();
+    request.fields[RequestKeys.time] = time.toString();
     // request.fields['vendor_id'] = userID;
     var response = await request.send();
     print(response.statusCode);
@@ -58,6 +60,7 @@ class _OtpScreenState extends State<OtpScreen> {
       Fluttertoast.showToast(msg: "${userData['message']}");
       setState(() {
         newOtp = userData['otp'];
+        time = userData['time'];
       });
 
     }else{
@@ -176,7 +179,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: InkWell(
                   onTap: () {
                     print("this is my ${widget.otp} qnad ${pin}");
-                    if(widget.otp.toString() == pin){
+                    if(newOtp.toString() == pin){
                      registerUser(context, widget.fName, widget.lName, widget.mobile, widget.email, widget.password);
                     }else{
                       Fluttertoast.showToast(msg: "Please enter valid OTP!");

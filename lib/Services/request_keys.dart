@@ -18,6 +18,7 @@ class RequestKeys {
   static String city = 'city';
   static String state = 'state';
   static String name = 'name';
+  static String time = 'time';
   static String photographertype = 'photographer_type';
   static String companyname = 'company_name';
   static String companyphone = 'company_phone';
@@ -33,6 +34,7 @@ class RequestKeys {
   static String filter = 'filter';
   static String userType = 'user_type';
   static String jobId = 'job_id';
+  static String jobStatus = 'job_status';
   static String freelanceId = 'freelance_id';
   static String searchText = 'search_text';
   static String companyImage = 'company_image';

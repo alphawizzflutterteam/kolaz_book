@@ -122,7 +122,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                   "${controller.getphotographetClient[index].city}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: AppColors.textclr, fontSize: 13)),
+                                      color: AppColors.textclr, fontSize: 15)),
                             ],
                           ),
                           children: [
@@ -474,7 +474,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                     style: const TextStyle(
                                         color: AppColors.textclr,
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 13)),
+                                        fontSize: 15)),
                               ],
                             ),
                             children: [
@@ -1046,7 +1046,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                 value: items.resId,
                                                 child: Text(
                                                   items.resName.toString(),
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color: AppColors.textclr),
                                                 ),
                                               );
@@ -1064,7 +1064,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 9,
                                     ),
                                     Padding(
@@ -1075,23 +1075,23 @@ class _ContactScreenState extends State<ContactScreen> {
                                             MediaQuery.of(context).size.width,
                                         // height: 34,
                                         padding:
-                                            EdgeInsets.symmetric(vertical: 0),
+                                           const  EdgeInsets.symmetric(vertical: 0),
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             color: AppColors.cardclr),
                                         child: TextFormField(
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: AppColors.textclr),
                                           controller:
                                               controller.companyController,
                                           keyboardType: TextInputType.name,
                                           validator: (value) => value!.isEmpty
-                                              ? 'City cannot be blank'
+                                              ? 'Company Name cannot be blank'
                                               : null,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
                                               hintText:
-                                                  'Company Name (Optional)',
+                                                  'Company Name',
                                               hintStyle: TextStyle(
                                                   color: AppColors.textclr,
                                                   fontSize: 14),
@@ -2438,24 +2438,22 @@ class _ContactScreenState extends State<ContactScreen> {
                               child: Container(
                                   height: 50,
                                   width: 120,
-                                  child: Center(
-                                    child: Text(
-                                      'Photographers',
-                                      style: TextStyle(
-                                        color: controller.isSelected
-                                            ? Color(0xffffffff)
-                                            : Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600
-                                      ),
-                                    ),
-                                  ),
                                   decoration: BoxDecoration(
                                     color: controller.isSelected
                                         ? AppColors.AppbtnColor
                                         : AppColors.containerclr,
                                     // border: Border.all(color: AppColors.AppbtnColor),
                                     borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Photographers',
+                                      style: TextStyle(
+                                        color:  Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
                                   )),
                             ),
                             InkWell(
@@ -2474,6 +2472,11 @@ class _ContactScreenState extends State<ContactScreen> {
                               child: Container(
                                   height: 50,
                                   width: 120,
+                                  decoration: BoxDecoration(
+                                      color: controller.isSelected
+                                          ? AppColors.containerclr
+                                          : AppColors.AppbtnColor,
+                                      borderRadius: BorderRadius.circular(10)),
                                   child: Center(
                                     child: Text(
                                       'Clients',
@@ -2485,12 +2488,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                         fontWeight: FontWeight.w600
                                       ),
                                     ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: controller.isSelected
-                                          ? AppColors.containerclr
-                                          : AppColors.AppbtnColor,
-                                      borderRadius: BorderRadius.circular(10))),
+                                  )),
                             ),
                           ],
                         ),

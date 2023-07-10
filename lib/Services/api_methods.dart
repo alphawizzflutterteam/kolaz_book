@@ -9,6 +9,7 @@ class ApiMethods {
 
   String login = 'login';
   String logout = 'logout';
+  String logoutAllDevices = 'logout_all';
   String OtpVerify = 'verify_otp';
   String updateProfile = 'user_edit';
   String registerUser = 'user_register';

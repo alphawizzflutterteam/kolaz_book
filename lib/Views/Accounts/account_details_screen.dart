@@ -33,6 +33,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
   String? totalOutstanding;
   int currentIndex = 0 ;
   String pdfUrl = '';
+  final formKey = GlobalKey<FormState>();
   TextEditingController amountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -370,7 +371,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                   color: AppColors.contaccontainerred),
               width: MediaQuery.of(context).size.width / 1.5,
               child: const Center(
-                  child: Text("Add Payment",
+                  child: Text("Payout",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -564,6 +565,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomSheet: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 60),
         child: Container(
@@ -603,158 +605,162 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
                   InkWell(
                     onTap: () {
                       showModalBottomSheet(
-                        isScrollControlled: true,
+                        isScrollControlled: false,
                         context: context,
                         builder: (BuildContext context) {
                           return StatefulBuilder(
                             builder: (BuildContext context,
                                 Function(Function()) setState) {
                               return Container(
+                                height: MediaQuery.of(context).size.width,
                                 child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 30,
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: AppColors.containerclr,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Row(
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      isSelected = true;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                      height: 50,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 14,
-                                                                left: 10,
-                                                                right: 10),
-                                                        child: Text(
-                                                          'Payment Received',
-                                                          style: TextStyle(
-                                                            color: isSelected
-                                                                ? Color(
-                                                                    0xffffffff)
-                                                                : Colors.white,
-                                                            fontSize: 16,
+                                  child: Form(
+                                    key: formKey,
+                                    child : Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: AppColors.containerclr,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10)),
+                                              child: Row(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        isSelected = true;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                        height: 50,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 14,
+                                                                  left: 10,
+                                                                  right: 10),
+                                                          child: Text(
+                                                            'Payment Received',
+                                                            style: TextStyle(
+                                                              color: isSelected
+                                                                  ? Color(
+                                                                      0xffffffff)
+                                                                  : Colors.white,
+                                                              fontSize: 16,
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color: isSelected
-                                                            ? AppColors.greenbtn
-                                                            : AppColors
-                                                                .containerclr,
-                                                        // border: Border.all(color: AppColors.AppbtnColor),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      )),
-                                                ),
-                                                widget.type == 'client'
-                                                    ? InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            // Navigator.of(context).push(MaterialPageRoute(
-                                                            //   builder: (context) => NextPage(),
-                                                            // ));
-                                                            isSelected = false;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                            height: 50,
-                                                            width: 130,
-                                                            child: Center(
-                                                              child: Text(
-                                                                'Add Extra Charges',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: isSelected
-                                                                      ? AppColors
-                                                                          .whit
-                                                                      : Colors
-                                                                          .white,
-                                                                  fontSize: 16,
+                                                        decoration: BoxDecoration(
+                                                          color: isSelected
+                                                              ? AppColors.greenbtn
+                                                              : AppColors
+                                                                  .containerclr,
+                                                          // border: Border.all(color: AppColors.AppbtnColor),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        )),
+                                                  ),
+                                                  widget.type == 'client'
+                                                      ? InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              // Navigator.of(context).push(MaterialPageRoute(
+                                                              //   builder: (context) => NextPage(),
+                                                              // ));
+                                                              isSelected = false;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                              height: 50,
+                                                              width: 130,
+                                                              child: Center(
+                                                                child: Text(
+                                                                  'Add Extra Charges',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: isSelected
+                                                                        ? AppColors
+                                                                            .whit
+                                                                        : Colors
+                                                                            .white,
+                                                                    fontSize: 16,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            decoration: BoxDecoration(
-                                                                color: isSelected
-                                                                    ? AppColors
-                                                                        .containerclr
-                                                                    : AppColors
-                                                                        .AppbtnColor,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10))),
-                                                      )
-                                                    : InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            // Navigator.of(context).push(MaterialPageRoute(
-                                                            //   builder: (context) => NextPage(),
-                                                            // ));
-                                                            isSelected = false;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                            height: 50,
-                                                            width: 130,
-                                                            child: Center(
-                                                              child: Text(
-                                                                'Payout',
-                                                                style:
-                                                                    TextStyle(
+                                                              decoration: BoxDecoration(
                                                                   color: isSelected
                                                                       ? AppColors
-                                                                          .whit
-                                                                      : Colors
-                                                                          .white,
-                                                                  fontSize: 16,
+                                                                          .containerclr
+                                                                      : AppColors
+                                                                          .AppbtnColor,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10))),
+                                                        )
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              // Navigator.of(context).push(MaterialPageRoute(
+                                                              //   builder: (context) => NextPage(),
+                                                              // ));
+                                                              isSelected = false;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                              height: 50,
+                                                              width: 130,
+                                                              child: Center(
+                                                                child: Text(
+                                                                  'Payout',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: isSelected
+                                                                        ? AppColors
+                                                                            .whit
+                                                                        : Colors
+                                                                            .white,
+                                                                    fontSize: 16,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            decoration: BoxDecoration(
-                                                                color: isSelected
-                                                                    ? AppColors
-                                                                        .containerclr
-                                                                    : AppColors
-                                                                        .contaccontainerred,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10))),
-                                                      ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      widget.type == 'client'
-                                          ? isSelected
-                                              ? _paymentReceived()
-                                              : extraCharge()
-                                          : isSelected
-                                              ? _paymentReceived()
-                                              : _payout(),
-                                    ],
+                                                              decoration: BoxDecoration(
+                                                                  color: isSelected
+                                                                      ? AppColors
+                                                                          .containerclr
+                                                                      : AppColors
+                                                                          .contaccontainerred,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10))),
+                                                        ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        widget.type == 'client'
+                                            ? isSelected
+                                                ? _paymentReceived()
+                                                : extraCharge()
+                                            : isSelected
+                                                ? _paymentReceived()
+                                                : _payout(),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

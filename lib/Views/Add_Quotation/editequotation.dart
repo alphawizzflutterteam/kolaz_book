@@ -126,7 +126,8 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
 
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
-    request.fields[RequestKeys.type] =  'jobs' ;
+    request.fields[RequestKeys.type] = 'jobs' ;
+    request.fields[RequestKeys.jobStatus] = '0' ;
     // request.fields[RequestKeys.filter] =
     // widget.type == true ? 'all' : 'upcomings';
     request.fields[RequestKeys.jobId] = widget.id.toString();
@@ -1538,16 +1539,16 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                           ),
                         ),
 
-                        // InkWell(
-                        //   onTap: (){
-                        //     downloadPdfs();
-                        //   },
-                        //   child
-                        //       : Image.asset(
-                        //     "assets/images/pdf.png",
-                        //     scale: 1.6,
-                        //   ),
-                        // ),
+                        InkWell(
+                          onTap: (){
+                            downloadPdfs();
+                          },
+                          child
+                              : Image.asset(
+                            "assets/images/pdf.png",
+                            scale: 1.6,
+                          ),
+                        ),
                         InkWell(
                           onTap: () async {
                             await showDialog(

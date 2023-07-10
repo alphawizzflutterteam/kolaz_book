@@ -17,6 +17,7 @@ class SignupScreen extends StatelessWidget {
 
 
   final _formKey = GlobalKey<FormState>();
+  String time = '';
    TextEditingController firstnameController = TextEditingController();
    TextEditingController lastnameController = TextEditingController();
    TextEditingController emailController = TextEditingController();
@@ -37,6 +38,7 @@ class SignupScreen extends StatelessWidget {
      request.headers.addAll(headers);
      request.fields[RequestKeys.mobile] = mobileController.text.toString();
      request.fields[RequestKeys.name] = firstnameController.text.toString();
+     request.fields[RequestKeys.time] =  time.toString();
      // request.fields['vendor_id'] = userID;
      var response = await request.send();
      print(response.statusCode);
@@ -46,7 +48,8 @@ class SignupScreen extends StatelessWidget {
      if(userData['error'] == false){
        Fluttertoast.showToast(msg: "${userData['message']}");
        int otp = userData['otp'];
-       Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(
+       time = userData['time'];
+        Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(
          otp: otp,
          fName: firstnameController.text.toString(),
          lName: lastnameController.text.toString(),
@@ -322,9 +325,18 @@ class SignupScreen extends StatelessWidget {
                               ),
                               const Text('I Agree To All',style:TextStyle(color: AppColors.whit,fontSize: 13,),),
                               const SizedBox(width: 2,),
-                              const Text('Term of Use',style:TextStyle(color: AppColors.AppbtnColor,fontSize: 13,fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),),
+                              InkWell(
+                                onTap: (){
+                                  Get.toNamed(tncscreen);
+                                },
+                                  child
+                                  : const Text('Term of Use',style:TextStyle(color: AppColors.AppbtnColor,fontSize: 13,fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),)),
                               const Text(' And',style:TextStyle(color: AppColors.whit,fontSize: 13,),),
-                              const Text(' Privacy',style:TextStyle(color: AppColors.AppbtnColor,fontSize: 13,fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),),
+                              InkWell(
+                                onTap: (){
+                                  Get.toNamed(privacypolicyScreen);
+                                },
+                                  child: const Text(' Privacy',style:TextStyle(color: AppColors.AppbtnColor,fontSize: 13,fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),)),
                             ],
                           ),
                           const SizedBox(

@@ -95,6 +95,7 @@ class _HelpandSupportState extends State<HelpandSupport> {
                                 ),
                                 elevation: 5,
                                 child: TextFormField(
+                                  readOnly: true,
                                   controller: controller.firstnameController,
                                   keyboardType: TextInputType.name,
                                   decoration: const InputDecoration(
@@ -124,6 +125,7 @@ class _HelpandSupportState extends State<HelpandSupport> {
                                 ),
                                 elevation: 5,
                                 child: TextFormField(
+                                  readOnly: true,
                                   controller: controller.lastnameController,
                                   keyboardType: TextInputType.name,
                                   validator: (value) {
@@ -159,6 +161,7 @@ class _HelpandSupportState extends State<HelpandSupport> {
                       ),
                       elevation: 5,
                       child: TextFormField(
+                        readOnly: true,
                         controller: controller.emailController,
                         keyboardType: TextInputType.name,
                         decoration: const InputDecoration(

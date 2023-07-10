@@ -173,6 +173,7 @@ class _EditClientJobState extends State<EditClientJob> {
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.type] =  'jobs' ;
+    request.fields[RequestKeys.jobStatus] =  '1' ;
     request.fields[RequestKeys.filter] =
     widget.type == true ? 'all' : 'upcomings';
     request.fields[RequestKeys.jobId] = widget.type == true ? widget.allJobs!.id.toString() : widget.upcomingJobs!.id.toString();
@@ -1977,12 +1978,12 @@ class _EditClientJobState extends State<EditClientJob> {
                               print("this final List $newList and $finalList");
 
                               if(eventController != null) {
-                                if( pType[0]['photographer_id'] != null ) {
+                                // if( pType[0]['photographer_id'] != null ) {
                                   updateClientJob();
-                                }else{
-                                  Fluttertoast.showToast(
-                                      msg: "Please select photographers!");
-                                }
+                                // }else{
+                                //   Fluttertoast.showToast(
+                                //       msg: "Please select photographers!");
+                                // }
                               }
                               else {
                                 Fluttertoast.showToast(

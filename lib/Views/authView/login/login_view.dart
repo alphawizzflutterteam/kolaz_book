@@ -23,10 +23,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final setHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    // final setHeight = MediaQuery
+    //     .of(context)
+    //     .size
+    //     .height;
     final setWidth = MediaQuery
         .of(context)
         .size
@@ -52,9 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding:
-                                const EdgeInsets.only(left: 130.0, top: 20),
+                              Center(
                                 child: Image.asset(
                                   'assets/images/loginlogo.png',
                                   height: 70,

@@ -552,5 +552,27 @@ Future<UpdateProfile> updateProfileApi(Map<String, String> body) async {
     }
   }
 
+  Future<LogoutModel> logoutAllDeviceApi(Map<String, String> body) async  {
+    if (await connectivity.checkConnectivity() == ConnectivityResult.wifi ||
+        await connectivity.checkConnectivity() == ConnectivityResult.mobile) {
+      String res =
+      await _apiClient.postMethod(method: _apiMethods.logoutAllDevices, body: body);
+      if (res.isNotEmpty) {
+        try {
+          return logoutModelFromJson(res);
+        } catch (e) {
+          if (kDebugMode) {
+            print(e);
+          }
+          return LogoutModel(status: "1" , msg: e.toString());
+        }
+      } else {
+        return LogoutModel(status: "0", msg: 'Something went wrong');
+      }
+    } else {
+      return LogoutModel(status: "0", msg: 'No Internet');
+    }
+  }
+
 
 }
