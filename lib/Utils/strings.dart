@@ -12,6 +12,7 @@ final Uri getBannersApi = Uri.parse('${baseUrl}get_all_banners');
 final Uri getClientJobsApi = Uri.parse('${baseUrl}get_job_list');
 final Uri allotedJobsApi = Uri.parse('${baseUrl}allotted_jobs');
 final Uri downloadPdfApi = Uri.parse('${baseUrl}download_pdf');
+final Uri downloadAllottedJobPdfApi = Uri.parse('${baseUrl}download_alloted');
 final Uri getAccountsDataApi = Uri.parse('${baseUrl}accounts');
 final Uri ledgerDataApi = Uri.parse('${baseUrl}ledger_entries');
 final Uri addPayoutApi = Uri.parse('${baseUrl}add_amount');

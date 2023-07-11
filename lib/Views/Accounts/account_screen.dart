@@ -28,6 +28,7 @@ class AccountsScreen extends StatefulWidget {
 
 class _AccountsScreenState extends State<AccountsScreen> {
   var selectedTime1;
+
   GlobalKey keyList = GlobalKey();
 
   TextEditingController dateinput = TextEditingController();
@@ -36,6 +37,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
   int currentIndex = 0;
   int photographerIndex = 0;
   String pdfUrl = '';
+
 
   @override
   void initState() {
@@ -251,77 +253,122 @@ class _AccountsScreenState extends State<AccountsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width / 1.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    currentIndex = 0;
-                    getAccountsData();
-                  });
-                },
-                child: Container(
-                    width: 80,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: currentIndex == 0
-                            ? const Color(0xff668D3F)
-                            : Colors.transparent,
-                        border: Border.all(
-                            color: currentIndex == 0
-                                ? Colors.transparent
-                                : const Color(0xff668D3F))),
-                    child: const Center(
-                      child: Text(
-                        "All",
-                        style: TextStyle(
-                            color: AppColors.whit, fontWeight: FontWeight.w600),
-                      ),
-                    )),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    currentIndex = 1;
-                  });
-                  getAccountsData();
-                },
-                child: Container(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    // width: 80,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: currentIndex == 1
-                            ? const Color(0xff668D3F)
-                            : Colors.transparent,
-                        border: Border.all(
-                            color: currentIndex == 1
-                                ? Colors.transparent
-                                : const Color(0xff668D3F))),
-                    child: const Center(
-                      child: Text(
-                        "Outstanding",
-                        style: TextStyle(
-                            color: AppColors.whit,
-                            // currentIndex == 1
-                            //     ? AppColors.whit
-                            //     : Colors.black,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )),
-              ),
-            ],
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Radio(
+                    value: 0,
+                    fillColor: MaterialStateColor.resolveWith((states) => AppColors.AppbtnColor),
+                    groupValue: currentIndex,
+                    onChanged: (int? value) {
+                      setState(() {
+                        currentIndex = value!;
+
+                        // isUpi = false;
+                      });
+                    }),
+                Text(
+                  "All",
+                  style: TextStyle(color: AppColors.AppbtnColor, fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Radio(
+                    value: 1,
+                    fillColor: MaterialStateColor.resolveWith((states) => AppColors.greenbtn, ),
+                    groupValue: currentIndex,
+                    onChanged: (int? value) {
+                      setState(() {
+                        currentIndex = value!;
+                      });
+                    }),
+                Text(
+                  "Outstanding",
+                  style: TextStyle(color: AppColors.greenbtn, fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+              ],
+            ),
+          ],
         ),
+        // Container(
+        //   height: 45,
+        //   width: MediaQuery.of(context).size.width / 1.0,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       InkWell(
+        //         onTap: () {
+        //           setState(() {
+        //             currentIndex = 0;
+        //             getAccountsData();
+        //           });
+        //         },
+        //         child: Container(
+        //             width: 80,
+        //             height: 40,
+        //             decoration: BoxDecoration(
+        //                 borderRadius: BorderRadius.circular(10),
+        //                 color: currentIndex == 0
+        //                     ? const Color(0xff668D3F)
+        //                     : Colors.transparent,
+        //                 border: Border.all(
+        //                     color: currentIndex == 0
+        //                         ? Colors.transparent
+        //                         : const Color(0xff668D3F))),
+        //             child: const Center(
+        //               child: Text(
+        //                 "All",
+        //                 style: TextStyle(
+        //                     color: AppColors.whit, fontWeight: FontWeight.w600),
+        //               ),
+        //             )),
+        //       ),
+        //       const SizedBox(
+        //         width: 15,
+        //       ),
+        //       InkWell(
+        //         onTap: () {
+        //           setState(() {
+        //             currentIndex = 1;
+        //           });
+        //           getAccountsData();
+        //         },
+        //         child: Container(
+        //             padding: const EdgeInsets.only(left: 10, right: 10),
+        //             // width: 80,
+        //             height: 40,
+        //             decoration: BoxDecoration(
+        //                 borderRadius: BorderRadius.circular(10),
+        //                 color: currentIndex == 1
+        //                     ? const Color(0xff668D3F)
+        //                     : Colors.transparent,
+        //                 border: Border.all(
+        //                     color: currentIndex == 1
+        //                         ? Colors.transparent
+        //                         : const Color(0xff668D3F))),
+        //             child: const Center(
+        //               child: Text(
+        //                 "Outstanding",
+        //                 style: TextStyle(
+        //                     color: AppColors.whit,
+        //                     // currentIndex == 1
+        //                     //     ? AppColors.whit
+        //                     //     : Colors.black,
+        //                     fontWeight: FontWeight.w600),
+        //               ),
+        //             )),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         const SizedBox(
           height: 4,
         ),
@@ -402,116 +449,178 @@ class _AccountsScreenState extends State<AccountsScreen> {
 
   Widget _phptographers() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        height: 45,
-        width: MediaQuery.of(context).size.width / 1.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  photographerIndex = 0;
-                });
-                getAccountsData();
-              },
-              child: Container(
-                  width: 80,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: photographerIndex == 0
-                          ? AppColors.AppbtnColor
-                          : Colors.transparent,
-                      border: Border.all(
-                          color: photographerIndex == 0
-                              ? Colors.transparent
-                              : AppColors.AppbtnColor)),
-                  child: const Center(
-                    child: Text(
-                      "All",
-                      style: TextStyle(
-                          color: AppColors.whit, fontWeight: FontWeight.w600),
-                    ),
-                  )),
-            ),
-            const SizedBox(
-              width: 15,
-            ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  photographerIndex = 1;
-                });
-                getAccountsData();
-              },
-              child: Container(
-                  width: 80,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: photographerIndex == 1
-                          ? AppColors.contaccontainerred
-                          : Colors.transparent,
-                      border: Border.all(
-                          color: photographerIndex == 1
-                              ? Colors.transparent
-                              : AppColors.contaccontainerred)),
-                  child: const Center(
-                    child: Text(
-                      "Payout",
-                      style: TextStyle(
-                          color: AppColors.whit, fontWeight: FontWeight.w600),
-                    ),
-                  )),
-            ),
-            const SizedBox(
-              width: 15,
-            ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  photographerIndex = 2;
-                });
-                getAccountsData();
-              },
-              child: Container(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  // width: 80,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: photographerIndex == 2
-                          ? const Color(0xff668D3F)
-                          : Colors.transparent,
-                      border: Border.all(
-                          color: photographerIndex == 2
-                              ? Colors.transparent
-                              : const Color(0xff668D3F))),
-                  child: const Center(
-                    child: Text(
-                      "Outstanding",
-                      style: TextStyle(
-                          color: AppColors.whit,
-                          // currentIndex == 1
-                          //     ? AppColors.whit
-                          //     : Colors.black,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )),
-            ),
-          ],
-        ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Radio(
+                  value: 0,
+                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.AppbtnColor),
+                  groupValue: photographerIndex,
+                  onChanged: (int? value) {
+                    setState(() {
+                      photographerIndex = value!;
+                     
+                      // isUpi = false;
+                    });
+                  }),
+              Text(
+                "All",
+                style: TextStyle(color: AppColors.AppbtnColor, fontWeight: FontWeight.w600, fontSize: 15),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Radio(
+                  value: 1,
+                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.contaccontainerred),
+                  groupValue: photographerIndex,
+                  onChanged: (int? value) {
+                    setState(() {
+                      photographerIndex = value!;
+                      
+                    });
+                  }),
+              Text(
+                "Payout",
+                style: TextStyle(color: AppColors.contaccontainerred, fontWeight: FontWeight.w600, fontSize: 15),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Radio(
+                  value: 2,
+                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.greenbtn, ),
+                  groupValue: photographerIndex,
+                  onChanged: (int? value) {
+                    setState(() {
+                      photographerIndex = value!;
+
+                    });
+                  }),
+              Text(
+                "Outstanding",
+                style: TextStyle(color: AppColors.greenbtn, fontWeight: FontWeight.w600, fontSize: 15),
+              ),
+            ],
+          ),
+        ],
       ),
-      SizedBox(
-        height: 4,
-      ),
+      // Container(
+      //   height: 45,
+      //   width: MediaQuery.of(context).size.width / 1.0,
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       InkWell(
+      //         onTap: () {
+      //           setState(() {
+      //             photographerIndex = 0;
+      //           });
+      //           getAccountsData();
+      //         },
+      //         child: Container(
+      //             width: 80,
+      //             height: 40,
+      //             decoration: BoxDecoration(
+      //                 borderRadius: BorderRadius.circular(10),
+      //                 color: photographerIndex == 0
+      //                     ? AppColors.AppbtnColor
+      //                     : Colors.transparent,
+      //                 border: Border.all(
+      //                     color: photographerIndex == 0
+      //                         ? Colors.transparent
+      //                         : AppColors.AppbtnColor)),
+      //             child: const Center(
+      //               child: Text(
+      //                 "All",
+      //                 style: TextStyle(
+      //                     color: AppColors.whit, fontWeight: FontWeight.w600),
+      //               ),
+      //             )),
+      //       ),
+      //       const SizedBox(
+      //         width: 15,
+      //       ),
+      //       InkWell(
+      //         onTap: () {
+      //           setState(() {
+      //             photographerIndex = 1;
+      //           });
+      //           getAccountsData();
+      //         },
+      //         child: Container(
+      //             width: 80,
+      //             height: 40,
+      //             decoration: BoxDecoration(
+      //                 borderRadius: BorderRadius.circular(10),
+      //                 color: photographerIndex == 1
+      //                     ? AppColors.contaccontainerred
+      //                     : Colors.transparent,
+      //                 border: Border.all(
+      //                     color: photographerIndex == 1
+      //                         ? Colors.transparent
+      //                         : AppColors.contaccontainerred)),
+      //             child: const Center(
+      //               child: Text(
+      //                 "Payout",
+      //                 style: TextStyle(
+      //                     color: AppColors.whit, fontWeight: FontWeight.w600),
+      //               ),
+      //             )),
+      //       ),
+      //       const SizedBox(
+      //         width: 15,
+      //       ),
+      //       InkWell(
+      //         onTap: () {
+      //           setState(() {
+      //             photographerIndex = 2;
+      //           });
+      //           getAccountsData();
+      //         },
+      //         child: Container(
+      //             padding: const EdgeInsets.only(left: 10, right: 10),
+      //             // width: 80,
+      //             height: 40,
+      //             decoration: BoxDecoration(
+      //                 borderRadius: BorderRadius.circular(10),
+      //                 color: photographerIndex == 2
+      //                     ? const Color(0xff668D3F)
+      //                     : Colors.transparent,
+      //                 border: Border.all(
+      //                     color: photographerIndex == 2
+      //                         ? Colors.transparent
+      //                         : const Color(0xff668D3F))),
+      //             child: const Center(
+      //               child: Text(
+      //                 "Outstanding",
+      //                 style: TextStyle(
+      //                     color: AppColors.whit,
+      //                     // currentIndex == 1
+      //                     //     ? AppColors.whit
+      //                     //     : Colors.black,
+      //                     fontWeight: FontWeight.w600),
+      //               ),
+      //             )),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+
       Padding(
-        padding: const EdgeInsets.only(left: 10.0),
+        padding: const EdgeInsets.only(left: 5.0, right: 5, top: 5),
         child: Container(
           padding: EdgeInsets.only(left: 7),
           height: 45,
-          width: MediaQuery.of(context).size.width / 1.1,
+          width: MediaQuery.of(context).size.width / 1.0,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: AppColors.teamcard2),
@@ -519,19 +628,19 @@ class _AccountsScreenState extends State<AccountsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children:  [
               Container(
-                width: MediaQuery.of(context).size.width / 3  ,
+                width: MediaQuery.of(context).size.width / 2.9  ,
                 child: Text(
                   "Photographer Name",
                   style: TextStyle(color: AppColors.whit),
                 ),
               ),
-              const SizedBox(width: 10,),
+              // const SizedBox(width: 10,),
               Container(
                   width: MediaQuery.of(context).size.width / 3  - 15,
                   child: Text("City Name", style: TextStyle(color: AppColors.whit))),
 
               Container(
-                  width: MediaQuery.of(context).size.width / 3 - 40,
+                  width: MediaQuery.of(context).size.width / 3 - 20,
                   child: Text("Remaining", style: TextStyle(color: AppColors.whit))),
             ],
           ),
@@ -699,7 +808,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                               getAccountsData();
                             },
                             child: Container(
-                                height: 50,
+                                height: 40,
                                 width: 120,
                                 child: Center(
                                   child: Text(
@@ -731,7 +840,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                               getAccountsData();
                             },
                             child: Container(
-                                height: 50,
+                                height: 40,
                                 width: 120,
                                 child: Center(
                                   child: Text(

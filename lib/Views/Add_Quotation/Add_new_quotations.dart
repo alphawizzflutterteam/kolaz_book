@@ -63,6 +63,7 @@ class _AddQuotationState extends State<AddQuotation> {
   var eventController;
   var cityController;
   var clientName;
+  var clientId;
   String? userId;
   List<ClientList> clientList = [];
 
@@ -660,14 +661,14 @@ class _AddQuotationState extends State<AddQuotation> {
     request.fields.addAll({
       'client_name': clientName.toString(),
       'city': cityNameController.text.toString(),
-      'mobile': mobileController.text.toString(),
+      'mobile': clientId.toString(),
       'type_event': eventController.toString(),
       'output': outputController.text.toString(),
       'amount': amountController.text.toString(),
       // 'event[]': selectedEvents.toString(),
       'type': 'client',
       'event_details': finalList.toString(),
-      // 'date[]': selectedDate.toString(),
+      // 'client_id': clientId.toString(),
       'user_id': userId.toString()
     });
     print("this is add quotation request ${request.fields.toString()}");
@@ -792,8 +793,9 @@ class _AddQuotationState extends State<AddQuotation> {
                                           [],
                                       onChanged: (value) {
                                         if (value != null) {
-                                          print("this is my value ${value.firstName}");
+                                          print("this is my value ${value.firstName}  and ${value.id}");
                                           clientName = "${value.firstName} ${value.lastName}";
+                                          clientId = value.id;
                                           cityNameController.text = value.city;
                                           mobileController.text = value.mobile;
 

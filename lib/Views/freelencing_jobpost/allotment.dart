@@ -3,10 +3,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kolazz_book/Models/alloted_jobs_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Utils/colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,74 +27,10 @@ class _JobsScreenState extends State<AllotmentScreen> {
 
   int currentindex = 0;
 
-  Widget _allDates() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
 
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width/1.1,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.lightwhite),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Order Date", style: TextStyle(color: AppColors.textclr),),
-                Text("Type Of", style: TextStyle(color: AppColors.textclr)),
-                Text("Event", style: TextStyle(color: AppColors.textclr)),
-                Text("Venue", style: TextStyle(color: AppColors.textclr)),
-                Text("Job Id", style: TextStyle(color: AppColors.textclr)),
-
-              ],
-            ),
-          ),
-        ),
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width/1.1,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.lightwhite),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 5),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("02/May/2023", style: TextStyle(color: AppColors.textclr,fontSize: 10),),
-                SizedBox(width: 20,),
-                Text("Candid Photography", style: TextStyle(color: AppColors.textclr,fontSize: 10)),
-                SizedBox(width: 10,),
-
-                Text("Wedding", style: TextStyle(color: AppColors.textclr,fontSize: 12)),
-                SizedBox(width: 20,),
-
-                Text("Mumbai", style: TextStyle(color: AppColors.textclr,fontSize: 10)),
-                SizedBox(width: 35,),
-                Text("FJ 001", style: TextStyle(color: AppColors.textclr,fontSize: 10)),
-
-              ],
-            ),
-          ),
-        ),
-
-
-      ],
-    );
-  }
-
-  Widget _upcomingDates() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-
-
-
-      ],
-    );
-  }
 
   String? userId;
+  String? pdfUrl;
 
   List<AllotedJobs> getJobs = [];
   getClientJobs() async {
@@ -126,10 +64,66 @@ class _JobsScreenState extends State<AllotmentScreen> {
     getClientJobs();
   }
 
+  downloadPdfs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    var uri = Uri.parse(downloadAllottedJobPdfApi.toString());
+    // '${Apipath.getCitiesUrl}');
+    var request = http.MultipartRequest("POST", uri);
+    Map<String, String> headers = {
+      "Accept": "application/json",
+    };
+
+    request.headers.addAll(headers);
+    request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.type] = 'jobs' ;
+    request.fields[RequestKeys.filter] =
+    currentindex == 0 ? 'all' : 'upcomings';
+    var response = await request.send();
+    print("this is pdf download requests ${request.fields}");
+    print(response.statusCode);
+    String responseData = await response.stream.transform(utf8.decoder).join();
+    var userData = json.decode(responseData);
+
+    setState(() {
+      pdfUrl = userData['url'];
+    });
+    _showPdf(pdfUrl);
+    print("this is our html content $pdfUrl");
+    // downloadPdfs();
+  }
+
+  _showPdf(pdf) async {
+    print("this is my url $pdf");
+    var url = pdf.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: "Could not open this pdf!");
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgruond,
+      bottomSheet :  Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+                onTap: () async {
+                  downloadPdfs();
+                },
+                child: Image.asset(
+                  "assets/images/pdf.png",
+                  scale: 1.6,
+                )),
+          ],
+        ),
+      ),
       appBar: AppBar(
         leading: InkWell(
             onTap: (){

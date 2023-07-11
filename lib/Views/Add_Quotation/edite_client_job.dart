@@ -134,7 +134,7 @@ class _EditClientJobState extends State<EditClientJob> {
       'type_event': eventController.toString(),
       'output': outputController.text.toString(),
       'amount': amountController.text.toString(),
-      'id': widget.type == true ? widget.allJobs!.id.toString()
+      'job_id': widget.type == true ? widget.allJobs!.id.toString()
           : widget.upcomingJobs!.id.toString(),
       // 'event[]': selectedEvents.toString(),
       'type': 'client',
@@ -415,15 +415,16 @@ class _EditClientJobState extends State<EditClientJob> {
                     style: TextStyle(color: AppColors.textclr),
                   ))),
           onPressed: () {
-            deleteQuotation(quotationData[0].id.toString(), context);
-            Navigator.of(context).pop(true);
+            deleteQuotation(context);
+            Navigator.pop(context);
+            Navigator.pop(context, true);
           },
         ),
       ],
     );
   }
 
-  deleteQuotation(String id, BuildContext context) async {
+  deleteQuotation(BuildContext context) async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();ff
     // String? userId = preferences.getString('id');
     var headers = {
@@ -431,7 +432,11 @@ class _EditClientJobState extends State<EditClientJob> {
     };
     var request =
     http.MultipartRequest('POST', Uri.parse(deleteQuotationApi.toString()));
-    request.fields.addAll({'id': id.toString()});
+    request.fields.addAll({
+      'id':
+        widget.type == true?
+            widget.allJobs!.id.toString()
+        :  widget.upcomingJobs!.id.toString()});
     print(
         "this is delete quotation request ${request.fields.toString()} and $deleteQuotationApi");
 
@@ -446,7 +451,8 @@ class _EditClientJobState extends State<EditClientJob> {
       if (userData['error'] == false) {
 
         Fluttertoast.showToast(msg: userData['message']);
-        Navigator.pop(context, false);
+
+        // Navigator.pop(context, false);
 
       } else {
         Fluttertoast.showToast(msg: userData['message']);
@@ -1262,6 +1268,7 @@ class _EditClientJobState extends State<EditClientJob> {
                                     width:
                                     MediaQuery.of(context).size.width / 2.1,
                                     child: TextFormField(
+                                      readOnly: true,
                                       style: const TextStyle(
                                           color: AppColors.textclr),
                                       controller: clientNameController,

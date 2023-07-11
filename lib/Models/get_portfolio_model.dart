@@ -128,8 +128,9 @@ class Portfolio {
       dynamic oauthUid, 
       dynamic lastLogin, 
       String? isFreelancer, 
-      String? categoryId, 
-      String? about, 
+      String? categoryId,
+    String? categoryName,
+    String? about,
       String? equipments, 
       String? countryVisited, 
       String? coverImage, 
@@ -171,6 +172,7 @@ class Portfolio {
     _lastLogin = lastLogin;
     _isFreelancer = isFreelancer;
     _categoryId = categoryId;
+    _categoryName = categoryName;
     _about = about;
     _equipments = equipments;
     _countryVisited = countryVisited;
@@ -216,6 +218,7 @@ class Portfolio {
     _lastLogin = json['last_login'];
     _isFreelancer = json['is_freelancer'];
     _categoryId = json['category_id'];
+    _categoryName = json['category_name'];
     _about = json['about'];
     _equipments = json['equipments'];
     _countryVisited = json['country_visited'];
@@ -259,6 +262,7 @@ class Portfolio {
   dynamic _lastLogin;
   String? _isFreelancer;
   String? _categoryId;
+  String? _categoryName;
   String? _about;
   String? _equipments;
   String? _countryVisited;
@@ -343,6 +347,7 @@ Portfolio copyWith({  String? id,
   lastLogin: lastLogin ?? _lastLogin,
   isFreelancer: isFreelancer ?? _isFreelancer,
   categoryId: categoryId ?? _categoryId,
+  categoryName: categoryId ?? _categoryName,
   about: about ?? _about,
   equipments: equipments ?? _equipments,
   countryVisited: countryVisited ?? _countryVisited,
@@ -386,6 +391,7 @@ Portfolio copyWith({  String? id,
   dynamic get lastLogin => _lastLogin;
   String? get isFreelancer => _isFreelancer;
   String? get categoryId => _categoryId;
+  String? get categoryName => _categoryName;
   String? get about => _about;
   String? get equipments => _equipments;
   String? get countryVisited => _countryVisited;
@@ -431,6 +437,7 @@ Portfolio copyWith({  String? id,
     map['last_login'] = _lastLogin;
     map['is_freelancer'] = _isFreelancer;
     map['category_id'] = _categoryId;
+    map['category_name'] = _categoryName;
     map['about'] = _about;
     map['equipments'] = _equipments;
     map['country_visited'] = _countryVisited;

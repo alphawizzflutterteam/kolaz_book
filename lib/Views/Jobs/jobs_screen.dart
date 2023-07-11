@@ -1025,64 +1025,7 @@ class _JobsScreenState extends State<JobsScreen> {
                         ),
                         InkWell(
                             onTap: () async {
-
                               downloadPdfs();
-                              // final status = await Permission.storage.request();
-                              //
-                              // if (status == PermissionStatus.granted) {
-                              //   if (mounted) {
-                              //     // setState(() {
-                              //     //   _isProgress = true;
-                              //     // });
-                              //   }
-                              //   var targetPath;
-                              //
-                              //   if (Platform.isIOS) {
-                              //     var target = await getApplicationDocumentsDirectory();
-                              //     targetPath = target.path.toString();
-                              //   } else {
-                              //     var downloadsDirectory =
-                              //         await DownloadsPathProvider.downloadsDirectory;
-                              //     targetPath = downloadsDirectory!.path.toString();
-                              //   }
-                              //
-                              //   var targetFileName = "Invoice_${widget.model!.id}";
-                              //   var generatedPdfFile, filePath;
-                              //   try {
-                              //     generatedPdfFile =
-                              //         await FlutterHtmlToPdf.convertFromHtmlContent(
-                              //         widget.model!.invoice!, targetPath, targetFileName);
-                              //     filePath = generatedPdfFile.path;
-                              //   } on Exception {
-                              //     //  filePath = targetPath + "/" + targetFileName + ".html";
-                              //     generatedPdfFile =
-                              //         await FlutterHtmlToPdf.convertFromHtmlContent(
-                              //         widget.model!.invoice!, targetPath, targetFileName);
-                              //     filePath = generatedPdfFile.path;
-                              //   }
-                              //
-                              //   if (mounted) {
-                              //     // setState(() {
-                              //     //   _isProgress = false;
-                              //     // });
-                              //   }
-                              //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              //     content: Text(
-                              //       "${getTranslated(context, 'INVOICE_PATH')} $targetFileName",
-                              //       textAlign: TextAlign.center,
-                              //       style: TextStyle(color: Theme.of(context).colorScheme.black),
-                              //     ),
-                              //     action: SnackBarAction(
-                              //         label: getTranslated(context, 'VIEW')!,
-                              //         textColor: Theme.of(context).colorScheme.fontColor,
-                              //         onPressed: () async {
-                              //           final result = await OpenFilex.open(filePath);
-                              //         }),
-                              //     backgroundColor: Theme.of(context).colorScheme.white,
-                              //     elevation: 1.0,
-                              //   ));
-                              // }
-                              // takeScreenShot();
                             },
                             child: Image.asset(
                               "assets/images/pdf.png",
@@ -1202,7 +1145,7 @@ class _JobsScreenState extends State<JobsScreen> {
                                 });
                               },
                               child: Container(
-                                  height: 50,
+                                  height: 40,
                                   width: 120,
                                   child: Center(
                                     child: Text(
@@ -1212,6 +1155,7 @@ class _JobsScreenState extends State<JobsScreen> {
                                             ? Color(0xffffffff)
                                             : Colors.white,
                                         fontSize: 16,
+                                        fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
@@ -1233,7 +1177,7 @@ class _JobsScreenState extends State<JobsScreen> {
                                 });
                               },
                               child: Container(
-                                  height: 50,
+                                  height: 40,
                                   width: 130,
                                   child: Center(
                                     child: Text(
@@ -1242,6 +1186,7 @@ class _JobsScreenState extends State<JobsScreen> {
                                         color: isSelected
                                             ? AppColors.whit
                                             : Colors.white,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 16,
                                       ),
                                     ),

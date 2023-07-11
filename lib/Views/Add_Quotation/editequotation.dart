@@ -1042,6 +1042,7 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                                     width:
                                     MediaQuery.of(context).size.width / 2.1,
                                     child: TextFormField(
+                                      readOnly: true,
                                       style: const TextStyle(
                                           color: AppColors.textclr),
                                       controller: clientNameController,

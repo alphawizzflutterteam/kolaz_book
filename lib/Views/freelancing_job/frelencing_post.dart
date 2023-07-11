@@ -157,6 +157,7 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
     print("this is our html content $pdfUrl");
     // downloadPdfs();
   }
+
   _showPdf(pdf) async {
     print("this is my url $pdf");
     var url = pdf.toString();
@@ -226,8 +227,6 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
   //     await Permission.storage.request();
   //   }
   // }
-
-
 
   getFreelancingJobs() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -981,6 +980,22 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
         init: HomeController(),
         builder: (controller) {
           return Scaffold(
+            bottomSheet :  Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                      onTap: () async {
+                        downloadPdfs();
+                      },
+                      child: Image.asset(
+                        "assets/images/pdf.png",
+                        scale: 1.6,
+                      )),
+                ],
+              ),
+            ),
             // bottomSheet: isSelected
             //     ? Padding(
             //   padding:

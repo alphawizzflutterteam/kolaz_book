@@ -106,6 +106,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // TODO: implement initState
     super.initState();
     getCountryList();
+
   }
 
   @override
@@ -157,7 +158,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         top: 40 ,
                         left: 0,
                         right: 0,
-                        child: Column(children: [
+                        child: Column(
+                          children: [
                           GestureDetector(
                             onTap: (){
                               controller.requestPermission(context,1);
@@ -170,19 +172,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     borderRadius: BorderRadius.circular(50)),
                               child:   ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
-                                  child: controller.profilePic == null || controller.profilePic == '' ?
+                                  child:
+                                 controller.profilePic != null || controller.profilePic != '' ?
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child:
+                                      // rcImage != null ?
+                                      Image.network(controller.profilePic.toString(), fit: BoxFit.cover, height: 90,width: 95,)
+                                  )
+                                      :
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
                                     child: controller.imageFile != null
                                         ? Image.file(controller.imageFile!, fit: BoxFit.cover, height: 90,width: 95,)
                                         : Image.asset("assets/images/loginlogo.png",fit: BoxFit.fill,height: 90,width: 95,)
                                   )
-                                      : ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child:
-                                      // rcImage != null ?
-                                      Image.network(controller.profilePic.toString(), fit: BoxFit.cover, height: 90,width: 95,)
-                                  )
+
                               ),
                                 ),
                                 Positioned(

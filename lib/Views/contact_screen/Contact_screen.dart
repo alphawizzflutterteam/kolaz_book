@@ -1424,6 +1424,7 @@ class _ContactScreenState extends State<ContactScreen> {
       init: addPhotographerController(),
       builder: (controller) {
         return Scaffold(
+
           backgroundColor: AppColors.backgruond,
           // bottomNavigationBar: bottomBar(),
           appBar: controller.isSelected
@@ -2436,7 +2437,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 controller.searchController.clear();
                               },
                               child: Container(
-                                  height: 50,
+                                  height: 40,
                                   width: 120,
                                   decoration: BoxDecoration(
                                     color: controller.isSelected
@@ -2470,7 +2471,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 controller.searchController.clear();
                               },
                               child: Container(
-                                  height: 50,
+                                  height: 40,
                                   width: 120,
                                   decoration: BoxDecoration(
                                       color: controller.isSelected

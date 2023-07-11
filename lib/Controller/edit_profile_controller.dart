@@ -279,8 +279,8 @@ class EditProfileController extends AppBaseController {
         await http.MultipartFile.fromPath(
             RequestKeys.companyImage, imageFile2!.path.toString()));
 
-
-    print("ok++++++++======>>>> ${request.files}");
+    print("request======>>>> ${request.fields} ");
+    print("ok++++++++======>>>> ${request.files} ");
     request.headers.addAll(headers);
 
     var response = await request.send();
@@ -295,6 +295,8 @@ class EditProfileController extends AppBaseController {
       if (jsonResponse.status == "success") {
         Fluttertoast.showToast(msg: "${jsonResponse.message}");
         Fluttertoast.showToast(msg: jsonResponse.message ?? '');
+        imageFile = null;
+        imageFile2 = null ;
         setBusy(false);
         Get.to(DashBoard());
         update();
@@ -366,66 +368,66 @@ class EditProfileController extends AppBaseController {
   File? imageFile2;
   String? imagePath;
 
-  void Dialoguebox(String type){
-    Get.defaultDialog(
-        title:'Select Image',
-        backgroundColor: Colors.white,
-        titleStyle: TextStyle(color:AppColors.back),
-        radius: 10,
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                _getFromCamera(type);
-              },
-              child:Text('Camera'),
-            ),
-            const SizedBox(width: 15,),
-            ElevatedButton(
-              onPressed: (){
-                _getFromGallery(type);
-              },
-              child:const Text('Gallery'),
-            ),
-          ],
-        )
-    );
-
-  }
-
-  _getFromGallery(String type) async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      if(type =='profile') {
-        imageFile = File(pickedFile.path);
-      }else {
-        imageFile2 = File(pickedFile.path);
-      }
-      print('image======${imageFile}');
-      Get.back();
-      update();
-    }
-
-  }
-  _getFromCamera(String type) async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-    );
-    if (pickedFile != null) {
-      if(type=='profile') {
-
-        imageFile = File(pickedFile.path);
-      }else {
-
-        imageFile2 = File(pickedFile.path);
-      }
-      Get.back();
-      update();
-    }
-  }
+  // void Dialoguebox(String type){
+  //   Get.defaultDialog(
+  //       title:'Select Image',
+  //       backgroundColor: Colors.white,
+  //       titleStyle: TextStyle(color:AppColors.back),
+  //       radius: 10,
+  //       content: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               _getFromCamera(type);
+  //             },
+  //             child:Text('Camera'),
+  //           ),
+  //           const SizedBox(width: 15,),
+  //           ElevatedButton(
+  //             onPressed: (){
+  //               _getFromGallery(type);
+  //             },
+  //             child:const Text('Gallery'),
+  //           ),
+  //         ],
+  //       )
+  //   );
+  //
+  // }
+  //
+  // _getFromGallery(String type) async {
+  //   PickedFile? pickedFile = await ImagePicker().getImage(
+  //     source: ImageSource.gallery,
+  //   );
+  //   if (pickedFile != null) {
+  //     if(type =='profile') {
+  //       imageFile = File(pickedFile.path);
+  //     }else {
+  //       imageFile2 = File(pickedFile.path);
+  //     }
+  //     print('image======${imageFile}');
+  //     Get.back();
+  //     update();
+  //   }
+  //
+  // }
+  // _getFromCamera(String type) async {
+  //   PickedFile? pickedFile = await ImagePicker().getImage(
+  //     source: ImageSource.camera,
+  //   );
+  //   if (pickedFile != null) {
+  //     if(type=='profile') {
+  //
+  //       imageFile = File(pickedFile.path);
+  //     }else {
+  //
+  //       imageFile2 = File(pickedFile.path);
+  //     }
+  //     Get.back();
+  //     update();
+  //   }
+  // }
 
 
   void requestPermission(BuildContext context,int i) async{
@@ -471,11 +473,14 @@ class EditProfileController extends AppBaseController {
                       )),
                 ),
               ),
+              i == 1 ?
               Container(
                 width: 200,
                 height: 1,
                 color: Colors.black12,
-              ),
+              )
+              : SizedBox.shrink(),
+              i == 1 ?
               InkWell(
                 onTap: () async {
                   removeProfileImage(context);
@@ -486,7 +491,8 @@ class EditProfileController extends AppBaseController {
                       Icons.delete,
                       color: AppColors.primary,
                     )),
-              ),
+              )
+              : SizedBox.shrink(),
             ],
           ),
         );

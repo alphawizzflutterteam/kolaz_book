@@ -53,12 +53,14 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
     print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
-
+    setState(() {
+      typeofPhotographyEvent = TypeofPhotography.fromJson(userData).categories!;
+    });
     // collectionModal = AllCateModel.fromJson(userData);
-    typeofPhotographyEvent = TypeofPhotography.fromJson(userData).categories!;
+
     // print(
     //     "ooooo ${collectionModal!.status} and ${collectionModal!.categories!.length} and ${userID}");
-    print("this is photographer $typeofPhotographyEvent");
+    print("this is photographer +++++ $typeofPhotographyEvent");
   }
 
   var photoGrapherType;
@@ -243,7 +245,9 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
         countryController.text = widget.data!.countryVisited.toString();
         coverPhoto = widget.data!.coverImage.toString();
         _isChecked = true;
+        // photoGrapherType = widget.data!.categoryId.toString();
       });
+      print("this is category ID ${widget.data!.categoryId.toString()}");
       if (widget.data!.categoryId != null || widget.data!.categoryId != '') {
         setState(() {
           photoGrapherType = widget.data!.categoryId.toString();
@@ -356,21 +360,21 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
                                           fontSize: 15),
                                     )
                                         : const CircularProgressIndicator(),
-                                    InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AddPortfolioScreen()));
-                                        },
-                                        child: const Text(
-                                          "My Portfolio",
-                                          style: TextStyle(
-                                              color: AppColors.whit,
-                                              decoration:
-                                              TextDecoration.underline),
-                                        ))
+                                    // InkWell(
+                                    //     onTap: () {
+                                    //       Navigator.push(
+                                    //           context,
+                                    //           MaterialPageRoute(
+                                    //               builder: (context) =>
+                                    //                   AddPortfolioScreen()));
+                                    //     },
+                                    //     child: const Text(
+                                    //       "My Portfolio",
+                                    //       style: TextStyle(
+                                    //           color: AppColors.whit,
+                                    //           decoration:
+                                    //           TextDecoration.underline),
+                                    //     ))
                                   ],
                                 )
                               ],
@@ -457,7 +461,7 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
                                 ),
                                 // Array list of items
                                 items: typeofPhotographyEvent
-                                    .map((Categories items) {
+                                    .map((items) {
                                   return DropdownMenuItem(
                                     value: items.resId,
                                     child: Text(

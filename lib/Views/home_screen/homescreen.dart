@@ -10,6 +10,7 @@ import 'package:kolazz_book/Controller/home_controller.dart';
 import 'package:kolazz_book/Models/banner_list_model.dart';
 import 'package:kolazz_book/Models/get_client_jobs_model.dart';
 import 'package:kolazz_book/Models/get_freelancer_jobs_model.dart';
+import 'package:kolazz_book/Models/get_profile_model.dart';
 import 'package:kolazz_book/Services/request_keys.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/Add_Quotation/edite_client_job.dart';

@@ -254,7 +254,7 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    widget.data.categoryId.toString(),
+                                    widget.data.categoryName.toString(),
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
@@ -289,18 +289,67 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                     ],
                   ),
                   Positioned(
-                    top: 80,
-                    left: 20,
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      decoration:  BoxDecoration(
-                          border: Border.all(color: AppColors.AppbtnColor),
-                          shape: BoxShape.circle,
-                          image: DecorationImage(image: NetworkImage( widget.data.profilePic.toString()))
-                      ),
-                    ),
+                      top: 80,
+                      left: 20,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            color: AppColors.back,
+                            shape: BoxShape.circle
+                        ),
+
+                        child: widget.data.profilePic
+                            .toString() ==
+                            '' ||
+                            widget.data.profilePic ==
+                                null ||
+                            widget.data.profilePic
+                                .toString() ==
+                                'https://developmentalphawizz.com/kolaz_book/uploads/profile_pics/'
+                            ? Container(
+                          height: 80,
+                          width: 80,
+                          decoration:
+                          BoxDecoration(
+                              border: Border.all(
+                                  color: AppColors
+                                      .AppbtnColor),
+                              shape: BoxShape
+                                  .circle,
+                              image:
+                              const DecorationImage(
+                                image:
+                                AssetImage("assets/images/loginlogo.png"),
+                                fit: BoxFit
+                                    .fill,
+                              )),
+                        )
+                            : Container(
+                            height: 80,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppColors
+                                        .AppbtnColor),
+                                shape: BoxShape
+                                    .circle,
+                                image: DecorationImage(
+                                    image:
+                                    NetworkImage(widget.data.profilePic.toString())))),
+                      )
                   )
+                  // Positioned(
+                  //   top: 80,
+                  //   left: 20,
+                  //   child: Container(
+                  //     height: 80,
+                  //     width: 80,
+                  //     decoration:  BoxDecoration(
+                  //         border: Border.all(color: AppColors.AppbtnColor),
+                  //         shape: BoxShape.circle,
+                  //         image: DecorationImage(image: NetworkImage( widget.data.profilePic.toString()))
+                  //     ),
+                  //   ),
+                  // )
 
                 ],
               ),
