@@ -297,6 +297,7 @@ class EditProfileController extends AppBaseController {
         Fluttertoast.showToast(msg: jsonResponse.message ?? '');
         imageFile = null;
         imageFile2 = null ;
+        getProfile();
         setBusy(false);
         Get.to(DashBoard());
         update();

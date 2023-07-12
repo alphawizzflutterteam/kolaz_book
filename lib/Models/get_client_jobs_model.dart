@@ -117,6 +117,7 @@ class UpcomingJobs {
   UpcomingJobs({
       String? id,
       String? clientName,
+    String? clientId,
       String? mobile,
       String? city,
       String? qid,
@@ -133,6 +134,7 @@ class UpcomingJobs {
       String? eventName,}){
     _id = id;
     _clientName = clientName;
+    _clientId = clientId;
     _mobile = mobile;
     _city = city;
     _qid = qid;
@@ -152,6 +154,7 @@ class UpcomingJobs {
   UpcomingJobs.fromJson(dynamic json) {
     _id = json['id'];
     _clientName = json['client_name'];
+    _clientId = json['client_id'];
     _mobile = json['mobile'];
     _city = json['city'];
     _qid = json['qid'];
@@ -174,6 +177,7 @@ class UpcomingJobs {
   }
   String? _id;
   String? _clientName;
+  String? _clientId;
   String? _mobile;
   String? _city;
   String? _qid;
@@ -190,6 +194,7 @@ class UpcomingJobs {
   String? _eventName;
 UpcomingJobs copyWith({  String? id,
   String? clientName,
+  String? clientId,
   String? mobile,
   String? city,
   String? qid,
@@ -206,6 +211,7 @@ UpcomingJobs copyWith({  String? id,
   String? eventName,
 }) => UpcomingJobs(  id: id ?? _id,
   clientName: clientName ?? _clientName,
+  clientId: clientId ?? _clientId,
   mobile: mobile ?? _mobile,
   city: city ?? _city,
   qid: qid ?? _qid,
@@ -223,6 +229,7 @@ UpcomingJobs copyWith({  String? id,
 );
   String? get id => _id;
   String? get clientName => _clientName;
+  String? get clientId => _clientId;
   String? get mobile => _mobile;
   String? get city => _city;
   String? get qid => _qid;
@@ -242,6 +249,7 @@ UpcomingJobs copyWith({  String? id,
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['client_name'] = _clientName;
+    map['client_id'] = _clientId;
     map['mobile'] = _mobile;
     map['city'] = _city;
     map['qid'] = _qid;
@@ -359,6 +367,7 @@ class AllJobs {
   AllJobs({
       String? id,
       String? clientName,
+    String? clientId,
       String? mobile,
       String? city,
       String? qid,
@@ -375,6 +384,7 @@ class AllJobs {
       String? eventName,}){
     _id = id;
     _clientName = clientName;
+    _clientId= clientId;
     _mobile = mobile;
     _city = city;
     _qid = qid;
@@ -394,6 +404,7 @@ class AllJobs {
   AllJobs.fromJson(dynamic json) {
     _id = json['id'];
     _clientName = json['client_name'];
+    _clientId = json['client_id'];
     _mobile = json['mobile'];
     _city = json['city'];
     _qid = json['qid'];
@@ -416,6 +427,7 @@ class AllJobs {
   }
   String? _id;
   String? _clientName;
+  String? _clientId;
   String? _mobile;
   String? _city;
   String? _qid;
@@ -432,6 +444,7 @@ class AllJobs {
   String? _eventName;
 AllJobs copyWith({  String? id,
   String? clientName,
+  String? clientId,
   String? mobile,
   String? city,
   String? qid,
@@ -448,6 +461,7 @@ AllJobs copyWith({  String? id,
   String? eventName,
 }) => AllJobs(  id: id ?? _id,
   clientName: clientName ?? _clientName,
+  clientId: clientId ?? _clientId,
   mobile: mobile ?? _mobile,
   city: city ?? _city,
   qid: qid ?? _qid,
@@ -465,6 +479,7 @@ AllJobs copyWith({  String? id,
 );
   String? get id => _id;
   String? get clientName => _clientName;
+  String? get clientId => _clientId;
   String? get mobile => _mobile;
   String? get city => _city;
   String? get qid => _qid;
@@ -484,6 +499,7 @@ AllJobs copyWith({  String? id,
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['client_name'] = _clientName;
+    map['client_id'] = _clientId;
     map['mobile'] = _mobile;
     map['city'] = _city;
     map['qid'] = _qid;

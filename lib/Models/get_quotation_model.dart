@@ -76,7 +76,8 @@ class Setting {
   Setting({
       String? cityName, 
       String? id, 
-      String? clientName, 
+      String? clientName,
+    String? clientId,
       String? mobile, 
       String? city, 
       String? qid, 
@@ -94,6 +95,7 @@ class Setting {
     _cityName = cityName;
     _id = id;
     _clientName = clientName;
+    _clientId = clientId;
     _mobile = mobile;
     _city = city;
     _qid = qid;
@@ -114,6 +116,7 @@ class Setting {
     _cityName = json['city_name'];
     _id = json['id'];
     _clientName = json['client_name'];
+    _clientId = json['cliend_id'];
     _mobile = json['mobile'];
     _city = json['city'];
     _qid = json['qid'];
@@ -139,6 +142,7 @@ class Setting {
   String? _cityName;
   String? _id;
   String? _clientName;
+  String? _clientId;
   String? _mobile;
   String? _city;
   String? _qid;
@@ -156,6 +160,7 @@ class Setting {
 Setting copyWith({  String? cityName,
   String? id,
   String? clientName,
+  String? clientId,
   String? mobile,
   String? city,
   String? qid,
@@ -173,6 +178,7 @@ Setting copyWith({  String? cityName,
 }) => Setting(  cityName: cityName ?? _cityName,
   id: id ?? _id,
   clientName: clientName ?? _clientName,
+  clientId: clientId ?? _clientId,
   mobile: mobile ?? _mobile,
   city: city ?? _city,
   qid: qid ?? _qid,
@@ -191,6 +197,7 @@ Setting copyWith({  String? cityName,
   String? get cityName => _cityName;
   String? get id => _id;
   String? get clientName => _clientName;
+  String? get clientId => _clientId;
   String? get mobile => _mobile;
   String? get city => _city;
   String? get qid => _qid;

@@ -208,7 +208,8 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                             image: DecorationImage(
                                 image: NetworkImage(
                                     widget.data.coverImage.toString()
-                                )
+                                ),
+                               fit: BoxFit.fill
                             )
                         ),
                       ),

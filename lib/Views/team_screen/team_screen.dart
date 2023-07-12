@@ -79,225 +79,230 @@ teamCard(result){
       children: [
         RepaintBoundary(
           key: keyList,
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                height: 65,
-                decoration: BoxDecoration(
-                    color: AppColors.teamcard2,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Row(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.center,
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "${result.clientName}",
-                      style: const TextStyle(
-                          color: AppColors.textclr,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${result.eventName}",
-                      style: const TextStyle(
-                          color: AppColors.textclr,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${result.cityName}",
-                      style: const TextStyle(
-                          color: AppColors.textclr,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
+          child: Container(
+            decoration: BoxDecoration(
+                color: AppColors.back,
+                borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  height: 65,
+                  decoration: BoxDecoration(
+                      color: AppColors.teamcard2,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.center,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${result.clientName}",
+                        style: const TextStyle(
+                            color: AppColors.textclr,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "${result.eventName}",
+                        style: const TextStyle(
+                            color: AppColors.textclr,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "${result.cityName}",
+                        style: const TextStyle(
+                            color: AppColors.textclr,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 10.0, left: 10, right: 10),
-                child: Row(
-                  children: [
-                    const Text(
-                      "Date: ",
-                      style: TextStyle(
-                          color: AppColors.whit,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    const SizedBox(
-                      width: 7,
-                    ),
-                    Text(
-                      "${result.date}",
-                      style: const TextStyle(
-                          color: AppColors.teamcard2,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10.0, left: 10, right: 10),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "Date: ",
+                        style: TextStyle(
+                            color: AppColors.whit,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
+                      const SizedBox(
+                        width: 7,
+                      ),
+                      Text(
+                        "${result.date}",
+                        style: const TextStyle(
+                            color: AppColors.teamcard2,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width:
-                      MediaQuery.of(context).size.width /
-                          2 - 15,
-                      // height: 100,
-                      child: Column(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context)
-                                .size
-                                .width /
-                                2.0 - 15,
-                            padding: EdgeInsets.all(3.0),
-                            child: const Text(
-                              "Photographer Name  ",
-                              style: TextStyle(
-                                  color: AppColors.whit,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
-                            ),
-                          ),
-                          Container(
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width:
+                        MediaQuery.of(context).size.width /
+                            2 - 15,
+                        // height: 100,
+                        child: Column(
+                          mainAxisAlignment:
+                          MainAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Container(
                               width: MediaQuery.of(context)
                                   .size
                                   .width /
                                   2.0 - 15,
+                              padding: EdgeInsets.all(3.0),
+                              child: const Text(
+                                "Photographer Name  ",
+                                style: TextStyle(
+                                    color: AppColors.whit,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                              ),
+                            ),
+                            Container(
+                                width: MediaQuery.of(context)
+                                    .size
+                                    .width /
+                                    2.0 - 15,
+                                child: ListView.builder(
+                                    physics:
+                                    NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: result
+                                        .photographers!.length,
+                                    itemBuilder: (context, j) {
+                                      if (result.photographers![j]
+                                          .name
+                                          .toString() !=
+                                          "") {
+                                        return Padding(
+                                          padding:
+                                          const EdgeInsets.all(3.0),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width /
+                                                2.0 -0,
+                                            // height: 20,
+                                            child: Text(
+                                              result
+                                                  .photographers![j]
+                                                  .name
+                                                  .toString(),
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: AppColors
+                                                      .teamcard2,
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .bold),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return const Padding(
+                                        padding:  EdgeInsets.all(3.0),
+                                        child:  Text(
+                                          "Not Allotted yet!",
+                                          style:  TextStyle(
+                                              color: AppColors
+                                                  .contaccontainerred,
+                                              fontSize: 14,
+                                              fontWeight:
+                                              FontWeight
+                                                  .bold),
+                                        ),
+                                      );
+                                    })),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width:
+                        MediaQuery.of(context).size.width /
+                            2 - 15,
+                        // height: 100,
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding:
+                              const EdgeInsets.all(3.0),
+                              child: const Text(
+                                "Type Of Photography",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: AppColors.whit,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                              ),
+                            ),
+                            Container(
+                              // height: 200,
+                              width: MediaQuery.of(context)
+                                  .size
+                                  .width /
+                                  2 - 15,
+                              // width: 300,
                               child: ListView.builder(
-                                  physics:
-                                  NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: result
                                       .photographers!.length,
                                   itemBuilder: (context, j) {
-                                    if (result.photographers![j]
-                                        .name
-                                        .toString() !=
-                                        "") {
-                                      return Padding(
-                                        padding:
-                                        const EdgeInsets.all(3.0),
-                                        child: Container(
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width /
-                                              2.0 -0,
-                                          // height: 20,
-                                          child: Text(
-                                            result
-                                                .photographers![j]
-                                                .name
-                                                .toString(),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                color: AppColors
-                                                    .teamcard2,
-                                                fontSize: 14,
-                                                fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    return const Padding(
-                                      padding:  EdgeInsets.all(3.0),
-                                      child:  Text(
-                                        "Not Allotted yet!",
-                                        style:  TextStyle(
+                                    return Padding(
+                                      padding:
+                                      EdgeInsets.all(3.0),
+                                      child: Text(
+                                        result.photographers![j]
+                                            .type
+                                            .toString(),
+                                        style: const TextStyle(
                                             color: AppColors
-                                                .contaccontainerred,
+                                                .teamcard2,
                                             fontSize: 14,
                                             fontWeight:
                                             FontWeight
                                                 .bold),
                                       ),
                                     );
-                                  })),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width:
-                      MediaQuery.of(context).size.width /
-                          2 - 15,
-                      // height: 100,
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding:
-                            const EdgeInsets.all(3.0),
-                            child: const Text(
-                              "Type Of Photography",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: AppColors.whit,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
+                                  }),
                             ),
-                          ),
-                          Container(
-                            // height: 200,
-                            width: MediaQuery.of(context)
-                                .size
-                                .width /
-                                2 - 15,
-                            // width: 300,
-                            child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: result
-                                    .photographers!.length,
-                                itemBuilder: (context, j) {
-                                  return Padding(
-                                    padding:
-                                    EdgeInsets.all(3.0),
-                                    child: Text(
-                                      result.photographers![j]
-                                          .type
-                                          .toString(),
-                                      style: const TextStyle(
-                                          color: AppColors
-                                              .teamcard2,
-                                          fontSize: 14,
-                                          fontWeight:
-                                          FontWeight
-                                              .bold),
-                                    ),
-                                  );
-                                }),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           ),
         ),
         Container(

@@ -46,6 +46,7 @@ class _JobsScreenState extends State<AllotmentScreen> {
     request.fields[RequestKeys.userId] = userId!;
     request.fields[RequestKeys.photographerId] = widget.pid!;
     request.fields[RequestKeys.type] = currentindex == 0 ? 'all' :  'upcoming';
+    print("thisbis is request ${request.fields}");
 
     var response = await request.send();
     print(response.statusCode);

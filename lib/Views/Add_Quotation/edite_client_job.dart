@@ -45,6 +45,7 @@ class _EditClientJobState extends State<EditClientJob> {
   List<CityList> citiesList = [];
   List photographerType = [];
   bool isLast = false;
+  String? clientId;
 
   String photographer = "photographer";
 
@@ -130,7 +131,7 @@ class _EditClientJobState extends State<EditClientJob> {
     request.fields.addAll({
       'client_name': clientNameController.text.toString(),
       'city': cityNameController.text.toString(),
-      'mobile': mobileController.text.toString(),
+      'mobile': clientId.toString(),
       'type_event': eventController.toString(),
       'output': outputController.text.toString(),
       'amount': amountController.text.toString(),
@@ -402,6 +403,7 @@ class _EditClientJobState extends State<EditClientJob> {
                   ))),
           onPressed: () => Navigator.of(context).pop(false),
         ),
+
         TextButton(
           child: Container(
               height: 25,
@@ -1078,6 +1080,7 @@ class _EditClientJobState extends State<EditClientJob> {
         clientNameController.text = widget.allJobs!.clientName.toString();
         cityNameController.text = widget.allJobs!.city.toString();
         eventController = widget.allJobs!.typeEvent.toString();
+        clientId = widget.allJobs!.clientId.toString();
         amountController.text = widget.allJobs!.amount.toString();
         mobileController.text = widget.allJobs!.mobile.toString();
         outputController.text = widget.allJobs!.output.toString();
@@ -1090,6 +1093,7 @@ class _EditClientJobState extends State<EditClientJob> {
         cityController = widget.upcomingJobs!.city.toString();
         cityNameController.text = widget.upcomingJobs!.city.toString();
         eventController = widget.upcomingJobs!.typeEvent.toString();
+        clientId = widget.upcomingJobs!.clientId.toString();
         mobileController.text = widget.upcomingJobs!.mobile.toString();
         amountController.text = widget.upcomingJobs!.amount.toString();
         outputController.text = widget.upcomingJobs!.output.toString();

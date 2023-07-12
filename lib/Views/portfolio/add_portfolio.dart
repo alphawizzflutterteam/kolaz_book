@@ -127,7 +127,7 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
     var image = await ImagePickerGC.pickImage(
       context: context,
       source: source,
-      imageQuality: 1,
+      imageQuality: 80,
       maxHeight: 400,
       maxWidth: 2400,
       cameraIcon: const Icon(
@@ -161,8 +161,12 @@ class _AddPortfolioScreenState extends State<AddPortfolioScreen> {
     });
     Navigator.pop(context);
   }
+
   Future getImageGallery(ImgSource source, BuildContext context, int i) async {
     var image = await ImagePickerGC.pickImage(
+
+      maxHeight: 400,
+      maxWidth: 2400,
       context: context,
       source: source,
       cameraIcon: const Icon(

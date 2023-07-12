@@ -234,6 +234,7 @@ class _JobsScreenState extends State<JobsScreen> {
     var uri = Uri.parse(getFreelancingJobsApi.toString());
     // '${Apipath.getCitiesUrl}');
     var request = http.MultipartRequest("POST", uri);
+
     Map<String, String> headers = {
       "Accept": "application/json",
     };
@@ -1143,6 +1144,7 @@ class _JobsScreenState extends State<JobsScreen> {
                                 setState(() {
                                   isSelected = true;
                                 });
+                                getClientJobs();
                               },
                               child: Container(
                                   height: 40,
@@ -1175,6 +1177,7 @@ class _JobsScreenState extends State<JobsScreen> {
                                   // ));
                                   isSelected = false;
                                 });
+                                getFreelancingJobs();
                               },
                               child: Container(
                                   height: 40,

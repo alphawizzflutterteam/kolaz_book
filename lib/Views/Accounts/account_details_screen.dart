@@ -136,7 +136,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.type] = 'accounts';
-    request.fields[RequestKeys.userType] = isSelected ? 'client' : 'photographer';
+    request.fields[RequestKeys.userType] = widget.type.toString();
     request.fields[RequestKeys.filter] =
     isSelected ? 'all' : 'outstanding';
     request.fields[RequestKeys.photographerId] = widget.pid!;

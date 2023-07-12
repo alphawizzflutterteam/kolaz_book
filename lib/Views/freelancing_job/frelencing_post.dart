@@ -141,6 +141,7 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
 
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
+    request.fields[RequestKeys.photographerId] = widget.pId.toString();
     request.fields[RequestKeys.type] = isSelected  ? 'jobs' : 'freelance';
     request.fields[RequestKeys.filter] =
     currentindex == 0 ? 'all' : 'upcomings';

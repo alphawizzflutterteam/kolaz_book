@@ -85,7 +85,7 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
     request.fields.addAll({
       'client_name': clientNameController.text.toString(),
       'city': cityNameController.text.toString(),
-      'mobile': mobileController.text.toString(),
+      'mobile': clientId.toString(),
       'type_event': eventController.toString(),
       'output': outputController.text.toString(),
       'amount': amountController.text.toString(),
@@ -178,6 +178,7 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
   var cityController;
   var clientName;
   String? userId;
+  String? clientId;
   List<ClientList> clientList = [];
 
   List<Setting> quotationData = [];
@@ -211,6 +212,7 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
     clientNameController.text = quotationData[0].clientName.toString();
     cityController = quotationData[0].city.toString();
     cityNameController.text = quotationData[0].cityName.toString();
+    clientId = quotationData[0].clientId.toString();
     eventController = quotationData[0].typeEvent.toString();
     amountController.text = quotationData[0].amount.toString();
     mobileController.text = quotationData[0].mobile.toString();
