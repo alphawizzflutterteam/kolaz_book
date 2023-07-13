@@ -34,12 +34,13 @@ class _OtpScreenState extends State<OtpScreen> {
   String pin = '';
   Api api = Api() ;
   RegisterUserData? registerData;
-
+  bool showTime = false;
   int? newOtp;
   String time = '';
+
   sendOtpSignUp(BuildContext context) async {
 
-    var uri = Uri.parse(forgotSendOtpApi.toString());
+    var uri = Uri.parse(sendOtpApi.toString());
     // '${Apipath.getCitiesUrl}');
     var request = http.MultipartRequest("POST", uri);
     Map<String, String> headers = {
@@ -51,6 +52,7 @@ class _OtpScreenState extends State<OtpScreen> {
     request.fields[RequestKeys.name] = widget.fName.toString();
     request.fields[RequestKeys.time] = time.toString();
     // request.fields['vendor_id'] = userID;
+    print("this is ${request.fields}");
     var response = await request.send();
     print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
@@ -117,9 +119,21 @@ class _OtpScreenState extends State<OtpScreen> {
     if(widget.otp != null || widget.otp != 0){
       newOtp = widget.otp!;
     }
+    Future.delayed(Duration(seconds: 30),(){
+      setState(() {
+        showTime = true;
+      });
+    });
   }
+
   @override
   Widget build(BuildContext context) {
+    // Future.delayed(Duration(seconds: 30),(){
+    //   print("tisbisbhsghfsdhjg");
+    //   setState(() {
+    //     showTime = true;
+    //   });
+    // });
     return GetBuilder(
       init: OtpController(),
       builder: (controller) {
@@ -167,12 +181,13 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               const SizedBox(height: 40,),
               const Text('Have not Received the varification code?',style: TextStyle(fontSize:18,fontWeight: FontWeight.w400,color: AppColors.whit),),
-              TextButton(
+              showTime ?  TextButton(
                   onPressed:(){
                    sendOtpSignUp(context);
 
                  },
-                  child:const Text('Resend',style: TextStyle(color: AppColors.AppbtnColor,fontWeight: FontWeight.w500,fontSize: 18,decoration: TextDecoration.underline),)),
+                  child:const Text('Resend',style: TextStyle(color: AppColors.AppbtnColor,fontWeight: FontWeight.w500,fontSize: 18,decoration: TextDecoration.underline),))
+              : SizedBox.shrink(),
               const SizedBox(height: 10,),
               Padding(
                 padding: const EdgeInsets.only(left:40.0,right:40),

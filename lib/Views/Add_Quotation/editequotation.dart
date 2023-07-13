@@ -368,7 +368,6 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                   ))),
           onPressed: () {
             deleteQuotation(quotationData[0].id.toString(), context);
-            Navigator.of(context).pop(true);
           },
         ),
       ],
@@ -398,7 +397,11 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
       if (userData['error'] == false) {
 
         Fluttertoast.showToast(msg: userData['message']);
-        Navigator.pop(context, false);
+        if(mounted){
+          Navigator.pop(context);
+          Navigator.pop(context, false);
+        }
+
 
       } else {
         Fluttertoast.showToast(msg: userData['message']);

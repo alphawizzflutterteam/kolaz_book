@@ -28,7 +28,7 @@ class SignupScreen extends StatelessWidget {
 
    sendOtpSignUp(BuildContext context) async {
 
-     var uri = Uri.parse(forgotSendOtpApi.toString());
+     var uri = Uri.parse(sendOtpApi.toString());
      // '${Apipath.getCitiesUrl}');
      var request = http.MultipartRequest("POST", uri);
      Map<String, String> headers = {
@@ -346,7 +346,11 @@ class SignupScreen extends StatelessWidget {
                             onTap: () {
                               if(_formKey.currentState!.validate()) {
 
-                                sendOtpSignUp(context);
+                                if(controller.isCheck) {
+                                  sendOtpSignUp(context);
+                                }else{
+                                  Fluttertoast.showToast(msg: "Please agree to terms of use and privacy!");
+                                }
                                 // controller.onTapResend();
                                   // controller.registerUser();
                                 }

@@ -975,6 +975,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     child: Text("Terms & Condition For Quotation PDF", style: TextStyle(fontSize: 14, color: Color(0xffCCCCCC)),),
                                   ),
                                   Container(
+                                    height: 70,
                                     width: MediaQuery.of(context).size.width/1.1,
                                     child: Card(
                                       color: Color(0xff6D6A6A),
@@ -982,13 +983,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       elevation: 5,
-                                      child: TextFormField(
+                                      child: TextField(
+                                        maxLines: 30,
                                         controller: controller.termsconditionControlletr,
-                                        keyboardType: TextInputType.name,
+                                        keyboardType: TextInputType.multiline,
+                                        // keyboardType: TextInputType.name,
                                         decoration: const InputDecoration(
                                             hintText: 'Paste here from Notepad/Text File',hintStyle: TextStyle(color: AppColors.whit),
                                             border: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(left: 10)
+                                            contentPadding: EdgeInsets.only(left: 10, top: 12)
                                         ),
                                       ),
                                     ),

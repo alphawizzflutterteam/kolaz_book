@@ -24,7 +24,6 @@ import 'add_freelance_job.dart';
 import 'edit_freelance_job.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 
 class FreelancingJobsScreen extends StatefulWidget {
   final String? pId;
@@ -1167,6 +1166,14 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
             backgroundColor: AppColors.backgruond,
             appBar: isSelected
                 ? AppBar(
+              leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColors.AppbtnColor,
+                  )),
               automaticallyImplyLeading: false,
               backgroundColor: Color(0xff303030),
               actions: [
@@ -1182,6 +1189,14 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
               ],
             )
                 : AppBar(
+              leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColors.AppbtnColor,
+                  )),
               automaticallyImplyLeading: false,
               backgroundColor: Color(0xff303030),
               actions: [
@@ -1200,141 +1215,56 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
               key: keyList,
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Container(
-                  //       decoration: BoxDecoration(
-                  //           color: AppColors.containerclr,
-                  //           borderRadius: BorderRadius.circular(10)),
-                  //       child: Row(
-                  //         children: [
-                  //           InkWell(
-                  //             onTap: () {
-                  //               setState(() {
-                  //                 isSelected = true;
-                  //               });
-                  //             },
-                  //             child: Container(
-                  //                 height: 50,
-                  //                 width: 120,
-                  //                 child: Center(
-                  //                   child: Text(
-                  //                     'Client',
-                  //                     style: TextStyle(
-                  //                       color: isSelected
-                  //                           ? Color(0xffffffff)
-                  //                           : Colors.white,
-                  //                       fontSize: 16,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 decoration: BoxDecoration(
-                  //                   color: isSelected
-                  //                       ? AppColors.AppbtnColor
-                  //                       : AppColors.containerclr,
-                  //                   // border: Border.all(color: AppColors.AppbtnColor),
-                  //                   borderRadius: BorderRadius.circular(10),
-                  //                 )),
-                  //           ),
-                  //           InkWell(
-                  //             onTap: () {
-                  //               setState(() {
-                  //                 // Navigator.of(context).push(MaterialPageRoute(
-                  //                 //   builder: (context) => NextPage(),
-                  //                 // ));
-                  //                 isSelected = false;
-                  //               });
-                  //             },
-                  //             child: Container(
-                  //                 height: 50,
-                  //                 width: 130,
-                  //                 child: Center(
-                  //                   child: Text(
-                  //                     'Freelancing',
-                  //                     style: TextStyle(
-                  //                       color: isSelected
-                  //                           ? AppColors.whit
-                  //                           : Colors.white,
-                  //                       fontSize: 16,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 decoration: BoxDecoration(
-                  //                     color: isSelected
-                  //                         ? AppColors.containerclr
-                  //                         : AppColors.AppbtnColor,
-                  //                     borderRadius: BorderRadius.circular(10))),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+
                   Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child: Row(
+                    padding: const EdgeInsets.only(left: 30, right: 30, top: 8),
+                    child:  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              currentindex = 0;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: currentindex == 0
-                                    ? AppColors.AppbtnColor
-                                    : const Color(0xff8B8B8B)),
-                            child: const Center(
-                                child: Text("All Jobs",
-                                    style: TextStyle(
-                                        color: Color(0xffFFFFFF),
-                                        fontSize: 16))),
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Radio(
+                                value: 0,
+                                fillColor: MaterialStateColor.resolveWith((states) => AppColors.AppbtnColor),
+                                groupValue: currentindex,
+                                onChanged: (int? value) {
+                                  setState(() {
+                                    currentindex = value!;
+
+                                    // isUpi = false;
+                                  });
+                                }),
+                            Text(
+                              "All",
+                              style: TextStyle(color: AppColors.AppbtnColor, fontWeight: FontWeight.w600, fontSize: 15),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              currentindex = 1;
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: currentindex == 1
-                                    ? AppColors.AppbtnColor
-                                    : Color(0xff8B8B8B)),
-                            child: const Center(
-                                child: Text(
-                                  "Upcoming Jobs",
-                                  style: TextStyle(
-                                      color: Color(0xffFFFFFF), fontSize: 16),
-                                )),
-                          ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Radio(
+                                value: 1,
+                                fillColor: MaterialStateColor.resolveWith((states) => AppColors.greenbtn, ),
+                                groupValue: currentindex,
+                                onChanged: (int? value) {
+                                  setState(() {
+                                    currentindex = value!;
+                                  });
+                                }),
+                           const Text(
+                              "Upcoming",
+                              style: TextStyle(color: AppColors.greenbtn, fontWeight: FontWeight.w600, fontSize: 15),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
+
                   isSelected ? _client() : _freelancing(),
                 ],
               ),

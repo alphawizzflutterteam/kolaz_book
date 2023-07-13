@@ -24,7 +24,6 @@ import '../freelancing_job/add_freelance_job.dart';
 import '../freelancing_job/edit_freelance_job.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 
 class JobsScreen extends StatefulWidget {
   const JobsScreen({Key? key}) : super(key: key);
@@ -36,7 +35,7 @@ class JobsScreen extends StatefulWidget {
 class _JobsScreenState extends State<JobsScreen> {
   bool isClickable = true;
   bool isSelected = false;
-  int currentindex = 0;
+  int currentIndex = 0;
   GlobalKey keyList = GlobalKey();
 
   takeScreenShot() async {
@@ -142,7 +141,7 @@ class _JobsScreenState extends State<JobsScreen> {
     request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.type] = isSelected  ? 'jobs' : 'freelance';
     request.fields[RequestKeys.filter] =
-        currentindex == 0 ? 'all' : 'upcomings';
+        currentIndex == 0 ? 'all' : 'upcomings';
     var response = await request.send();
     print("this is pdf download requests ${request.fields}");
     print(response.statusCode);
@@ -258,7 +257,7 @@ class _JobsScreenState extends State<JobsScreen> {
       children: [
         getJobs != null
             ? getJobs.isNotEmpty
-                ? currentindex == 0
+                ? currentIndex == 0
                     ? Container(
                         height: MediaQuery.of(context).size.height / 1.8,
                         width: MediaQuery.of(context).size.width,
@@ -270,8 +269,8 @@ class _JobsScreenState extends State<JobsScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             var data = getJobs[0].allJobs![index];
                             return InkWell(
-                              onTap: () {
-                                Navigator.push(
+                              onTap: () async{
+                              var res =  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditClientJob(
@@ -279,6 +278,9 @@ class _JobsScreenState extends State<JobsScreen> {
                                             allJobs: getJobs[0].allJobs![index],
                                             // allJobs: getJobs[0].allJobs![index],
                                             data: jobs[0]['all_jobs'][index])));
+                              if(res != null){
+                                getClientJobs();
+                              }
                               },
                               child: Padding(
                                 padding: EdgeInsets.all(5),
@@ -397,17 +399,18 @@ class _JobsScreenState extends State<JobsScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             var data = getJobs[0].upcomingJobs![index];
                             return InkWell(
-                              onTap: () {
-                                Navigator.push(
+                              onTap: () async{
+                                var res =  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditClientJob(
-                                              type: false,
-                                              upcomingJobs: getJobs[0]
-                                                  .upcomingJobs![index],
-                                              data: jobs[0]['upcoming_jobs']
-                                                  [index],
-                                            )));
+                                            type: true,
+                                            allJobs: getJobs[0].allJobs![index],
+                                            // allJobs: getJobs[0].allJobs![index],
+                                            data: jobs[0]['all_jobs'][index])));
+                                if(res != null){
+                                  getClientJobs();
+                                }
                               },
                               child: Padding(
                                 padding: EdgeInsets.all(5),
@@ -710,7 +713,7 @@ class _JobsScreenState extends State<JobsScreen> {
                   ),
                 ),
               )
-            : currentindex == 0
+            : currentIndex == 0
                 ? Container(
                     height: MediaQuery.of(context).size.height / 1.8,
                     width: MediaQuery.of(context).size.width,
@@ -1205,66 +1208,56 @@ class _JobsScreenState extends State<JobsScreen> {
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
+
                   Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child: Row(
+                    padding: const EdgeInsets.only(left: 30, right: 30, top: 8, bottom: 8),
+                    child:  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              currentindex = 0;
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: currentindex == 0
-                                    ? AppColors.AppbtnColor
-                                    : Color(0xff8B8B8B)),
-                            child: const Center(
-                                child: Text("All Jobs",
-                                    style: TextStyle(
-                                        color: Color(0xffFFFFFF),
-                                        fontSize: 16))),
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Radio(
+                                value: 0,
+                                fillColor: MaterialStateColor.resolveWith((states) => AppColors.AppbtnColor),
+                                groupValue: currentIndex,
+                                onChanged: (int? value) {
+                                  setState(() {
+                                    currentIndex = value!;
+
+                                    // isUpi = false;
+                                  });
+                                }),
+                            Text(
+                              "All",
+                              style: TextStyle(color: AppColors.AppbtnColor, fontWeight: FontWeight.w600, fontSize: 15),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              currentindex = 1;
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: currentindex == 1
-                                    ? AppColors.AppbtnColor
-                                    : Color(0xff8B8B8B)),
-                            child: const Center(
-                                child: Text(
-                              "Upcoming Jobs",
-                              style: TextStyle(
-                                  color: Color(0xffFFFFFF), fontSize: 16),
-                            )),
-                          ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Radio(
+                                value: 1,
+                                fillColor: MaterialStateColor.resolveWith((states) => AppColors.greenbtn, ),
+                                groupValue: currentIndex,
+                                onChanged: (int? value) {
+                                  setState(() {
+                                    currentIndex = value!;
+                                  });
+                                }),
+                            Text(
+                              "Upcoming",
+                              style: TextStyle(color: AppColors.greenbtn, fontWeight: FontWeight.w600, fontSize: 15),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
+
                   isSelected ? _client() : _freelancing(),
                 ],
               ),

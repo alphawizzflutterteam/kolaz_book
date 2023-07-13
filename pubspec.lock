@@ -225,13 +225,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  downloads_path_provider_28:
-    dependency: "direct main"
-    description:
-      path: downloads_path_provider
-      relative: true
-    source: path
-    version: "0.1.0"
   dropdown_button2:
     dependency: "direct main"
     description:

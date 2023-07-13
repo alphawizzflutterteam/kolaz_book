@@ -147,59 +147,50 @@ class _JobsScreenState extends State<AllotmentScreen> {
           child: Column(
             children: [
 
-              SizedBox(height: 25,),
               Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Row(
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 8),
+                child:  Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentindex = 0;
-                        });
-                        getClientJobs();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25, vertical: 10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: currentindex == 0
-                                ? AppColors.AppbtnColor
-                                : const Color(0xff8B8B8B)),
-                        child: const Center(
-                            child: Text("All Jobs",
-                                style: TextStyle(
-                                    color: Color(0xffFFFFFF),
-                                    fontSize: 16))),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Radio(
+                            value: 0,
+                            fillColor: MaterialStateColor.resolveWith((states) => AppColors.AppbtnColor),
+                            groupValue: currentindex,
+                            onChanged: (int? value) {
+                              setState(() {
+                                currentindex = value!;
+
+                                // isUpi = false;
+                              });
+                            }),
+                        Text(
+                          "All",
+                          style: TextStyle(color: AppColors.AppbtnColor, fontWeight: FontWeight.w600, fontSize: 15),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentindex = 1;
-                        });
-                        getClientJobs();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: currentindex == 1
-                                ? AppColors.AppbtnColor
-                                : Color(0xff8B8B8B)),
-                        child: const Center(
-                            child: Text(
-                              "Upcoming Jobs",
-                              style: TextStyle(
-                                  color: Color(0xffFFFFFF), fontSize: 16),
-                            )),
-                      ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Radio(
+                            value: 1,
+                            fillColor: MaterialStateColor.resolveWith((states) => AppColors.greenbtn, ),
+                            groupValue: currentindex,
+                            onChanged: (int? value) {
+                              setState(() {
+                                currentindex = value!;
+                              });
+                            }),
+                        const Text(
+                          "Upcoming",
+                          style: TextStyle(color: AppColors.greenbtn, fontWeight: FontWeight.w600, fontSize: 15),
+                        ),
+                      ],
                     ),
                   ],
                 ),

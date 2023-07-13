@@ -83,8 +83,7 @@ dependencies:
   open_filex:
   screenshot: ^1.3.0
   path_provider: ^2.0.14
-  downloads_path_provider_28:
-    path: ./downloads_path_provider
+
 
 
 #  image_cropper: ^3.0.1

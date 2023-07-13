@@ -647,6 +647,7 @@ class _AddQuotationState extends State<AddQuotation> {
   List pData = [];
   List newList = [];
   String finalList = '';
+  bool loading = false;
 
   addQuotation() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -681,9 +682,17 @@ class _AddQuotationState extends State<AddQuotation> {
       String responseData =
       await response.stream.transform(utf8.decoder).join();
       var userData = json.decode(responseData);
-      Navigator.pop(context, true);
+      if(mounted){
+        setState(() {
+          loading = false;
+        });
+        Navigator.pop(context, true);
+      }
       Fluttertoast.showToast(msg: userData['message']);
     } else {
+      setState(() {
+        loading = false;
+      });
       print(response.reasonPhrase);
     }
   }
@@ -1139,6 +1148,9 @@ class _AddQuotationState extends State<AddQuotation> {
                     ),
                     InkWell(
                       onTap: () {
+                        setState(() {
+                          loading = true;
+                        });
 
                         if (formKey.currentState!.validate()) {
                           finalList = jsonEncode(newList);
@@ -1170,8 +1182,12 @@ class _AddQuotationState extends State<AddQuotation> {
                         ],
                             borderRadius: BorderRadius.circular(40),
                             color: AppColors.pdfbtn),
-                        child: const Center(
-                          child: Text("Add",
+                        child:  Center(
+                          child: loading ?
+                            const   CircularProgressIndicator(
+                                color: AppColors.whit,
+                              )
+                         : const  Text("Add",
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,

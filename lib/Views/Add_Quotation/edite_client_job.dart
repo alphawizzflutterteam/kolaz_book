@@ -453,8 +453,11 @@ class _EditClientJobState extends State<EditClientJob> {
       if (userData['error'] == false) {
 
         Fluttertoast.showToast(msg: userData['message']);
+        if(mounted){
+          Navigator.pop(context);
+          Navigator.pop(context, false);
+        }
 
-        // Navigator.pop(context, false);
 
       } else {
         Fluttertoast.showToast(msg: userData['message']);

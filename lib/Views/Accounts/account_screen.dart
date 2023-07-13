@@ -92,8 +92,8 @@ class _AccountsScreenState extends State<AccountsScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8, top: 10),
       child: InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+        var res  = await  Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => AccountDetailsScreen(
@@ -102,6 +102,9 @@ class _AccountsScreenState extends State<AccountsScreen> {
                         type: isSelected ? 'client' : 'photographer',
                         totalOutstanding: data?.totalAmount.toString(),
                       )));
+        if(res != null){
+          getAccountsData();
+        }
         },
         child: Container(
           height: 45,

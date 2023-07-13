@@ -816,7 +816,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
       appBar: AppBar(
         leading: InkWell(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pop(context, true);
             },
             child: Icon(Icons.arrow_back_ios, color: AppColors.AppbtnColor)),
         backgroundColor: Color(0xff303030),

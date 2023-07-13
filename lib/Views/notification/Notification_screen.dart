@@ -105,7 +105,7 @@ class _Notification_screenState extends State<Notification_screen> {
           backgroundColor: Color(0xff303030),
           actions: [
             Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const Padding(
@@ -113,25 +113,25 @@ class _Notification_screenState extends State<Notification_screen> {
                   child: Text("Notification", style: TextStyle(fontSize: 18, color:AppColors.AppbtnColor, fontWeight: FontWeight.bold)
                   ),
                 ),
-                Expanded(
-                  child:Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: FlutterSwitch(
-                      height: 20.0,
-                      width: 40.0,
-                      padding: 4.0,
-                      toggleSize: 15.0,
-                      borderRadius: 10.0,
-                      activeColor: AppColors.AppbtnColor,
-                      value: _isToggled,
-                      onToggle: (value) {
-                        setState(() {
-                          _isToggled = value;
-                        });
-                      },
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child:Padding(
+                //     padding: const EdgeInsets.only(right: 12.0),
+                //     child: FlutterSwitch(
+                //       height: 20.0,
+                //       width: 40.0,
+                //       padding: 4.0,
+                //       toggleSize: 15.0,
+                //       borderRadius: 10.0,
+                //       activeColor: AppColors.AppbtnColor,
+                //       value: _isToggled,
+                //       onToggle: (value) {
+                //         setState(() {
+                //           _isToggled = value;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ],
