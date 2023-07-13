@@ -39,7 +39,6 @@ class _OtpScreenState extends State<OtpScreen> {
   String time = '';
 
   sendOtpSignUp(BuildContext context) async {
-
     var uri = Uri.parse(sendOtpApi.toString());
     // '${Apipath.getCitiesUrl}');
     var request = http.MultipartRequest("POST", uri);
