@@ -78,6 +78,7 @@ class _JobsScreenState extends State<AllotmentScreen> {
     request.headers.addAll(headers);
     request.fields[RequestKeys.userId] = id!;
     request.fields[RequestKeys.type] = 'jobs' ;
+    request.fields[RequestKeys.photographerId] =  widget.pid.toString();
     request.fields[RequestKeys.filter] =
     currentindex == 0 ? 'all' : 'upcomings';
     var response = await request.send();
@@ -163,9 +164,9 @@ class _JobsScreenState extends State<AllotmentScreen> {
                             onChanged: (int? value) {
                               setState(() {
                                 currentindex = value!;
-
                                 // isUpi = false;
                               });
+                              getClientJobs();
                             }),
                         Text(
                           "All",
@@ -185,6 +186,7 @@ class _JobsScreenState extends State<AllotmentScreen> {
                               setState(() {
                                 currentindex = value!;
                               });
+                              getClientJobs();
                             }),
                         const Text(
                           "Upcoming",

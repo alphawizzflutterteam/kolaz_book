@@ -330,20 +330,21 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                             validator: (value) => value!.isEmpty
                                 ? 'Amount cannot be blank'
                                 : null,
-                            // onChanged: (String? val){
-                            //  //  if(widget.type == true) {
-                            //  // setState((){
-                            //  //   totalAmount = double.parse(
-                            //  //       widget.allJobs!.totalAmount.toString()) + double.parse(val.toString());
-                            //  // });
-                            //  //  }else {
-                            //  //    setState((){
-                            //  //      totalAmount = double.parse(
-                            //  //          widget.upcomingJobs!.totalAmount.toString()) + double.parse(val.toString());
-                            //  //    });
-                            //
-                            //
-                            // }  },
+                            onChanged: (String? val){
+                              if(widget.type == true) {
+                             setState((){
+                               // totalAmount = double.parse(
+                               //     widget.allJobs!.totalAmount.toString()) + double.parse(val.toString());
+                             });
+                              }else {
+                                setState(() {
+                                  // totalAmount = double.parse(
+                                  //     widget.upcomingJobs!.totalAmount
+                                  //         .toString()) +
+                                  //     double.parse(val.toString());
+                                });
+                              }
+                            },
                             decoration: const InputDecoration(
                               // contentPadding: EdgeInsets.only(bottom: 5),
                               hintText: 'Enter Amount',
@@ -392,18 +393,18 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                           children: [
                             InkWell(
                               onTap: () {
-            if(widget.type == true) {
-            setState((){
-            totalAmount = double.parse(
-            widget.allJobs!.totalAmount.toString()) + double.parse(amountController.text.toString());
-            });
-            }else {
-              setState(() {
-                totalAmount = double.parse(
-                    widget.upcomingJobs!.totalAmount.toString()) +
-                    double.parse(amountController.text.toString());
-              });
-            }
+            // if(widget.type == true) {
+            // setState((){
+            // totalAmount = double.parse(
+            // widget.allJobs!.totalAmount.toString()) + double.parse(amountController.text.toString());
+            // });
+            // }else {
+            //   setState(() {
+            //     totalAmount = double.parse(
+            //         widget.upcomingJobs!.totalAmount.toString()) +
+            //         double.parse(amountController.text.toString());
+            //   });
+            // }
                                 // setState(() {
                                 //   // widget.allJobs!.jsonData!.se = amountController.text.toString();
                                 //   // descriptionController  = TextEditingController(
@@ -414,6 +415,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                 //   //     descriptionController.text.toString();
                                 // });
 
+                                totalAmount += double.parse(amountController.text.toString());
                                 Navigator.pop(context, {
                                   'date' : selectedDates,
                                   'amount': amountController.text.toString(),
@@ -1589,6 +1591,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                         data.description.toString();
                                     amountController.text =
                                         data.amount.toString();
+                                    totalAmount -= double.parse(data.amount.toString());
                                   });
 
                                var isResult = await editUpdateInformationDialog(
@@ -1600,7 +1603,7 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
                                   });
                                 }else{
                                   setState((){
-                                    data.setAmount = amountController.text.toString();
+                                     data.setAmount = amountController.text.toString();
                                     data.setDescription = descriptionController.text.toString();
                                     data.setDate = DateFormat('dd-MM-yyyy').format(selectedDates!);
                                                                        // widget.allJobs?.jsonData!.setAmount(isResult['amount']) ;

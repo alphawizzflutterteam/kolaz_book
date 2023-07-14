@@ -593,7 +593,7 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                       Align(
                         alignment: Alignment.center,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
                               onTap: () {
@@ -613,26 +613,26 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                                               fontSize: 18,
                                               color: AppColors.textclr)))),
                             ),
-                            InkWell(
-                              onTap: () async{
-                                // setState(() {
-                                // });
-                                // await jsData.removeAt(index);
-                                Navigator.pop(context,true);
-                                setState((){});
-                              },
-                              child: Container(
-                                  height: 40,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: AppColors.contaccontainerred),
-                                  child: const Center(
-                                      child: Text("Delete",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: AppColors.textclr)))),
-                            ),
+                            // InkWell(
+                            //   onTap: () async{
+                            //     // setState(() {
+                            //     // });
+                            //     // await jsData.removeAt(index);
+                            //     Navigator.pop(context,true);
+                            //     setState((){});
+                            //   },
+                            //   child: Container(
+                            //       height: 40,
+                            //       width: 100,
+                            //       decoration: BoxDecoration(
+                            //           borderRadius: BorderRadius.circular(50),
+                            //           color: AppColors.contaccontainerred),
+                            //       child: const Center(
+                            //           child: Text("Delete",
+                            //               style: TextStyle(
+                            //                   fontSize: 18,
+                            //                   color: AppColors.textclr)))),
+                            // ),
 
                           ],
                         ),
@@ -1555,37 +1555,37 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                             scale: 1.6,
                           ),
                         ),
-                        InkWell(
-                          onTap: () async {
-                            await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return deleteConfirmation(context);
-                                });
-                          },
-                          child: Container(
-                            height: 35,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                boxShadow: const [
-                                  BoxShadow(
-                                    offset: Offset(1, 2),
-                                    blurRadius: 1,
-                                    color: AppColors.greyColor,
-                                  )
-                                ],
-                                color: AppColors.contaccontainerred,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: const Center(
-                                child: Text(
-                                  "Delete",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.textclr,
-                                      fontSize: 18),
-                                )),
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: () async {
+                        //     await showDialog(
+                        //         context: context,
+                        //         builder: (context) {
+                        //           return deleteConfirmation(context);
+                        //         });
+                        //   },
+                        //   child: Container(
+                        //     height: 35,
+                        //     width: 100,
+                        //     decoration: BoxDecoration(
+                        //         boxShadow: const [
+                        //           BoxShadow(
+                        //             offset: Offset(1, 2),
+                        //             blurRadius: 1,
+                        //             color: AppColors.greyColor,
+                        //           )
+                        //         ],
+                        //         color: AppColors.contaccontainerred,
+                        //         borderRadius: BorderRadius.circular(30)),
+                        //     child: const Center(
+                        //         child: Text(
+                        //           "Delete",
+                        //           style: TextStyle(
+                        //               fontWeight: FontWeight.bold,
+                        //               color: AppColors.textclr,
+                        //               fontSize: 18),
+                        //         )),
+                        //   ),
+                        // ),
                       ],
                     ),
 

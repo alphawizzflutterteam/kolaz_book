@@ -458,7 +458,6 @@ class _EditClientJobState extends State<EditClientJob> {
           Navigator.pop(context, false);
         }
 
-
       } else {
         Fluttertoast.showToast(msg: userData['message']);
         // Fluttertoast.showToast(msg: userData['msg']);
@@ -643,13 +642,11 @@ class _EditClientJobState extends State<EditClientJob> {
                           ),
                         ),
                       ),
-
-
                       const SizedBox(height: 15,),
                       Align(
                         alignment: Alignment.center,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
                               onTap: () {
@@ -669,26 +666,26 @@ class _EditClientJobState extends State<EditClientJob> {
                                               fontSize: 18,
                                               color: AppColors.textclr)))),
                             ),
-                            InkWell(
-                              onTap: () async{
-                                // setState(() {
-                                // });
-                                // await jsData.removeAt(index);
-                                Navigator.pop(context,true);
-                                setState((){});
-                              },
-                              child: Container(
-                                  height: 40,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: AppColors.contaccontainerred),
-                                  child: const Center(
-                                      child: Text("Delete",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: AppColors.textclr)))),
-                            ),
+                            // InkWell(
+                            //   onTap: () async{
+                            //     // setState(() {
+                            //     // });
+                            //     // await jsData.removeAt(index);
+                            //     Navigator.pop(context,true);
+                            //     setState((){});
+                            //   },
+                            //   child: Container(
+                            //       height: 40,
+                            //       width: 100,
+                            //       decoration: BoxDecoration(
+                            //           borderRadius: BorderRadius.circular(50),
+                            //           color: AppColors.contaccontainerred),
+                            //       child: const Center(
+                            //           child: Text("Delete",
+                            //               style: TextStyle(
+                            //                   fontSize: 18,
+                            //                   color: AppColors.textclr)))),
+                            // ),
 
                           ],
                         ),
