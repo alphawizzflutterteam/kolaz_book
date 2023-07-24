@@ -826,7 +826,7 @@ class _BroadcastScreenState extends State<BroadcastScreen> {
                               height: 10,
                             ),
                             const Text(
-                              "*All KalazBook User See Your Broadcast Message You Can send 2 message in 24 hrs",
+                              "*All KolazBook User See Your Broadcast Message You Can send 2 message in 24 hrs",
                               style: TextStyle(
                                   fontSize: 9, color: AppColors.whit),
                             )

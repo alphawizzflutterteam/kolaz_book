@@ -1555,37 +1555,37 @@ class _EditQuotationScreenState extends State<EditQuotationScreen> {
                             scale: 1.6,
                           ),
                         ),
-                        // InkWell(
-                        //   onTap: () async {
-                        //     await showDialog(
-                        //         context: context,
-                        //         builder: (context) {
-                        //           return deleteConfirmation(context);
-                        //         });
-                        //   },
-                        //   child: Container(
-                        //     height: 35,
-                        //     width: 100,
-                        //     decoration: BoxDecoration(
-                        //         boxShadow: const [
-                        //           BoxShadow(
-                        //             offset: Offset(1, 2),
-                        //             blurRadius: 1,
-                        //             color: AppColors.greyColor,
-                        //           )
-                        //         ],
-                        //         color: AppColors.contaccontainerred,
-                        //         borderRadius: BorderRadius.circular(30)),
-                        //     child: const Center(
-                        //         child: Text(
-                        //           "Delete",
-                        //           style: TextStyle(
-                        //               fontWeight: FontWeight.bold,
-                        //               color: AppColors.textclr,
-                        //               fontSize: 18),
-                        //         )),
-                        //   ),
-                        // ),
+                        InkWell(
+                          onTap: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return deleteConfirmation(context);
+                                });
+                          },
+                          child: Container(
+                            height: 35,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                boxShadow: const [
+                                  BoxShadow(
+                                    offset: Offset(1, 2),
+                                    blurRadius: 1,
+                                    color: AppColors.greyColor,
+                                  )
+                                ],
+                                color: AppColors.contaccontainerred,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: const Center(
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textclr,
+                                      fontSize: 18),
+                                )),
+                          ),
+                        ),
                       ],
                     ),
 

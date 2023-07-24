@@ -463,7 +463,7 @@ class EditProfileController extends AppBaseController {
               ),
               InkWell(
                 onTap: () async {
-                 getImage(ImgSource.Camera, context, i);
+                 getImageGallery(ImgSource.Camera, context, i);
                 },
                 child: Container(
                   child: ListTile(
@@ -504,20 +504,26 @@ class EditProfileController extends AppBaseController {
 
   }
 
-  Future getImage(ImgSource source, BuildContext context, int i) async {
-
-
-    var image = await ImagePickerGC.pickImage(
-      context: context,
-      source: source,
-      cameraIcon: const Icon(
-        Icons.add,
-        color: Colors.red,
-      ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
-    );
-    getCropImage(context, i, image);
-   // back();
-  }
+  // Future getImage(ImgSource source, BuildContext context, int i) async {
+  //   var image = await ImagePickerGC.pickImage(
+  //     context: context,
+  //     source: source,
+  //     cameraIcon: const Icon(
+  //       Icons.add,
+  //       color: Colors.red,
+  //     ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
+  //   );
+  //   // if(i ==2){
+  //   //     imageFile2 = File(image.path);
+  //   //     updateProfile();
+  //   //     update();
+  //   //     back();
+  //   // }
+  //   // else {
+  //     getCropImage(context, i, image);
+  //   // }
+  //  // back();
+  // }
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
       sourcePath: image.path,
@@ -533,22 +539,41 @@ class EditProfileController extends AppBaseController {
     if (i == 1) {
       imageFile = File(croppedFile!.path);
     } else if (i == 2) {
-      imageFile2 = File(croppedFile!.path);
+      // imageFile2 = File(croppedFile!.path);
     }
     updateProfile();
     update();
     back();
   }
   Future getImageGallery(ImgSource source, BuildContext context, int i) async {
-    var image = await ImagePickerGC.pickImage(
-      context: context,
-      source: source,
-      cameraIcon: const Icon(
-        Icons.add,
-        color: Colors.red,
-      ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
-    );
-    getCropImage(context, i, image);
+    if(i == 1) {
+      var image = await ImagePickerGC.pickImage(
+        context: context,
+        source: source,
+        cameraIcon: const Icon(
+          Icons.add,
+          color: Colors.red,
+        ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
+      );
+      getCropImage(context, i, image);
+    }else{
+      var image = await ImagePickerGC.pickImage(
+        maxHeight: 500,
+        maxWidth: 1000,
+        context: context,
+        source: source,
+        cameraIcon: const Icon(
+          Icons.add,
+          color: Colors.red,
+        ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
+      );
+      imageFile2 = File(image.path);
+      update();
+      updateProfile();
+      back();
+
+      // getCropImage(context, i, image);
+    }
    // back();
   }
 

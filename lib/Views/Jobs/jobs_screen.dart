@@ -370,9 +370,9 @@ class _JobsScreenState extends State<JobsScreen> {
                                                         FontWeight.bold),
                                               ),
                                               Text(
+                                                data.photographersDetails!.isNotEmpty ?
                                                 data.photographersDetails![0]
-                                                    .date
-                                                    .toString(),
+                                                    .date.toString()  : "",
                                                 style: TextStyle(
                                                     color:
                                                         AppColors.AppbtnColor),
@@ -499,10 +499,9 @@ class _JobsScreenState extends State<JobsScreen> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Text(
-                                                data.photographersDetails![0]
-                                                    .date
-                                                    .toString(),
+                                              Text(data.photographersDetails!.isNotEmpty ?
+                                              data.photographersDetails![0]
+                                                  .date.toString()  : "",
                                                 style: TextStyle(
                                                     color:
                                                         AppColors.AppbtnColor),

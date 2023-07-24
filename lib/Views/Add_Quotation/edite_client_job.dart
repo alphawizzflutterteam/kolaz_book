@@ -363,7 +363,6 @@ class _EditClientJobState extends State<EditClientJob> {
     print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
-
     setState(() {
       citiesList = GetCitiesModel.fromJson(userData).data!;
     });
@@ -418,8 +417,6 @@ class _EditClientJobState extends State<EditClientJob> {
                   ))),
           onPressed: () {
             deleteQuotation(context);
-            Navigator.pop(context);
-            Navigator.pop(context, true);
           },
         ),
       ],
@@ -1072,9 +1069,11 @@ class _EditClientJobState extends State<EditClientJob> {
     for(var i = 0; i< newList.length; i ++){
       up.add(newList[i]['date']);
     }
-    setState(() {
-      pType = newList[currentIndex]['data'];
-    });
+    if(newList.isNotEmpty) {
+      setState(() {
+        pType = newList[currentIndex]['data'];
+      });
+    }
     if(widget.type == true) {
       setState(() {
         clientNameController.text = widget.allJobs!.clientName.toString();

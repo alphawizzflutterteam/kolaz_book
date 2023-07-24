@@ -60,7 +60,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }else{
       Fluttertoast.showToast(msg: message.toString());
     }
-
     // setState(() {
     //   eventList = EventTypeModel.fromJson(userData).categories!;
     // });
@@ -73,10 +72,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     Map<String, String> headers = {
       "Accept": "application/json",
     };
-
     request.headers.addAll(headers);
     request.fields['mobile'] = mobileController.text.toString();
-    request.fields['otp'] = otp.toString();
+    request.fields['otp'] = pinCode.toString();
     request.fields['password'] = passwordController.text.toString();
     request.fields['confirm_password'] = confirmPassController.text.toString();
 
@@ -96,7 +94,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
-
+ String? pinCode;
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -122,8 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         style: TextStyle(
                             fontSize: 16,
                             color: AppColors.AppbtnColor,
-                            fontWeight: FontWeight.bold)),
-                  ),
+                            fontWeight: FontWeight.bold))),
                 ),
               ],
             ),
@@ -137,10 +134,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height: 40,),
-
                       show ? SizedBox.shrink()
-                      :
-                          Column(
+                      : Column(
                             children: [
                               Container(
                                   height: 50,
@@ -169,7 +164,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                         hintText: 'Enter Mobile Number',hintStyle: TextStyle(color: AppColors.whit)
                                     ),
                                   )),
-
                               Padding(
                                 padding: const EdgeInsets.only(left:70.0,right: 70, top: 40),
                                 child: GestureDetector(
@@ -190,7 +184,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       child: const Center(
                                         child: Text("Submit",
                                             style: TextStyle(color: AppColors.whit)),
-                                      )),
+                                      ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -198,7 +193,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       show ?
                       Column(
                         children: [
-                          Text(otp.toString(), style: TextStyle(color: AppColors.whit, fontSize: 16, fontWeight: FontWeight.w600),),
+                          // Text(otp.toString(), style: TextStyle(color: AppColors.whit, fontSize: 16, fontWeight: FontWeight.w600),),
                           Padding(
                             padding: const EdgeInsets.only(left:40.0,right:40, top: 20),
                             child: OTPTextField(
@@ -214,6 +209,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               onCompleted: (pin) {
                                 print("Completed: " + pin);
                                 pin = pin ;
+                                pinCode = pin  ;
+                                print("Pin number is here ${pinCode}");
                               },
                             ),
                           ),
@@ -258,7 +255,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                         Icons.visibility_off,
                                         color: AppColors.whit,
                                       ),
-                                    ))),
+                                    ),
+                                ),
+                            ),
                           ),
                           const SizedBox(height: 10,),
                           Container(
@@ -283,7 +282,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     hintText: "Confirm Password",
                                     hintStyle:
                                     const   TextStyle(color: AppColors.whit),
-
                                     // prefixIcon: const Icon(
                                     //   Icons.lock_open_outlined,
                                     //   color: Colors.grey,
@@ -303,7 +301,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                         Icons.visibility_off,
                                         color: AppColors.whit,
                                       ),
-                                    ))),
+                                    ),
+                                ),
+                            ),
                           ),
                           const SizedBox(height: 20,),
                           Padding(
@@ -330,8 +330,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                           ),
                         ],
-                      )
-                          : SizedBox.shrink()
+                      ): SizedBox.shrink()
                     ],
                   ),
                 ),

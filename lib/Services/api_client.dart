@@ -14,7 +14,7 @@ class ApiClient extends GetConnect {
 
   static const imageUrl2=
       'https://developmentalphawizz.com/';
-  static const baseAppUrl = 'https://developmentalphawizz.com/kolaz_book/api/';
+  static const baseAppUrl = 'https://kolazbook.com/api/';
 
   @override
   void onInit() {

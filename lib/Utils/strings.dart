@@ -1,5 +1,5 @@
 
-const String baseUrl = 'https://developmentalphawizz.com/kolaz_book/api/';
+const String baseUrl = 'https://kolazbook.com/api/';
 
 final Uri addQuotationApi = Uri.parse('${baseUrl}add_quatation');
 final Uri getQuotationApi = Uri.parse('${baseUrl}get_quatation');

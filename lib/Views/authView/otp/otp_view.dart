@@ -156,7 +156,7 @@ class _OtpScreenState extends State<OtpScreen> {
               const SizedBox(height: 5,),
               Text('+91 ${widget.mobile}',style: const TextStyle(fontSize: 21,fontWeight: FontWeight.w500,color: AppColors.whit),),
               const SizedBox(height: 5,),
-               Text('OTP - ${newOtp.toString()}',style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w500,color: AppColors.whit),),
+               // Text('OTP - ${newOtp.toString()}',style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w500,color: AppColors.whit),),
               const SizedBox(height: 40,),
               Padding(
                 padding: const EdgeInsets.only(left:40.0,right:40),
@@ -179,7 +179,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               const SizedBox(height: 40,),
-              const Text('Have not Received the varification code?',style: TextStyle(fontSize:18,fontWeight: FontWeight.w400,color: AppColors.whit),),
+              const Text('Have not received the verification code?',style: TextStyle(fontSize:18,fontWeight: FontWeight.w400,color: AppColors.whit),),
               showTime ?  TextButton(
                   onPressed:(){
                    sendOtpSignUp(context);

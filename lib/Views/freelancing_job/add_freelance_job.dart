@@ -1496,15 +1496,14 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                 "amount": amountController.text.toString()
                               });
                               setState(() {
-                                totalAmount += double.parse(
-                                    amountController.text.toString());
+                                totalAmount +=  double.parse(amountController.text.toString());
+                                
+                                print("tital amount in add button ${totalAmount}");
                               });
-                              print("this is my new json data $jsonData");
+                              print("this is my new json data in add button $jsData");
                               Navigator.pop(context);
                             }else{
                               Fluttertoast.showToast(msg: "Please select required fields!!");
-
-
                             }
                             // addFreelancer();
                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
@@ -1528,6 +1527,8 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
           });
         });
   }
+  
+  String ? oldOne ;
 
    editUpdateInformationDialog(BuildContext context, int index) async {
     return await showDialog(
@@ -1634,16 +1635,18 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                         children: [
                           InkWell(
                             onTap: () {
+                              oldOne = jsData[index]['amount'];
                                jsData[index]['date'] = DateFormat('dd-MM-yyyy').format(selectedDates!).toString();
                                jsData[index]['description'] = descriptionController.text.toString();
                                jsData[index]['amount'] = amountController.text.toString();
-
+                               // 300 + 100
                                setState((){
-                                 totalAmount += double.parse(
-                                     jsData[index]['amount'].toString());
-                               });
+                                 print(" ${jsData[index]['amount'].toString()}___edit________");
 
-                              print("this is my new json data $jsonData");
+                                 totalAmount += double.parse(jsData[index]['amount'].toString()) - double.parse(oldOne ?? '0.0');
+                               });
+                              // print("total amount in edit button ${totalAmount}");
+                              // print("this is my new json data in edit button$jsData");
                               Navigator.pop(context);
                               // addFreelancer();
                               // Navigator.push(context, MaterialPageRoute(builder: (context)=>MyApp()));
@@ -1666,6 +1669,8 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                               // setState(() {
                               // });
                               // await jsData.removeAt(index);
+                              oldOne = jsData[index]['amount'] ;
+                              totalAmount = totalAmount - double.parse(oldOne ?? '0.0');
                               Navigator.pop(context,true);
                               setState((){});
                             },
@@ -2388,9 +2393,7 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
                                   selectedDates = null;
                                   amountController.clear();
                                   descriptionController.clear();
-
                                   await showAddInformationDialog(context);
-
                                   // if (controller.formKey.currentState!
                                   //     .validate()) {
                                   //   controller.increment();

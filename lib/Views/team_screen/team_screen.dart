@@ -31,7 +31,7 @@ class _TeamScreenState extends State<TeamScreen> {
   }
 
   List<Teams> getUpcomingJobs = [];
-  TextEditingController mapLinkController = TextEditingController();
+  List<TextEditingController> mapLinkController = [];
   TextEditingController descriptionController = TextEditingController();
 
   getUpcomingTeamJobs() async {
@@ -66,8 +66,10 @@ class _TeamScreenState extends State<TeamScreen> {
   }
 
 
-teamCard(result){
+teamCard(result, int index){
   GlobalKey keyList = GlobalKey();
+  TextEditingController mapLinkController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   return Container(
     decoration: BoxDecoration(
         color: AppColors.teamcard,
@@ -384,7 +386,7 @@ teamCard(result){
                                     left: 5)),
                           ),
                         ),
-                        SizedBox(
+                       const  SizedBox(
                           height: 10,
                         ),
                         Container(
@@ -392,7 +394,7 @@ teamCard(result){
                           height: 40,
                           width: 170,
                           child: TextFormField(
-                            controller:  descriptionController,
+                            controller: descriptionController,
                             style: const TextStyle(
                               // color: AppColors.field,
                                 fontSize:
@@ -419,7 +421,7 @@ teamCard(result){
               ),
               InkWell(
                 onTap: (){
-                  takeScreenShot(keyList);
+                  takeScreenShot(keyList, mapLinkController.text.toString(), descriptionController.text.toString());
                 },
                 child: Container(
                   height: 35,
@@ -452,7 +454,7 @@ teamCard(result){
   );
 }
 
-  takeScreenShot(GlobalKey keyList) async {
+  takeScreenShot(GlobalKey keyList, String mapLink, description) async {
 
     // iconVisible = true ;
     // var status =  await Permission.photos.request();
@@ -480,7 +482,7 @@ teamCard(result){
             .toString();
         final imagePath = await File('$directory/$fileName.png').create();
         await imagePath.writeAsBytes(pngBytes);
-        Share.shareFiles([imagePath.path],text: 'Google Map Link : ${mapLinkController.text.toString()} \n Notes : ${descriptionController.text.toString()}');
+        Share.shareFiles([imagePath.path],text: 'Google Map Link : ${mapLink} \n Notes : ${description}');
         // final resultsave = await ImageGallerySaver.saveImage(Uint8List.fromList(pngBytes),quality: 90,name: 'screenshot-${DateTime.now()}.png');
         //print(resultsave);
       }
@@ -574,7 +576,7 @@ teamCard(result){
                         itemCount: getUpcomingJobs.length,
                         itemBuilder: (context, index) {
                           var result = getUpcomingJobs[index];
-                          return teamCard(result);
+                          return teamCard(result, index);
                         },
                       )
                     : Center(

@@ -180,7 +180,6 @@ class _TestEditQuotationState extends State<TestEditQuotation> {
     print(response.statusCode);
     String responseData = await response.stream.transform(utf8.decoder).join();
     var userData = json.decode(responseData);
-
     setState(() {
       citiesList = GetCitiesModel.fromJson(userData).data!;
     });

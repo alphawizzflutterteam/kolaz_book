@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:kolazz_book/Controller/edit_profile_controller.dart';
@@ -58,13 +59,50 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
     // getPortfolios();
   }
 
+  Future<void> _launchInsta(String userName) async{
+    var nativeUrl = "instagram://user?username=$userName";
+    var webUrl = "https://www.instagram.com/$userName/";
+    if (await canLaunch(nativeUrl)) {
+    await launch(nativeUrl);
+    } else if (await canLaunch(webUrl)) {
+    await launch(webUrl);
+    } else {
+    print("can't open Instagram");
+    }
+  }
+
+  // Future<void> _launchFb(String userName) async{
+  //   var nativeUrl = "instagram://user?username=$userName";
+  //   var webUrl = "https://www.instagram.com/$userName/";
+  //   if (await canLaunch(nativeUrl)) {
+  //     await launch(nativeUrl);
+  //   } else if (await canLaunch(webUrl)) {
+  //     await launch(webUrl);
+  //   } else {
+  //     print("can't open Instagram");
+  //   }
+  // }
+  // Future<void> _launchYoutube(String userName) async{
+  //   var nativeUrl = "youtube://user?username=$userName";
+  //   var webUrl = "https://www.instagram.com/$userName/";
+  //   if (await canLaunch(nativeUrl)) {
+  //     await launch(nativeUrl);
+  //   } else if (await canLaunch(webUrl)) {
+  //     await launch(webUrl);
+  //   } else {
+  //     print("can't open Instagram");
+  //   }
+  // }
 
 
   Future<void> _launchUrl(String uri) async {
-    if (!await launchUrl(Uri.parse(uri))) {
+    if (!await launchUrl(Uri.parse(uri),
+        mode: LaunchMode.externalApplication)) {
+      Fluttertoast.showToast(msg: "Your link is not valid or not available");
       throw Exception('Could not launch $uri');
     }
   }
+
   _launchCaller(mobileNumber) async {
     var url = "tel:${mobileNumber.toString()}";
     if (await canLaunch(url)) {
@@ -433,6 +471,7 @@ class _MyPortfolioScreenState extends State<MyPortfolioScreen> {
                 children: [
                   InkWell(
                     onTap: (){
+                      // _launchInsta(widget.data.instagram.toString());
                       _launchUrl(widget.data.instagram.toString());
                     },
                     child: Container(
