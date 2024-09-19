@@ -845,43 +845,43 @@ class _EditFreelanceJobState extends State<EditFreelanceJob> {
             bottomSheet: Padding(
               padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 50),
               child: Container(
-                height: 90,
+                height: 50,
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children:  [
-                        const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Total",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.whit),
-                            )),
-                        Container(
-                          height: 30,
-                          width: 230,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color(0xffbfbfbf),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  '₹ ${totalAmount.toStringAsFixed(0)}',
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontStyle: FontStyle.italic),
-                                )
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10,),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children:  [
+                    //     const Align(
+                    //         alignment: Alignment.centerLeft,
+                    //         child: Text(
+                    //           "Total",
+                    //           style: TextStyle(
+                    //               fontWeight: FontWeight.bold,
+                    //               color: AppColors.whit),
+                    //         )),
+                    //     Container(
+                    //       height: 30,
+                    //       width: 230,
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(8),
+                    //         color: Color(0xffbfbfbf),
+                    //       ),
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.only(right: 8.0),
+                    //         child: Align(
+                    //             alignment: Alignment.centerRight,
+                    //             child: Text(
+                    //               '₹ ${totalAmount.toStringAsFixed(0)}',
+                    //               style: const TextStyle(
+                    //                   color: Colors.black,
+                    //                   fontStyle: FontStyle.italic),
+                    //             )
+                    //         ),
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
+                    // const SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment:
                       MainAxisAlignment.spaceBetween,

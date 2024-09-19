@@ -1017,7 +1017,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           elevation: 5,
-                          child: controller.companyLogo == null || controller.companyLogo == '' ?
+                          child: controller.companyLogo == null || controller.companyLogo == 'https://kolazbook.com/uploads/profile_pics/user.png' ?
                           ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: controller.imageFile2 != null

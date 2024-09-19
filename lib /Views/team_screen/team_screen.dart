@@ -509,7 +509,7 @@ teamCard(result, int index){
     //   ScaffoldMessenger.of(context).showSnackBar(
     //       const SnackBar(content: Text('This Permission is recommended')));
     // }
-    else if (await status.isDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
+    else if ( status.isDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
       openAppSettings().then((value) {
 
       });

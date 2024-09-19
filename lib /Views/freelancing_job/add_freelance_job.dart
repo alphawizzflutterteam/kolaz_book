@@ -1749,45 +1749,45 @@ class AddFreelanceJobState extends State<AddFreelanceJob> {
           bottomSheet:  Padding(
             padding: const EdgeInsets.only(bottom: 35.0),
             child: Container(
-              height: 100,
+              height: 40,
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Total",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.whit),
-                            )),
-                        Container(
-                          padding: EdgeInsets.only(right: 8),
-                          height: 30,
-                          width: 230,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color(0xffbfbfbf),
-                          ),
-                          child: Align(
-                              alignment: Alignment.centerRight,
-                              child:  Text(
-                                "₹ ${totalAmount.toStringAsFixed(2)}",
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    fontStyle: FontStyle.italic),
-                              )),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12,),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       const Align(
+                  //           alignment: Alignment.centerLeft,
+                  //           child: Text(
+                  //             "Total",
+                  //             style: TextStyle(
+                  //                 fontWeight: FontWeight.bold,
+                  //                 color: AppColors.whit),
+                  //           )),
+                  //       Container(
+                  //         padding: EdgeInsets.only(right: 8),
+                  //         height: 30,
+                  //         width: 230,
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(8),
+                  //           color: Color(0xffbfbfbf),
+                  //         ),
+                  //         child: Align(
+                  //             alignment: Alignment.centerRight,
+                  //             child:  Text(
+                  //               "₹ ${totalAmount.toStringAsFixed(2)}",
+                  //               style: const TextStyle(
+                  //                   color: Colors.black,
+                  //                   fontWeight: FontWeight.w600,
+                  //                   fontSize: 14,
+                  //                   fontStyle: FontStyle.italic),
+                  //             )),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 12,),
                   Align(
                     alignment: Alignment.center,
                     child: InkWell(

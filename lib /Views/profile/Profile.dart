@@ -12,7 +12,6 @@ import '../../Widgets/customerDrawer/customdrawer.dart';
 import '../edit_profile/edit_profile.dart';
 
 
-
 class MyProfilePage extends StatefulWidget {
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();

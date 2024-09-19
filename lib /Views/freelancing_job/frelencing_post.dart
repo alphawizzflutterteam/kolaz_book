@@ -259,136 +259,140 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
         getJobs != null
             ? getJobs.isNotEmpty
             ? currentindex == 0
-            ? Container(
-          height: MediaQuery.of(context).size.height / 1.8,
-          width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: getJobs[0].allJobs!.length,
-            physics: ScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              var data = getJobs[0].allJobs![index];
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EditClientJob(
-                              type: true,
-                              allJobs: getJobs[0].allJobs![index],
-                              // allJobs: getJobs[0].allJobs![index],
-                              data: jobs[0]['all_jobs'][index])));
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Container(
-                    width: 340,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(10)),
-                      color: Colors.black12,
-                      elevation: 1,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 15.0, left: 10, right: 10),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  data.clientName.toString(),
-                                  style: const TextStyle(
-                                      color: AppColors.textclr,
-                                      fontSize: 16,
-                                      fontWeight:
-                                      FontWeight.bold),
-                                ),
-                                Container(
-                                    padding: const EdgeInsets
-                                        .symmetric(
-                                        horizontal: 14,
-                                        vertical: 10),
-                                    decoration: BoxDecoration(
+            ?
+        // Container(
+        //   height: MediaQuery.of(context).size.height / 1.8,
+        //   width: MediaQuery.of(context).size.width,
+        //   child:
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount: getJobs[0].allJobs!.length,
+              physics: ScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                var data = getJobs[0].allJobs![index];
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditClientJob(
+                                type: true,
+                                allJobs: getJobs[0].allJobs![index],
+                                // allJobs: getJobs[0].allJobs![index],
+                                data: jobs[0]['all_jobs'][index])));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Container(
+                      width: 340,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(10)),
+                        color: Colors.black12,
+                        elevation: 1,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 15.0, left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    data.clientName.toString(),
+                                    style: const TextStyle(
+                                        color: AppColors.textclr,
+                                        fontSize: 16,
+                                        fontWeight:
+                                        FontWeight.bold),
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets
+                                          .symmetric(
+                                          horizontal: 14,
+                                          vertical: 10),
+                                      decoration: BoxDecoration(
+                                          color:
+                                          AppColors.lightwhite,
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              10)),
+                                      child: Text(
+                                        data.qid.toString(),
+                                        style: const TextStyle(
+                                          color: AppColors.whit,
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 10.0, left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    data.city.toString(),
+                                    style: const TextStyle(
+                                        color: AppColors.textclr,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                  const Text(
+                                    "",
+                                    style: TextStyle(
+                                        color: AppColors.whit),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 15.0,
+                                  left: 10,
+                                  right: 10,
+                                  bottom: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    data.eventName.toString(),
+                                    style: TextStyle(
+                                        color: AppColors.textclr,
+                                        fontSize: 16,
+                                        fontWeight:
+                                        FontWeight.bold),
+                                  ),
+                                  Text(
+                                    data.photographersDetails![0]
+                                        .date
+                                        .toString(),
+                                    style: TextStyle(
                                         color:
-                                        AppColors.lightwhite,
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            10)),
-                                    child: Text(
-                                      data.qid.toString(),
-                                      style: const TextStyle(
-                                        color: AppColors.whit,
-                                      ),
-                                    )),
-                              ],
+                                        AppColors.AppbtnColor),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, left: 10, right: 10),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  data.city.toString(),
-                                  style: const TextStyle(
-                                      color: AppColors.textclr,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                                const Text(
-                                  "",
-                                  style: TextStyle(
-                                      color: AppColors.whit),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 15.0,
-                                left: 10,
-                                right: 10,
-                                bottom: 10),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  data.eventName.toString(),
-                                  style: TextStyle(
-                                      color: AppColors.textclr,
-                                      fontSize: 16,
-                                      fontWeight:
-                                      FontWeight.bold),
-                                ),
-                                Text(
-                                  data.photographersDetails![0]
-                                      .date
-                                      .toString(),
-                                  style: TextStyle(
-                                      color:
-                                      AppColors.AppbtnColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        )
-            : Container(
-          height: MediaQuery.of(context).size.height / 1.8,
+                );
+              },
+            ),
+          )
+         // )
+            : Expanded(
+          // height: MediaQuery.of(context).size.height / 1.8,
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
@@ -712,7 +716,7 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
         )
             : currentindex == 0
             ? Container(
-          height: MediaQuery.of(context).size.height / 1.8,
+          height: MediaQuery.of(context).size.height / 1.3,
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             shrinkWrap: true,
@@ -836,7 +840,7 @@ class _FreelancingJobsScreenState extends State<FreelancingJobsScreen> {
           ),
         )
             : Container(
-          height: MediaQuery.of(context).size.height / 1.8,
+          height: MediaQuery.of(context).size.height / 1.3,
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             shrinkWrap: true,

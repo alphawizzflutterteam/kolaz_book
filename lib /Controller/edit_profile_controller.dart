@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,6 +15,7 @@ import 'package:kolazz_book/Models/get_country_model.dart';
 import 'package:kolazz_book/Models/get_states_model.dart';
 import 'package:kolazz_book/Utils/strings.dart';
 import 'package:kolazz_book/Views/home_screen/homescreen.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Models/get_profile_model.dart';
@@ -445,7 +447,8 @@ class EditProfileController extends AppBaseController {
             children: <Widget>[
               InkWell(
                 onTap: () async {
-                  getImageGallery(ImgSource.Gallery, context ,i);
+                  getFromGallery(context, i);
+                  // getImageGallery(ImgSource.Gallery, context ,i);
                 },
                 child:  Container(
                   child: ListTile(
@@ -500,6 +503,7 @@ class EditProfileController extends AppBaseController {
       },
     );
 
+
     ///
 
   }
@@ -545,6 +549,36 @@ class EditProfileController extends AppBaseController {
     update();
     back();
   }
+  Future<void> getFromGallery(BuildContext context, int i) async {
+    const permission = Permission.storage;
+    final status = await permission.status;
+    debugPrint('>>>Status $status');
+    if (status != PermissionStatus.granted) {
+      await permission.request();
+      if (await permission.status.isGranted) {
+        var result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          allowMultiple: false,
+        );
+        if (result != null) {
+          if(i ==1) {
+          getCropImage(context, i, result);
+          }else{
+            imageFile2 = File(result.paths.toString());
+          }
+          // imagePathList.add(result.paths.toString()).toList();
+          update();
+          back();
+        } else {
+          back();
+          // User canceled the picker
+        }
+      }else {
+        await permission.request();
+      }
+    }
+  }
+
   Future getImageGallery(ImgSource source, BuildContext context, int i) async {
     if(i == 1) {
       var image = await ImagePickerGC.pickImage(
